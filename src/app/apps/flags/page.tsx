@@ -3,6 +3,28 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { FeatureFlag } from "@/lib/types";
 
 export default function FlagsPage() {
@@ -70,159 +92,156 @@ export default function FlagsPage() {
       />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center gap-4">
         {!isAdmin && (
-          <p className="text-sm text-amber-700">
-            You are <strong>{role}</strong> — flag changes require admin.
-          </p>
+          <Alert variant="warning" className="flex-1">
+            <AlertDescription>
+              You are <strong>{role}</strong> — flag changes require admin.
+            </AlertDescription>
+          </Alert>
         )}
-        <button
+        <Button
           onClick={() => setShowForm((v) => !v)}
           disabled={!isAdmin}
-          className="ml-auto rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="ml-auto"
           title={isAdmin ? undefined : "Requires admin role"}
         >
           {showForm ? "Cancel" : "New flag"}
-        </button>
+        </Button>
       </div>
 
       {showForm && isAdmin && (
-        <form
-          onSubmit={createFlag}
-          className="mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2"
-        >
-          <label className="text-sm">
-            <span className="mb-1 block text-slate-500">Key (kebab-case)</span>
-            <input
-              value={form.key}
-              onChange={(e) => setForm({ ...form, key: e.target.value })}
-              placeholder="new-payment-flow"
-              className="w-full rounded-md border border-slate-300 px-3 py-1.5"
-              required
-            />
-          </label>
-          <label className="text-sm">
-            <span className="mb-1 block text-slate-500">Owner</span>
-            <input
-              value={form.owner}
-              onChange={(e) => setForm({ ...form, owner: e.target.value })}
-              placeholder="payments-team"
-              className="w-full rounded-md border border-slate-300 px-3 py-1.5"
-              required
-            />
-          </label>
-          <label className="text-sm sm:col-span-2">
-            <span className="mb-1 block text-slate-500">Description</span>
-            <input
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="What does this flag control?"
-              className="w-full rounded-md border border-slate-300 px-3 py-1.5"
-              required
-            />
-          </label>
-          <label className="text-sm">
-            <span className="mb-1 block text-slate-500">Environment</span>
-            <select
-              value={form.environment}
-              onChange={(e) => setForm({ ...form, environment: e.target.value })}
-              className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5"
-            >
-              <option value="development">development</option>
-              <option value="staging">staging</option>
-              <option value="production">production</option>
-            </select>
-          </label>
-          <div className="flex items-end">
-            <button
-              type="submit"
-              className="rounded-md bg-emerald-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
-            >
-              Create flag
-            </button>
-          </div>
-        </form>
+        <Card className="mb-6">
+          <CardContent>
+            <form onSubmit={createFlag} className="grid gap-4 sm:grid-cols-2">
+              <div className="flex flex-col gap-1.5 text-sm">
+                <label htmlFor="flag-key" className="text-muted-foreground">
+                  Key (kebab-case)
+                </label>
+                <Input
+                  id="flag-key"
+                  value={form.key}
+                  onChange={(e) => setForm({ ...form, key: e.target.value })}
+                  placeholder="new-payment-flow"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1.5 text-sm">
+                <label htmlFor="flag-owner" className="text-muted-foreground">
+                  Owner
+                </label>
+                <Input
+                  id="flag-owner"
+                  value={form.owner}
+                  onChange={(e) => setForm({ ...form, owner: e.target.value })}
+                  placeholder="payments-team"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1.5 text-sm sm:col-span-2">
+                <label htmlFor="flag-desc" className="text-muted-foreground">
+                  Description
+                </label>
+                <Input
+                  id="flag-desc"
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
+                  placeholder="What does this flag control?"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1.5 text-sm">
+                <label className="text-muted-foreground">Environment</label>
+                <Select
+                  value={form.environment}
+                  onValueChange={(v) => setForm({ ...form, environment: v })}
+                >
+                  <SelectTrigger aria-label="Environment">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="development">development</SelectItem>
+                      <SelectItem value="staging">staging</SelectItem>
+                      <SelectItem value="production">production</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-end">
+                <Button type="submit">Create flag</Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       )}
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">Flag</th>
-              <th className="px-4 py-3">Environment</th>
-              <th className="px-4 py-3">Owner</th>
-              <th className="px-4 py-3">Rollout</th>
-              <th className="px-4 py-3">Updated</th>
-              <th className="px-4 py-3">Enabled</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <div className="rounded-lg border bg-card shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Flag</TableHead>
+              <TableHead>Environment</TableHead>
+              <TableHead>Owner</TableHead>
+              <TableHead>Rollout</TableHead>
+              <TableHead>Updated</TableHead>
+              <TableHead>Enabled</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {flags.map((f) => (
-              <tr key={f.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3">
+              <TableRow key={f.id}>
+                <TableCell>
                   <div className="font-mono text-xs font-medium">{f.key}</div>
-                  <div className="text-xs text-slate-500">{f.description}</div>
-                </td>
-                <td className="px-4 py-3">
+                  <div className="text-xs text-muted-foreground">
+                    {f.description}
+                  </div>
+                </TableCell>
+                <TableCell>
                   <StatusBadge value={f.environment} />
-                </td>
-                <td className="px-4 py-3 text-slate-600">{f.owner}</td>
-                <td className="px-4 py-3">
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {f.owner}
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center gap-2">
-                    <input
-                      type="range"
+                    <Slider
                       min={0}
                       max={100}
                       step={5}
-                      defaultValue={f.rolloutPercent}
+                      defaultValue={[f.rolloutPercent]}
                       disabled={!isAdmin}
-                      onMouseUp={(e) =>
-                        patch(f.id, {
-                          rolloutPercent: Number(
-                            (e.target as HTMLInputElement).value
-                          ),
-                        })
+                      onValueCommit={([value]) =>
+                        patch(f.id, { rolloutPercent: value })
                       }
-                      onTouchEnd={(e) =>
-                        patch(f.id, {
-                          rolloutPercent: Number(
-                            (e.target as HTMLInputElement).value
-                          ),
-                        })
-                      }
-                      className="w-28 disabled:cursor-not-allowed disabled:opacity-40"
-                      title={isAdmin ? undefined : "Requires admin role"}
+                      className="w-28"
+                      aria-label={`Rollout percentage for ${f.key}`}
                     />
-                    <span className="w-10 text-xs text-slate-500">
+                    <span className="w-10 text-xs text-muted-foreground">
                       {f.rolloutPercent}%
                     </span>
                   </div>
-                </td>
-                <td className="px-4 py-3 text-xs text-slate-500">
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground">
                   {new Date(f.updatedAt).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-3">
-                  <button
-                    onClick={() => patch(f.id, { enabled: !f.enabled })}
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    checked={f.enabled}
+                    onCheckedChange={(checked) =>
+                      patch(f.id, { enabled: checked })
+                    }
                     disabled={!isAdmin}
-                    role="switch"
-                    aria-checked={f.enabled}
-                    className={`relative h-6 w-11 rounded-full transition disabled:cursor-not-allowed disabled:opacity-40 ${
-                      f.enabled ? "bg-emerald-500" : "bg-slate-300"
-                    }`}
+                    aria-label={`Toggle ${f.key}`}
                     title={isAdmin ? undefined : "Requires admin role"}
-                  >
-                    <span
-                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
-                        f.enabled ? "left-[22px]" : "left-0.5"
-                      }`}
-                    />
-                  </button>
-                </td>
-              </tr>
+                  />
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

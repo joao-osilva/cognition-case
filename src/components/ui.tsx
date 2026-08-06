@@ -1,29 +1,36 @@
 "use client";
 
+import { AlertCircleIcon, XIcon } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+type BadgeVariant = "default" | "secondary" | "destructive" | "success" | "warning" | "outline";
+
+const VALUE_VARIANTS: Record<string, BadgeVariant> = {
+  pending: "secondary",
+  in_review: "default",
+  approved: "success",
+  rejected: "destructive",
+  escalated: "warning",
+  requested: "secondary",
+  processed: "success",
+  low: "success",
+  medium: "warning",
+  high: "destructive",
+  development: "secondary",
+  staging: "warning",
+  production: "destructive",
+  viewer: "secondary",
+  approver: "warning",
+  admin: "destructive",
+};
+
 export function StatusBadge({ value }: { value: string }) {
-  const styles: Record<string, string> = {
-    pending: "bg-slate-100 text-slate-700",
-    in_review: "bg-blue-100 text-blue-700",
-    approved: "bg-emerald-100 text-emerald-700",
-    rejected: "bg-rose-100 text-rose-700",
-    escalated: "bg-purple-100 text-purple-700",
-    requested: "bg-slate-100 text-slate-700",
-    processed: "bg-emerald-100 text-emerald-700",
-    low: "bg-emerald-100 text-emerald-700",
-    medium: "bg-amber-100 text-amber-700",
-    high: "bg-rose-100 text-rose-700",
-    development: "bg-slate-100 text-slate-700",
-    staging: "bg-amber-100 text-amber-700",
-    production: "bg-rose-100 text-rose-700",
-  };
   return (
-    <span
-      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-        styles[value] ?? "bg-slate-100 text-slate-700"
-      }`}
-    >
+    <Badge variant={VALUE_VARIANTS[value] ?? "secondary"}>
       {value.replace("_", " ")}
-    </span>
+    </Badge>
   );
 }
 
@@ -35,12 +42,15 @@ export function ErrorBanner({
   onDismiss: () => void;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between rounded-md border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800">
-      <span>{message}</span>
-      <button onClick={onDismiss} className="ml-4 font-medium hover:underline">
-        Dismiss
-      </button>
-    </div>
+    <Alert variant="destructive" className="mb-4">
+      <AlertCircleIcon />
+      <AlertDescription className="flex items-center justify-between gap-4">
+        <span>{message}</span>
+        <Button variant="ghost" size="icon-sm" onClick={onDismiss} aria-label="Dismiss">
+          <XIcon />
+        </Button>
+      </AlertDescription>
+    </Alert>
   );
 }
 
@@ -53,10 +63,8 @@ export function PageHeader({
 }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-        {title}
-      </h1>
-      <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
     </div>
   );
 }
