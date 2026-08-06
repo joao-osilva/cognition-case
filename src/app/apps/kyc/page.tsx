@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { RefreshCwIcon } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQueryState } from "@/lib/use-query-state";
 import { KycCase } from "@/lib/types";
 
 const VIEWS = [
@@ -31,10 +32,10 @@ const VIEWS = [
   { value: "rejected", label: "Rejected cases" },
 ];
 
-export default function KycPage() {
+function KycPageContent() {
   const [cases, setCases] = useState<KycCase[]>([]);
-  const [search, setSearch] = useState("");
-  const [view, setView] = useState("all");
+  const [search, setSearch] = useQueryState("q", "");
+  const [view, setView] = useQueryState("view", "all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
@@ -185,5 +186,13 @@ export default function KycPage() {
       </div>
       <GridFooter count={visible.length} label="cases" />
     </div>
+  );
+}
+
+export default function KycPage() {
+  return (
+    <Suspense>
+      <KycPageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { BanknoteIcon, CheckIcon, RefreshCwIcon, XIcon } from "lucide-react";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
@@ -10,6 +10,16 @@ import {
   GridFooter,
   ViewSelector,
 } from "@/components/grid";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Card,
   CardDescription,
@@ -25,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQueryState } from "@/lib/use-query-state";
 import { Refund } from "@/lib/types";
 
 const VIEWS = [
@@ -35,12 +46,13 @@ const VIEWS = [
   { value: "processed", label: "Processed refunds" },
 ];
 
-export default function RefundsPage() {
+function RefundsPageContent() {
   const { role } = useRole();
   const [refunds, setRefunds] = useState<Refund[]>([]);
-  const [view, setView] = useState("all");
+  const [view, setView] = useQueryState("view", "all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [error, setError] = useState("");
+  const [confirmReject, setConfirmReject] = useState(false);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/refunds");
@@ -157,7 +169,7 @@ export default function RefundsPage() {
           icon={XIcon}
           disabled={!canApprove || selectedRequested.length === 0}
           title={canApprove ? undefined : "Requires approver role"}
-          onClick={() => actOnSelected("reject", selectedRequested)}
+          onClick={() => setConfirmReject(true)}
           className="text-destructive hover:text-destructive"
         >
           Reject
@@ -255,6 +267,40 @@ export default function RefundsPage() {
         </Table>
       </div>
       <GridFooter count={visible.length} label="refunds" />
+
+      <AlertDialog open={confirmReject} onOpenChange={setConfirmReject}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Reject {selectedRequested.length}{" "}
+              {selectedRequested.length === 1 ? "refund" : "refunds"}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              The selected requested{" "}
+              {selectedRequested.length === 1 ? "refund" : "refunds"} will be
+              rejected and the decision recorded in the audit log. This cannot
+              be undone from this dashboard.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => actOnSelected("reject", selectedRequested)}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              Reject {selectedRequested.length === 1 ? "Refund" : "Refunds"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+export default function RefundsPage() {
+  return (
+    <Suspense>
+      <RefundsPageContent />
+    </Suspense>
   );
 }

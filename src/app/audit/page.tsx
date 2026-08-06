@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { RefreshCwIcon } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
@@ -17,11 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQueryState } from "@/lib/use-query-state";
 import { AuditEntry } from "@/lib/types";
 
-export default function AuditPage() {
+function AuditPageContent() {
   const [entries, setEntries] = useState<AuditEntry[]>([]);
-  const [appFilter, setAppFilter] = useState("all");
+  const [appFilter, setAppFilter] = useQueryState("view", "all");
 
   const load = useCallback(() => {
     fetch("/api/audit")
@@ -119,5 +120,13 @@ export default function AuditPage() {
       </div>
       <GridFooter count={visible.length} label="entries" />
     </div>
+  );
+}
+
+export default function AuditPage() {
+  return (
+    <Suspense>
+      <AuditPageContent />
+    </Suspense>
   );
 }

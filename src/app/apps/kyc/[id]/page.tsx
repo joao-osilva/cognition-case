@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeftIcon,
@@ -24,9 +24,10 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useQueryState } from "@/lib/use-query-state";
 import { AuditEntry, KycCase } from "@/lib/types";
 
-export default function KycCasePage() {
+function KycCasePageContent() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { role } = useRole();
@@ -35,6 +36,7 @@ export default function KycCasePage() {
   const [loaded, setLoaded] = useState(false);
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
+  const [tab, setTab] = useQueryState("tab", "summary");
 
   const load = useCallback(async () => {
     const [kycRes, auditRes] = await Promise.all([
@@ -169,7 +171,7 @@ export default function KycCasePage() {
           </dl>
         </div>
 
-        <Tabs defaultValue="summary" className="gap-0">
+        <Tabs value={tab} onValueChange={setTab} className="gap-0">
           <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0 px-6">
             <TabsTrigger
               value="summary"
@@ -304,5 +306,13 @@ export default function KycCasePage() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function KycCasePage() {
+  return (
+    <Suspense>
+      <KycCasePageContent />
+    </Suspense>
   );
 }
