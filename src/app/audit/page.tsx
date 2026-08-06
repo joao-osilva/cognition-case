@@ -2,6 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { PageHeader, StatusBadge } from "@/components/ui";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { AuditEntry } from "@/lib/types";
 
 export default function AuditPage() {
@@ -26,62 +42,70 @@ export default function AuditPage() {
       />
 
       <div className="mb-4">
-        <select
-          value={appFilter}
-          onChange={(e) => setAppFilter(e.target.value)}
-          className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm"
-        >
-          <option value="all">All apps</option>
-          <option value="kyc">KYC</option>
-          <option value="refunds">Refunds</option>
-          <option value="flags">Feature flags</option>
-        </select>
+        <Select value={appFilter} onValueChange={setAppFilter}>
+          <SelectTrigger className="w-40" aria-label="App filter">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All apps</SelectItem>
+              <SelectItem value="kyc">KYC</SelectItem>
+              <SelectItem value="refunds">Refunds</SelectItem>
+              <SelectItem value="flags">Feature flags</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">When</th>
-              <th className="px-4 py-3">Actor</th>
-              <th className="px-4 py-3">Role</th>
-              <th className="px-4 py-3">App</th>
-              <th className="px-4 py-3">Action</th>
-              <th className="px-4 py-3">Entity</th>
-              <th className="px-4 py-3">Before</th>
-              <th className="px-4 py-3">After</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <div className="rounded-lg border bg-card shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>When</TableHead>
+              <TableHead>Actor</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>App</TableHead>
+              <TableHead>Action</TableHead>
+              <TableHead>Entity</TableHead>
+              <TableHead>Before</TableHead>
+              <TableHead>After</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {visible.map((e) => (
-              <tr key={e.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3 text-xs text-slate-500">
+              <TableRow key={e.id}>
+                <TableCell className="text-xs text-muted-foreground">
                   {new Date(e.timestamp).toLocaleString()}
-                </td>
-                <td className="px-4 py-3 text-xs">{e.actor}</td>
-                <td className="px-4 py-3">
+                </TableCell>
+                <TableCell className="text-xs">{e.actor}</TableCell>
+                <TableCell>
                   <StatusBadge value={e.role} />
-                </td>
-                <td className="px-4 py-3 uppercase text-xs text-slate-600">
+                </TableCell>
+                <TableCell className="text-xs uppercase text-muted-foreground">
                   {e.app}
-                </td>
-                <td className="px-4 py-3 font-medium">{e.action}</td>
-                <td className="px-4 py-3 font-mono text-xs">{e.entityId}</td>
-                <td className="px-4 py-3 font-mono text-xs text-slate-500">
+                </TableCell>
+                <TableCell className="font-medium">{e.action}</TableCell>
+                <TableCell className="font-mono text-xs">{e.entityId}</TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">
                   {e.before ?? "—"}
-                </td>
-                <td className="px-4 py-3 font-mono text-xs">{e.after ?? "—"}</td>
-              </tr>
+                </TableCell>
+                <TableCell className="font-mono text-xs">
+                  {e.after ?? "—"}
+                </TableCell>
+              </TableRow>
             ))}
             {visible.length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="py-8 text-center text-muted-foreground"
+                >
                   No audit entries yet — take an action in one of the apps.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

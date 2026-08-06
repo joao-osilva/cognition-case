@@ -3,6 +3,29 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Refund } from "@/lib/types";
 
 export default function RefundsPage() {
@@ -72,112 +95,123 @@ export default function RefundsPage() {
             }),
           },
         ].map((card) => (
-          <div
-            key={card.label}
-            className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
-            <div className="text-2xl font-semibold">{card.value}</div>
-            <div className="text-xs text-slate-500">{card.label}</div>
-          </div>
+          <Card key={card.label}>
+            <CardHeader>
+              <CardTitle className="text-2xl">{card.value}</CardTitle>
+              <CardDescription>{card.label}</CardDescription>
+            </CardHeader>
+          </Card>
         ))}
       </div>
 
       <div className="mb-4">
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm"
-        >
-          <option value="all">All statuses</option>
-          <option value="requested">Requested</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-          <option value="processed">Processed</option>
-        </select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-40" aria-label="Status filter">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="requested">Requested</SelectItem>
+              <SelectItem value="approved">Approved</SelectItem>
+              <SelectItem value="rejected">Rejected</SelectItem>
+              <SelectItem value="processed">Processed</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">Refund</th>
-              <th className="px-4 py-3">Customer</th>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Amount</th>
-              <th className="px-4 py-3">Reason</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Requested</th>
-              <th className="px-4 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <div className="rounded-lg border bg-card shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Refund</TableHead>
+              <TableHead>Customer</TableHead>
+              <TableHead>Order</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Reason</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Requested</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {visible.map((r) => (
-              <tr key={r.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3 font-mono text-xs">{r.id}</td>
-                <td className="px-4 py-3 font-medium">{r.customerName}</td>
-                <td className="px-4 py-3 font-mono text-xs">{r.orderId}</td>
-                <td className="px-4 py-3">
+              <TableRow key={r.id}>
+                <TableCell className="font-mono text-xs">{r.id}</TableCell>
+                <TableCell className="font-medium">{r.customerName}</TableCell>
+                <TableCell className="font-mono text-xs">{r.orderId}</TableCell>
+                <TableCell>
                   {r.amount.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                   })}{" "}
-                  <span className="text-xs text-slate-500">{r.currency}</span>
-                </td>
-                <td className="px-4 py-3 text-slate-600">{r.reason}</td>
-                <td className="px-4 py-3">
+                  <span className="text-xs text-muted-foreground">
+                    {r.currency}
+                  </span>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {r.reason}
+                </TableCell>
+                <TableCell>
                   <StatusBadge value={r.status} />
-                </td>
-                <td className="px-4 py-3 text-xs text-slate-500">
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground">
                   {new Date(r.requestedAt).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-3">
+                </TableCell>
+                <TableCell>
                   <div className="flex gap-2">
                     {r.status === "requested" && (
                       <>
-                        <button
+                        <Button
+                          size="sm"
                           onClick={() => act(r.id, "approve")}
                           disabled={!canApprove}
-                          className="rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                           title={
                             canApprove ? undefined : "Requires approver role"
                           }
                         >
                           Approve
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
                           onClick={() => act(r.id, "reject")}
                           disabled={!canApprove}
-                          className="rounded-md bg-rose-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-40"
                           title={
                             canApprove ? undefined : "Requires approver role"
                           }
                         >
                           Reject
-                        </button>
+                        </Button>
                       </>
                     )}
                     {r.status === "approved" && (
-                      <button
+                      <Button
+                        size="sm"
+                        variant="secondary"
                         onClick={() => act(r.id, "process")}
                         disabled={!canProcess}
-                        className="rounded-md bg-slate-900 px-2.5 py-1 text-xs font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
                         title={canProcess ? undefined : "Requires admin role"}
                       >
                         Process payout
-                      </button>
+                      </Button>
                     )}
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
             {visible.length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="py-8 text-center text-muted-foreground"
+                >
                   No refunds match the current filter.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

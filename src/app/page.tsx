@@ -1,4 +1,10 @@
 import Link from "next/link";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const APPS = [
   {
@@ -27,6 +33,23 @@ const ANALYSIS = [
   { href: "/analysis/recommendation", title: "Recommendation", description: "The build-vs-buy recommendation and its reasoning." },
 ];
 
+function CardGrid({ items }: { items: typeof APPS }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-3">
+      {items.map((item) => (
+        <Link key={item.href} href={item.href}>
+          <Card className="h-full transition hover:border-primary/50">
+            <CardHeader>
+              <CardTitle>{item.title}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div>
@@ -34,7 +57,7 @@ export default function Home() {
         <h1 className="text-3xl font-semibold tracking-tight">
           Power Apps Replacement Prototype
         </h1>
-        <p className="mt-3 max-w-3xl text-slate-600">
+        <p className="mt-3 max-w-3xl text-muted-foreground">
           A ~2-hour prototype built with Devin to assess whether a Series C
           fintech (~60 engineers, $250K/year internal-tool platform spend) could
           replace Microsoft Power Apps with a lightweight in-house alternative.
@@ -46,34 +69,12 @@ export default function Home() {
       </div>
 
       <h2 className="mb-4 text-lg font-semibold">The three internal apps</h2>
-      <div className="grid gap-4 sm:grid-cols-3">
-        {APPS.map((app) => (
-          <Link
-            key={app.href}
-            href={app.href}
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-400"
-          >
-            <h3 className="font-semibold">{app.title}</h3>
-            <p className="mt-2 text-sm text-slate-600">{app.description}</p>
-          </Link>
-        ))}
-      </div>
+      <CardGrid items={APPS} />
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">The assessment</h2>
-      <div className="grid gap-4 sm:grid-cols-3">
-        {ANALYSIS.map((doc) => (
-          <Link
-            key={doc.href}
-            href={doc.href}
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-400"
-          >
-            <h3 className="font-semibold">{doc.title}</h3>
-            <p className="mt-2 text-sm text-slate-600">{doc.description}</p>
-          </Link>
-        ))}
-      </div>
+      <CardGrid items={ANALYSIS} />
 
-      <p className="mt-10 text-sm text-slate-400">
+      <p className="mt-10 text-sm text-muted-foreground">
         Prototype note: data lives in memory and reseeds on cold starts — a
         deliberate scope cut, discussed in the evaluation.
       </p>

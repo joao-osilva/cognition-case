@@ -3,6 +3,34 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { KycCase } from "@/lib/types";
 
 export default function KycPage() {
@@ -59,187 +87,191 @@ export default function KycPage() {
         title="KYC Review Queue"
         subtitle="Identity verification cases awaiting compliance review. Decisions require the approver role; rejections and escalations require a note."
       />
-      {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
+      {error && !selected && (
+        <ErrorBanner message={error} onDismiss={() => setError("")} />
+      )}
 
       <div className="mb-4 flex flex-wrap gap-3">
-        <input
+        <Input
           placeholder="Search name, email, ID, country…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-72 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm"
+          className="w-72"
         />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm"
-        >
-          <option value="all">All statuses</option>
-          <option value="pending">Pending</option>
-          <option value="in_review">In review</option>
-          <option value="escalated">Escalated</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-        </select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-40" aria-label="Status filter">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="in_review">In review</SelectItem>
+              <SelectItem value="escalated">Escalated</SelectItem>
+              <SelectItem value="approved">Approved</SelectItem>
+              <SelectItem value="rejected">Rejected</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">Case</th>
-              <th className="px-4 py-3">Customer</th>
-              <th className="px-4 py-3">Country</th>
-              <th className="px-4 py-3">Document</th>
-              <th className="px-4 py-3">Risk</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Submitted</th>
-              <th className="px-4 py-3"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <div className="rounded-lg border bg-card shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Case</TableHead>
+              <TableHead>Customer</TableHead>
+              <TableHead>Country</TableHead>
+              <TableHead>Document</TableHead>
+              <TableHead>Risk</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Submitted</TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {visible.map((c) => (
-              <tr key={c.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3 font-mono text-xs">{c.id}</td>
-                <td className="px-4 py-3">
+              <TableRow key={c.id}>
+                <TableCell className="font-mono text-xs">{c.id}</TableCell>
+                <TableCell>
                   <div className="font-medium">{c.customerName}</div>
-                  <div className="text-xs text-slate-500">{c.customerEmail}</div>
-                </td>
-                <td className="px-4 py-3">{c.country}</td>
-                <td className="px-4 py-3">{c.documentType}</td>
-                <td className="px-4 py-3">
+                  <div className="text-xs text-muted-foreground">
+                    {c.customerEmail}
+                  </div>
+                </TableCell>
+                <TableCell>{c.country}</TableCell>
+                <TableCell>{c.documentType}</TableCell>
+                <TableCell>
                   <StatusBadge value={c.riskLevel} />
-                </td>
-                <td className="px-4 py-3">
+                </TableCell>
+                <TableCell>
                   <StatusBadge value={c.status} />
-                </td>
-                <td className="px-4 py-3 text-xs text-slate-500">
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground">
                   {new Date(c.submittedAt).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <button
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => {
                       setSelected(c);
                       setNotes("");
                       setError("");
                     }}
-                    className="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium hover:bg-slate-100"
                   >
                     Review
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
             {visible.length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="py-8 text-center text-muted-foreground"
+                >
                   No cases match the current filters.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
-      {selected && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-lg font-semibold">{selected.customerName}</h2>
-                <p className="font-mono text-xs text-slate-500">{selected.id}</p>
-              </div>
-              <StatusBadge value={selected.status} />
-            </div>
-            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-              <div>
-                <dt className="text-slate-500">Email</dt>
-                <dd>{selected.customerEmail}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Country</dt>
-                <dd>{selected.country}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Document</dt>
-                <dd>{selected.documentType}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Risk level</dt>
-                <dd>
-                  <StatusBadge value={selected.riskLevel} />
-                </dd>
-              </div>
-            </dl>
-            {selected.notes && (
-              <p className="mt-3 rounded-md bg-slate-50 p-3 text-sm text-slate-600">
-                {selected.notes}
-              </p>
-            )}
-
-            {canDecide ? (
-              <>
-                <textarea
-                  placeholder="Decision note (required for reject / escalate)…"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="mt-4 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-                  rows={2}
-                />
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {selected.status === "pending" && (
-                    <button
-                      onClick={() => act(selected.id, "start_review")}
-                      className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
-                    >
-                      Start review
-                    </button>
-                  )}
-                  <button
-                    onClick={() => act(selected.id, "approve")}
-                    className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => act(selected.id, "reject")}
-                    className="rounded-md bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-700"
-                  >
-                    Reject
-                  </button>
-                  <button
-                    onClick={() => act(selected.id, "escalate")}
-                    className="rounded-md bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700"
-                  >
-                    Escalate
-                  </button>
-                  <button
-                    onClick={() => setSelected(null)}
-                    className="ml-auto rounded-md border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-100"
-                  >
-                    Close
-                  </button>
+      <Dialog
+        open={selected !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelected(null);
+        }}
+      >
+        <DialogContent>
+          {selected && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  {selected.customerName}
+                  <StatusBadge value={selected.status} />
+                </DialogTitle>
+                <DialogDescription className="font-mono text-xs">
+                  {selected.id}
+                </DialogDescription>
+              </DialogHeader>
+              <dl className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <dt className="text-muted-foreground">Email</dt>
+                  <dd>{selected.customerEmail}</dd>
                 </div>
-              </>
-            ) : (
-              <div className="mt-4 flex items-center justify-between rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
-                <span>
-                  You are a <strong>viewer</strong> — switch to approver or admin
-                  to make decisions.
-                </span>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="ml-4 font-medium hover:underline"
-                >
-                  Close
-                </button>
-              </div>
-            )}
-            {error && (
-              <p className="mt-3 text-sm text-rose-600">{error}</p>
-            )}
-          </div>
-        </div>
-      )}
+                <div>
+                  <dt className="text-muted-foreground">Country</dt>
+                  <dd>{selected.country}</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Document</dt>
+                  <dd>{selected.documentType}</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Risk level</dt>
+                  <dd>
+                    <StatusBadge value={selected.riskLevel} />
+                  </dd>
+                </div>
+              </dl>
+              {selected.notes && (
+                <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                  {selected.notes}
+                </p>
+              )}
+
+              {canDecide ? (
+                <>
+                  <Textarea
+                    placeholder="Decision note (required for reject / escalate)…"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    rows={2}
+                  />
+                  {error && (
+                    <p className="text-sm text-destructive">{error}</p>
+                  )}
+                  <DialogFooter className="flex-wrap sm:justify-start">
+                    {selected.status === "pending" && (
+                      <Button
+                        variant="secondary"
+                        onClick={() => act(selected.id, "start_review")}
+                      >
+                        Start review
+                      </Button>
+                    )}
+                    <Button onClick={() => act(selected.id, "approve")}>
+                      Approve
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => act(selected.id, "reject")}
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => act(selected.id, "escalate")}
+                    >
+                      Escalate
+                    </Button>
+                  </DialogFooter>
+                </>
+              ) : (
+                <Alert>
+                  <AlertDescription>
+                    You are a <strong>viewer</strong> — switch to approver or
+                    admin to make decisions.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
