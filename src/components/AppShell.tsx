@@ -135,8 +135,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             />
             <input
               type="search"
+              name="q"
               placeholder="Search…"
               aria-label="Search"
+              spellCheck={false}
+              autoComplete="off"
               className="h-8 w-56 rounded-md bg-primary-foreground/10 pl-8 pr-3 text-sm text-primary-foreground placeholder:text-primary-foreground/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-foreground/40"
             />
           </div>
@@ -157,6 +160,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </SelectContent>
           </Select>
           <span
+            role="img"
             aria-label={`Signed in as ${role}`}
             className="flex size-8 items-center justify-center rounded-full bg-primary-foreground/20 text-xs font-semibold"
           >
@@ -168,7 +172,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1">
         <aside
           className={cn(
-            "flex shrink-0 flex-col gap-4 border-r bg-card px-2 py-3 transition-[width]",
+            "flex shrink-0 flex-col gap-4 border-r bg-card px-2 py-3 transition-[width] motion-reduce:transition-none",
             collapsed ? "w-12" : "w-56"
           )}
         >

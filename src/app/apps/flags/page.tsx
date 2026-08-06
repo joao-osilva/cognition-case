@@ -183,7 +183,7 @@ export default function FlagsPage() {
                 </Select>
               </div>
               <div className="flex items-end">
-                <Button type="submit">Create flag</Button>
+                <Button type="submit">Create Flag</Button>
               </div>
             </form>
           </CardContent>
