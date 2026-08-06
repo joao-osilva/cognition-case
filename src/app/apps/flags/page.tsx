@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { PlusIcon, RefreshCwIcon, XIcon } from "lucide-react";
 import { useRole } from "@/components/RoleContext";
+import { CommandBar, CommandButton, GridFooter } from "@/components/grid";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -92,26 +94,30 @@ export default function FlagsPage() {
       />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
-      <div className="mb-4 flex items-center gap-4">
-        {!isAdmin && (
-          <Alert variant="warning" className="flex-1">
-            <AlertDescription>
-              You are <strong>{role}</strong> — flag changes require admin.
-            </AlertDescription>
-          </Alert>
-        )}
-        <Button
+      {!isAdmin && (
+        <Alert variant="warning" className="mb-4">
+          <AlertDescription>
+            You are <strong>{role}</strong> — flag changes require admin.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <CommandBar className="mb-0">
+        <CommandButton
+          icon={showForm ? XIcon : PlusIcon}
           onClick={() => setShowForm((v) => !v)}
           disabled={!isAdmin}
-          className="ml-auto"
           title={isAdmin ? undefined : "Requires admin role"}
         >
-          {showForm ? "Cancel" : "New flag"}
-        </Button>
-      </div>
+          {showForm ? "Cancel" : "New"}
+        </CommandButton>
+        <CommandButton icon={RefreshCwIcon} onClick={load}>
+          Refresh
+        </CommandButton>
+      </CommandBar>
 
       {showForm && isAdmin && (
-        <Card className="mb-6">
+        <Card className="rounded-none border-b-0">
           <CardContent>
             <form onSubmit={createFlag} className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5 text-sm">
@@ -177,14 +183,14 @@ export default function FlagsPage() {
                 </Select>
               </div>
               <div className="flex items-end">
-                <Button type="submit">Create flag</Button>
+                <Button type="submit">Create Flag</Button>
               </div>
             </form>
           </CardContent>
         </Card>
       )}
 
-      <div className="rounded-lg border bg-card shadow-sm">
+      <div className="border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -251,6 +257,7 @@ export default function FlagsPage() {
           </TableBody>
         </Table>
       </div>
+      <GridFooter count={flags.length} label="flags" />
     </div>
   );
 }

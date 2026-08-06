@@ -1,23 +1,32 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { BanknoteIcon, CheckIcon, RefreshCwIcon, XIcon } from "lucide-react";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
-import { Button } from "@/components/ui/button";
+import {
+  CommandBar,
+  CommandButton,
+  GridFooter,
+  ViewSelector,
+} from "@/components/grid";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -26,13 +35,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQueryState } from "@/lib/use-query-state";
 import { Refund } from "@/lib/types";
 
-export default function RefundsPage() {
+const VIEWS = [
+  { value: "all", label: "All refunds" },
+  { value: "requested", label: "Requested refunds" },
+  { value: "approved", label: "Approved refunds" },
+  { value: "rejected", label: "Rejected refunds" },
+  { value: "processed", label: "Processed refunds" },
+];
+
+function RefundsPageContent() {
   const { role } = useRole();
   const [refunds, setRefunds] = useState<Refund[]>([]);
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [view, setView] = useQueryState("view", "all");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [error, setError] = useState("");
+  const [confirmReject, setConfirmReject] = useState(false);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/refunds");
@@ -44,18 +64,21 @@ export default function RefundsPage() {
     load();
   }, [load]);
 
-  async function act(id: string, action: string) {
+  async function actOnSelected(action: string, eligible: Refund[]) {
     setError("");
-    const res = await fetch(`/api/refunds/${id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? "Something went wrong.");
-      return;
+    for (const r of eligible) {
+      const res = await fetch(`/api/refunds/${r.id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error ?? "Something went wrong.");
+        break;
+      }
     }
+    setSelected(new Set());
     await load();
   }
 
@@ -63,8 +86,32 @@ export default function RefundsPage() {
   const canProcess = role === "admin";
 
   const visible = refunds.filter(
-    (r) => statusFilter === "all" || r.status === statusFilter
+    (r) => view === "all" || r.status === view
   );
+
+  const selectedRefunds = refunds.filter((r) => selected.has(r.id));
+  const selectedRequested = selectedRefunds.filter(
+    (r) => r.status === "requested"
+  );
+  const selectedApproved = selectedRefunds.filter(
+    (r) => r.status === "approved"
+  );
+
+  const allSelected =
+    visible.length > 0 && visible.every((r) => selected.has(r.id));
+
+  function toggleAll(checked: boolean) {
+    setSelected(checked ? new Set(visible.map((r) => r.id)) : new Set());
+  }
+
+  function toggleOne(id: string, checked: boolean) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
 
   const totals = {
     requested: refunds.filter((r) => r.status === "requested").length,
@@ -79,7 +126,7 @@ export default function RefundsPage() {
     <div>
       <PageHeader
         title="Refunds Dashboard"
-        subtitle="Approve or reject refund requests, then process approved payouts. Refunds over 1,000 and payout processing require admin."
+        subtitle="Select requests in the grid, then decide from the command bar. Refunds over 1,000 and payout processing require admin."
       />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
@@ -106,27 +153,62 @@ export default function RefundsPage() {
         ))}
       </div>
 
-      <div className="mb-4">
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-40" aria-label="Status filter">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="requested">Requested</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="processed">Processed</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <CommandBar>
+        <CommandButton icon={RefreshCwIcon} onClick={load}>
+          Refresh
+        </CommandButton>
+        <CommandButton
+          icon={CheckIcon}
+          disabled={!canApprove || selectedRequested.length === 0}
+          title={canApprove ? undefined : "Requires approver role"}
+          onClick={() => actOnSelected("approve", selectedRequested)}
+        >
+          Approve
+        </CommandButton>
+        <CommandButton
+          icon={XIcon}
+          disabled={!canApprove || selectedRequested.length === 0}
+          title={canApprove ? undefined : "Requires approver role"}
+          onClick={() => setConfirmReject(true)}
+          className="text-destructive hover:text-destructive"
+        >
+          Reject
+        </CommandButton>
+        <CommandButton
+          icon={BanknoteIcon}
+          disabled={!canProcess || selectedApproved.length === 0}
+          title={canProcess ? undefined : "Requires admin role"}
+          onClick={() => actOnSelected("process", selectedApproved)}
+        >
+          Process Payout
+        </CommandButton>
+        {selected.size > 0 && (
+          <span className="ml-2 text-xs tabular-nums text-muted-foreground">
+            {selected.size} selected
+          </span>
+        )}
+      </CommandBar>
+
+      <div className="border-x bg-card px-2 py-1.5">
+        <ViewSelector
+          value={view}
+          onChange={setView}
+          options={VIEWS}
+          ariaLabel="View"
+        />
       </div>
 
-      <div className="rounded-lg border bg-card shadow-sm">
+      <div className="border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-10">
+                <Checkbox
+                  checked={allSelected}
+                  onCheckedChange={(v) => toggleAll(v === true)}
+                  aria-label="Select all refunds"
+                />
+              </TableHead>
               <TableHead>Refund</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Order</TableHead>
@@ -134,12 +216,21 @@ export default function RefundsPage() {
               <TableHead>Reason</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Requested</TableHead>
-              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visible.map((r) => (
-              <TableRow key={r.id}>
+              <TableRow
+                key={r.id}
+                data-state={selected.has(r.id) ? "selected" : undefined}
+              >
+                <TableCell>
+                  <Checkbox
+                    checked={selected.has(r.id)}
+                    onCheckedChange={(v) => toggleOne(r.id, v === true)}
+                    aria-label={`Select ${r.id}`}
+                  />
+                </TableCell>
                 <TableCell className="font-mono text-xs">{r.id}</TableCell>
                 <TableCell className="font-medium">{r.customerName}</TableCell>
                 <TableCell className="font-mono text-xs">{r.orderId}</TableCell>
@@ -160,46 +251,6 @@ export default function RefundsPage() {
                     dateStyle: "medium",
                   }).format(new Date(r.requestedAt))}
                 </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    {r.status === "requested" && (
-                      <>
-                        <Button
-                          size="sm"
-                          onClick={() => act(r.id, "approve")}
-                          disabled={!canApprove}
-                          title={
-                            canApprove ? undefined : "Requires approver role"
-                          }
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => act(r.id, "reject")}
-                          disabled={!canApprove}
-                          title={
-                            canApprove ? undefined : "Requires approver role"
-                          }
-                        >
-                          Reject
-                        </Button>
-                      </>
-                    )}
-                    {r.status === "approved" && (
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => act(r.id, "process")}
-                        disabled={!canProcess}
-                        title={canProcess ? undefined : "Requires admin role"}
-                      >
-                        Process payout
-                      </Button>
-                    )}
-                  </div>
-                </TableCell>
               </TableRow>
             ))}
             {visible.length === 0 && (
@@ -208,13 +259,48 @@ export default function RefundsPage() {
                   colSpan={8}
                   className="py-8 text-center text-muted-foreground"
                 >
-                  No refunds match the current filter.
+                  No refunds match the current view.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+      <GridFooter count={visible.length} label="refunds" />
+
+      <AlertDialog open={confirmReject} onOpenChange={setConfirmReject}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Reject {selectedRequested.length}{" "}
+              {selectedRequested.length === 1 ? "refund" : "refunds"}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              The selected requested{" "}
+              {selectedRequested.length === 1 ? "refund" : "refunds"} will be
+              rejected and the decision recorded in the audit log. This cannot
+              be undone from this dashboard.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => actOnSelected("reject", selectedRequested)}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              Reject {selectedRequested.length === 1 ? "Refund" : "Refunds"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+export default function RefundsPage() {
+  return (
+    <Suspense>
+      <RefundsPageContent />
+    </Suspense>
   );
 }

@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { RefreshCwIcon } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  CommandBar,
+  CommandButton,
+  GridFooter,
+  ViewSelector,
+} from "@/components/grid";
 import {
   Table,
   TableBody,
@@ -18,17 +17,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQueryState } from "@/lib/use-query-state";
 import { AuditEntry } from "@/lib/types";
 
-export default function AuditPage() {
+function AuditPageContent() {
   const [entries, setEntries] = useState<AuditEntry[]>([]);
-  const [appFilter, setAppFilter] = useState("all");
+  const [appFilter, setAppFilter] = useQueryState("view", "all");
 
-  useEffect(() => {
+  const load = useCallback(() => {
     fetch("/api/audit")
       .then((r) => r.json())
       .then((d) => setEntries(d.audit));
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const visible = entries.filter(
     (e) => appFilter === "all" || e.app === appFilter
@@ -41,23 +45,27 @@ export default function AuditPage() {
         subtitle="Every state-changing action across all three apps: who did it, in what role, and the before/after values. Mirrors Dataverse auditing."
       />
 
-      <div className="mb-4">
-        <Select value={appFilter} onValueChange={setAppFilter}>
-          <SelectTrigger className="w-40" aria-label="App filter">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">All apps</SelectItem>
-              <SelectItem value="kyc">KYC</SelectItem>
-              <SelectItem value="refunds">Refunds</SelectItem>
-              <SelectItem value="flags">Feature flags</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <CommandBar>
+        <CommandButton icon={RefreshCwIcon} onClick={load}>
+          Refresh
+        </CommandButton>
+      </CommandBar>
+
+      <div className="border-x bg-card px-2 py-1.5">
+        <ViewSelector
+          value={appFilter}
+          onChange={setAppFilter}
+          options={[
+            { value: "all", label: "All app activity" },
+            { value: "kyc", label: "KYC activity" },
+            { value: "refunds", label: "Refunds activity" },
+            { value: "flags", label: "Feature-flag activity" },
+          ]}
+          ariaLabel="View"
+        />
       </div>
 
-      <div className="rounded-lg border bg-card shadow-sm">
+      <div className="border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -110,6 +118,15 @@ export default function AuditPage() {
           </TableBody>
         </Table>
       </div>
+      <GridFooter count={visible.length} label="entries" />
     </div>
+  );
+}
+
+export default function AuditPage() {
+  return (
+    <Suspense>
+      <AuditPageContent />
+    </Suspense>
   );
 }
