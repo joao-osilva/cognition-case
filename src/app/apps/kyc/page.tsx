@@ -93,7 +93,11 @@ export default function KycPage() {
 
       <div className="mb-4 flex flex-wrap gap-3">
         <Input
+          type="search"
           placeholder="Search name, email, ID, country…"
+          aria-label="Search cases"
+          spellCheck={false}
+          autoComplete="off"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-72"
@@ -147,8 +151,10 @@ export default function KycPage() {
                 <TableCell>
                   <StatusBadge value={c.status} />
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
-                  {new Date(c.submittedAt).toLocaleDateString()}
+                <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  {new Intl.DateTimeFormat(undefined, {
+                    dateStyle: "medium",
+                  }).format(new Date(c.submittedAt))}
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
@@ -190,7 +196,7 @@ export default function KycPage() {
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-3">
-                  {selected.customerName}
+                  <span>{selected.customerName}</span>
                   <StatusBadge value={selected.status} />
                 </DialogTitle>
                 <DialogDescription className="font-mono text-xs">
@@ -226,6 +232,7 @@ export default function KycPage() {
               {canDecide ? (
                 <>
                   <Textarea
+                    aria-label="Decision note"
                     placeholder="Decision note (required for reject / escalate)…"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}

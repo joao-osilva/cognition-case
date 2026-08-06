@@ -97,7 +97,9 @@ export default function RefundsPage() {
         ].map((card) => (
           <Card key={card.label}>
             <CardHeader>
-              <CardTitle className="text-2xl">{card.value}</CardTitle>
+              <CardTitle className="text-2xl tabular-nums">
+                {card.value}
+              </CardTitle>
               <CardDescription>{card.label}</CardDescription>
             </CardHeader>
           </Card>
@@ -141,22 +143,22 @@ export default function RefundsPage() {
                 <TableCell className="font-mono text-xs">{r.id}</TableCell>
                 <TableCell className="font-medium">{r.customerName}</TableCell>
                 <TableCell className="font-mono text-xs">{r.orderId}</TableCell>
-                <TableCell>
-                  {r.amount.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}{" "}
-                  <span className="text-xs text-muted-foreground">
-                    {r.currency}
-                  </span>
+                <TableCell className="tabular-nums">
+                  {new Intl.NumberFormat(undefined, {
+                    style: "currency",
+                    currency: r.currency,
+                  }).format(r.amount)}
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="max-w-48 truncate text-muted-foreground">
                   {r.reason}
                 </TableCell>
                 <TableCell>
                   <StatusBadge value={r.status} />
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
-                  {new Date(r.requestedAt).toLocaleDateString()}
+                <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  {new Intl.DateTimeFormat(undefined, {
+                    dateStyle: "medium",
+                  }).format(new Date(r.requestedAt))}
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">

@@ -74,8 +74,11 @@ export default function AuditPage() {
           <TableBody>
             {visible.map((e) => (
               <TableRow key={e.id}>
-                <TableCell className="text-xs text-muted-foreground">
-                  {new Date(e.timestamp).toLocaleString()}
+                <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  {new Intl.DateTimeFormat(undefined, {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  }).format(new Date(e.timestamp))}
                 </TableCell>
                 <TableCell className="text-xs">{e.actor}</TableCell>
                 <TableCell>
@@ -86,10 +89,10 @@ export default function AuditPage() {
                 </TableCell>
                 <TableCell className="font-medium">{e.action}</TableCell>
                 <TableCell className="font-mono text-xs">{e.entityId}</TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground">
+                <TableCell className="max-w-40 truncate font-mono text-xs text-muted-foreground">
                   {e.before ?? "—"}
                 </TableCell>
-                <TableCell className="font-mono text-xs">
+                <TableCell className="max-w-40 truncate font-mono text-xs">
                   {e.after ?? "—"}
                 </TableCell>
               </TableRow>

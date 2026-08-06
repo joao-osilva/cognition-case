@@ -123,6 +123,8 @@ export default function FlagsPage() {
                   value={form.key}
                   onChange={(e) => setForm({ ...form, key: e.target.value })}
                   placeholder="new-payment-flow"
+                  spellCheck={false}
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -135,6 +137,8 @@ export default function FlagsPage() {
                   value={form.owner}
                   onChange={(e) => setForm({ ...form, owner: e.target.value })}
                   placeholder="payments-team"
+                  spellCheck={false}
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -153,12 +157,14 @@ export default function FlagsPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5 text-sm">
-                <label className="text-muted-foreground">Environment</label>
+                <label htmlFor="flag-env" className="text-muted-foreground">
+                  Environment
+                </label>
                 <Select
                   value={form.environment}
                   onValueChange={(v) => setForm({ ...form, environment: v })}
                 >
-                  <SelectTrigger aria-label="Environment">
+                  <SelectTrigger id="flag-env" aria-label="Environment">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -195,7 +201,7 @@ export default function FlagsPage() {
               <TableRow key={f.id}>
                 <TableCell>
                   <div className="font-mono text-xs font-medium">{f.key}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="max-w-64 truncate text-xs text-muted-foreground">
                     {f.description}
                   </div>
                 </TableCell>
@@ -219,13 +225,15 @@ export default function FlagsPage() {
                       className="w-28"
                       aria-label={`Rollout percentage for ${f.key}`}
                     />
-                    <span className="w-10 text-xs text-muted-foreground">
+                    <span className="w-10 text-xs tabular-nums text-muted-foreground">
                       {f.rolloutPercent}%
                     </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
-                  {new Date(f.updatedAt).toLocaleDateString()}
+                <TableCell className="text-xs tabular-nums text-muted-foreground">
+                  {new Intl.DateTimeFormat(undefined, {
+                    dateStyle: "medium",
+                  }).format(new Date(f.updatedAt))}
                 </TableCell>
                 <TableCell>
                   <Switch
