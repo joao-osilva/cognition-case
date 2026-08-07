@@ -15,6 +15,7 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { useRole } from "./RoleContext";
+import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -159,6 +160,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <ThemeToggle />
           <span
             role="img"
             aria-label={`Signed in as ${role}`}

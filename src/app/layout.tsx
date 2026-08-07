@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { RoleProvider } from "@/components/RoleContext";
 import { AppShell } from "@/components/AppShell";
@@ -20,17 +21,30 @@ export const metadata: Metadata = {
     "A 2-hour prototype replicating the core Power Apps capabilities used by a fintech internal-tools team.",
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen antialiased">
-        <RoleProvider>
-          <AppShell>{children}</AppShell>
-        </RoleProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <RoleProvider>
+            <AppShell>{children}</AppShell>
+          </RoleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
