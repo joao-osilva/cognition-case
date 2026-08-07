@@ -259,12 +259,28 @@
     "replicated": {
       "title": "Replicado",
       "items": {
-        "grids": "Grades de dados com filtragem e busca (fila de KYC, reembolsos, flags)",
-        "forms": "Formulários validados para ações que alteram estado",
-        "rbac": "RBAC (viewer, approver, admin), aplicado no servidor",
-        "audit": "Log de auditoria: quem fez o quê, quando, com valores antes e depois",
-        "deploy": "Implantado e compartilhável"
-      }
+        "grids": {
+          "name": "Grades de dados",
+          "detail": "Filtragem e busca na fila de KYC, reembolsos e flags."
+        },
+        "forms": {
+          "name": "Formulários validados",
+          "detail": "Campos obrigatórios e regras de negócio em cada ação que altera estado."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Papéis viewer, approver e admin, aplicados no servidor."
+        },
+        "audit": {
+          "name": "Log de auditoria",
+          "detail": "Quem fez o quê, quando, com valores antes e depois."
+        },
+        "deploy": {
+          "name": "Implantação",
+          "detail": "No ar na Vercel, compartilhável com a equipe."
+        }
+      },
+      "done": "Feito"
     },
     "gaps": {
       "title": "Não replicado",
@@ -307,19 +323,32 @@
       "items": {
         "build": {
           "title": "Custo de construção",
-          "body": "Horas de engenharia primeiro: transformar o protótipo em um sistema de produção (SSO, banco de dados, integrações, testes) leva semanas de tempo sênior, não horas. E construir ainda significa comprar: motores de workflow (Temporal, Inngest), autenticação gerenciada e camadas de integração têm cada um sua conta. Auto-hospedar os equivalentes open-source troca assinaturas por gasto de nuvem. Não existe opção com zero fornecedores."
+          "points": [
+            "Horas de engenharia primeiro: transformar o protótipo em um sistema de produção (SSO, banco de dados, integrações, testes) leva semanas de tempo sênior, não horas.",
+            "Construir ainda significa comprar: motores de workflow (Temporal, Inngest), autenticação gerenciada e camadas de integração têm cada um sua conta.",
+            "Auto-hospedar os equivalentes open-source troca assinaturas por gasto de nuvem. Não existe opção com zero fornecedores."
+          ]
         },
         "maintenance": {
           "title": "Ônus de manutenção",
-          "body": "Conectores são um produto, não uma funcionalidade; alguém precisa manter cada integração funcionando conforme as APIs de terceiros mudam. Infraestrutura auto-hospedada adiciona patches, upgrades e plantão."
+          "points": [
+            "Conectores são um produto, não uma funcionalidade; alguém precisa manter cada integração funcionando conforme as APIs de terceiros mudam.",
+            "Infraestrutura auto-hospedada adiciona patches, upgrades e plantão."
+          ]
         },
         "security": {
           "title": "Implicações de segurança",
-          "body": "Autenticação e autorização são um compromisso permanente. Autenticação (SSO, sessões, MFA) e autorização (modelos de papéis, verificações de permissão em cada ação) vêm com a plataforma hoje e passariam a ser responsabilidade da equipe. Em uma fintech regulada, o mesmo vale para obrigações de auditoria e compliance."
+          "points": [
+            "Autenticação (SSO, sessões, MFA) e autorização (modelos de papéis, verificações de permissão em cada ação) vêm com a plataforma hoje e passariam a ser responsabilidade da equipe.",
+            "Em uma fintech regulada, o mesmo vale para obrigações de auditoria e compliance."
+          ]
         },
         "opportunity": {
           "title": "Custo de oportunidade",
-          "body": "O desenvolvimento cidadão desaparece: operações e compliance param de construir seus próprios aplicativos e abrem tickets. A previsão de demanda define a escala: de três a dez aplicativos CRUD, a equipe atual absorve; além disso, um a três engenheiros dedicados a US$ 200 mil+ superam o custo da licença antes mesmo do custo de oportunidade."
+          "points": [
+            "O desenvolvimento cidadão desaparece: operações e compliance param de construir seus próprios aplicativos e abrem tickets.",
+            "A previsão de demanda define a escala: de três a dez aplicativos CRUD, a equipe atual absorve; além disso, um a três engenheiros dedicados a US$ 200 mil+ superam o custo da licença antes mesmo do custo de oportunidade."
+          ]
         }
       }
     },
@@ -344,14 +373,16 @@
           "opex": "Cada mudança de ferramenta como ticket de engenharia; 1 a 3 engenheiros dedicados (US$ 200 mil+ cada) se a demanda crescer"
         }
       },
-      "buyProfile": "Comprar inverte o perfil: capex quase zero, uma única linha de opex (a licença), e o fornecedor carrega manutenção e segurança.",
-      "buildTitle": "Construir",
-      "buyTitle": "Comprar",
-      "legend": {
-        "oneTime": "Único",
-        "recurring": "Recorrente"
+      "buyProfile": "Comprar inverte o perfil: capex quase zero e uma única linha de opex.",
+      "buyTitle": "Comprar (contraste)",
+      "columns": {
+        "dimension": "Dimensão",
+        "capex": "Único (capex)",
+        "opex": "Recorrente (opex)"
       },
-      "license": "Licença da plataforma"
+      "none": "Nenhum",
+      "buyCapex": "Quase zero",
+      "buyOpex": "Licença da plataforma; o fornecedor carrega manutenção e segurança"
     },
     "title": "Avaliação",
     "lead": "O protótipo foi construído em cerca de duas horas com o Devin. O objetivo era replicar o núcleo de capacidades que os três aplicativos usam na plataforma, não um sistema de produção.",

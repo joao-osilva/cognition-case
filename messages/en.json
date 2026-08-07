@@ -259,12 +259,28 @@
     "replicated": {
       "title": "Replicated",
       "items": {
-        "grids": "Data grids with filtering and search (KYC queue, refunds, flags)",
-        "forms": "Validated forms for state-changing actions",
-        "rbac": "RBAC (viewer, approver, admin), enforced server-side",
-        "audit": "Audit log: who did what, when, with before and after values",
-        "deploy": "Deployed and shareable"
-      }
+        "grids": {
+          "name": "Data grids",
+          "detail": "Filtering and search across the KYC queue, refunds, and flags."
+        },
+        "forms": {
+          "name": "Validated forms",
+          "detail": "Required fields and business rules on every state-changing action."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Viewer, approver, admin roles, enforced server-side."
+        },
+        "audit": {
+          "name": "Audit log",
+          "detail": "Who did what, when, with before and after values."
+        },
+        "deploy": {
+          "name": "Deployment",
+          "detail": "Live on Vercel, shareable with the team."
+        }
+      },
+      "done": "Done"
     },
     "gaps": {
       "title": "Not replicated",
@@ -307,19 +323,32 @@
       "items": {
         "build": {
           "title": "Build cost",
-          "body": "Engineering hours first: hardening the prototype into a production system (SSO, database, integrations, testing) is weeks of senior time, not hours. And building still means buying: workflow engines (Temporal, Inngest), managed auth, integration layers each have a bill. Self-hosting the open-source equivalents trades subscriptions for cloud spend. There is no zero-vendor option."
+          "points": [
+            "Engineering hours first: hardening the prototype into a production system (SSO, database, integrations, testing) is weeks of senior time, not hours.",
+            "Building still means buying: workflow engines (Temporal, Inngest), managed auth, and integration layers each have a bill.",
+            "Self-hosting the open-source equivalents trades subscriptions for cloud spend. There is no zero-vendor option."
+          ]
         },
         "maintenance": {
           "title": "Maintenance burden",
-          "body": "Connectors are a product, not a feature; someone must keep every integration working as third-party APIs change. Self-hosted infrastructure adds patching, upgrades, and on-call."
+          "points": [
+            "Connectors are a product, not a feature; someone must keep every integration working as third-party APIs change.",
+            "Self-hosted infrastructure adds patching, upgrades, and on-call."
+          ]
         },
         "security": {
           "title": "Security implications",
-          "body": "Authentication and authorization are a permanent commitment. Authentication (SSO, sessions, MFA) and authorization (role models, permission checks on every action) come with the platform today and would become the team's responsibility. In a regulated fintech, so do audit and compliance obligations."
+          "points": [
+            "Authentication (SSO, sessions, MFA) and authorization (role models, permission checks on every action) come with the platform today and would become the team's responsibility.",
+            "In a regulated fintech, so do audit and compliance obligations."
+          ]
         },
         "opportunity": {
           "title": "Opportunity cost",
-          "body": "Citizen development disappears: operations and compliance stop building their own apps and file tickets instead. Demand forecast decides the scale: at three to ten CRUD apps the current team absorbs it; beyond that, one to three dedicated engineers at $200K+ exceed the license cost before opportunity cost is counted."
+          "points": [
+            "Citizen development disappears: operations and compliance stop building their own apps and file tickets instead.",
+            "Demand forecast decides the scale: at three to ten CRUD apps the current team absorbs it; beyond that, one to three dedicated engineers at $200K+ exceed the license cost before opportunity cost is counted."
+          ]
         }
       }
     },
@@ -344,14 +373,16 @@
           "opex": "Every tool change as an engineering ticket; 1 to 3 dedicated engineers ($200K+ each) if demand grows"
         }
       },
-      "buyProfile": "Buying inverts the profile: near-zero capex, a single opex line (the license), and the vendor carries maintenance and security.",
-      "buildTitle": "Build",
-      "buyTitle": "Buy",
-      "legend": {
-        "oneTime": "One-time",
-        "recurring": "Recurring"
+      "buyProfile": "Buying inverts the profile: near-zero capex and a single opex line.",
+      "buyTitle": "Buy (for contrast)",
+      "columns": {
+        "dimension": "Dimension",
+        "capex": "One-time (capex)",
+        "opex": "Recurring (opex)"
       },
-      "license": "Platform license"
+      "none": "None",
+      "buyCapex": "Near zero",
+      "buyOpex": "Platform license; the vendor carries maintenance and security"
     },
     "title": "Evaluation",
     "lead": "The prototype was built in roughly two hours with Devin. The goal was to replicate the capability core the three apps use on the platform, not a production system.",
