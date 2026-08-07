@@ -20,7 +20,7 @@ import {
 interface Tile {
   href: string;
   title: string;
-  description: string;
+  description?: string;
   cta: string;
 }
 
@@ -43,9 +43,11 @@ function TileCard({ item, number }: { item: Tile; number?: string }) {
             </div>
           )}
           <CardTitle className="text-balance">{item.title}</CardTitle>
-          <CardDescription className="text-pretty">
-            {item.description}
-          </CardDescription>
+          {item.description && (
+            <CardDescription className="text-pretty">
+              {item.description}
+            </CardDescription>
+          )}
         </CardHeader>
         <CardFooter className="mt-auto">
           <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
@@ -74,19 +76,16 @@ export default async function Home({
     {
       href: "/apps/kyc",
       title: t("kycTitle"),
-      description: t("kycDescription"),
       cta: t("kycCta"),
     },
     {
       href: "/apps/refunds",
       title: t("refundsTitle"),
-      description: t("refundsDescription"),
       cta: t("refundsCta"),
     },
     {
       href: "/apps/flags",
       title: t("flagsTitle"),
-      description: t("flagsDescription"),
       cta: t("flagsCta"),
     },
   ];
