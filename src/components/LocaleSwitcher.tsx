@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -46,18 +48,18 @@ function LocaleSwitcherContent() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
+        <DropdownMenuLabel>{t("changeLanguage")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup
+          value={locale}
+          onValueChange={(v) => switchTo(v as Locale)}
+        >
           {routing.locales.map((l) => (
-            <DropdownMenuItem
-              key={l}
-              onSelect={() => switchTo(l)}
-              data-active={l === locale}
-              className="data-[active=true]:font-medium"
-            >
+            <DropdownMenuRadioItem key={l} value={l} lang={l} translate="no">
               {LABELS[l]}
-            </DropdownMenuItem>
+            </DropdownMenuRadioItem>
           ))}
-        </DropdownMenuGroup>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

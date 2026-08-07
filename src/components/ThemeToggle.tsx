@@ -2,20 +2,22 @@
 
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const OPTIONS = [
-  { value: "light", labelKey: "themeLight" },
-  { value: "dark", labelKey: "themeDark" },
-  { value: "system", labelKey: "themeSystem" },
+  { value: "light", labelKey: "themeLight", icon: SunIcon },
+  { value: "dark", labelKey: "themeDark", icon: MoonIcon },
+  { value: "system", labelKey: "themeSystem", icon: MonitorIcon },
 ] as const;
 
 export function ThemeToggle() {
@@ -36,18 +38,16 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
+        <DropdownMenuLabel>{t("changeTheme")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
           {OPTIONS.map((o) => (
-            <DropdownMenuItem
-              key={o.value}
-              onSelect={() => setTheme(o.value)}
-              data-active={o.value === theme}
-              className="data-[active=true]:font-medium"
-            >
+            <DropdownMenuRadioItem key={o.value} value={o.value}>
+              <o.icon aria-hidden="true" className="size-4 text-muted-foreground" />
               {t(o.labelKey)}
-            </DropdownMenuItem>
+            </DropdownMenuRadioItem>
           ))}
-        </DropdownMenuGroup>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

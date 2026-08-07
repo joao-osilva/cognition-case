@@ -166,6 +166,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <div
+            aria-hidden="true"
+            className="h-5 w-px bg-primary-foreground/20"
+          />
           <LocaleSwitcher />
           <ThemeToggle />
           <span
