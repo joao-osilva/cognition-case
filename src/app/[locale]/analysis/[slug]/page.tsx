@@ -1,8 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { marked } from "marked";
+import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const DOCS: Record<string, { file: string; title: string }> = {
@@ -12,24 +14,36 @@ const DOCS: Record<string, { file: string; title: string }> = {
 };
 
 export function generateStaticParams() {
-  return Object.keys(DOCS).map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    Object.keys(DOCS).map((slug) => ({ locale, slug }))
+  );
 }
 
 export default async function AnalysisPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
   const doc = DOCS[slug];
   if (!doc) notFound();
 
-  const filePath = path.join(process.cwd(), "docs", doc.file);
   let markdown: string;
   try {
-    markdown = await fs.readFile(filePath, "utf-8");
+    markdown = await fs.readFile(
+      path.join(process.cwd(), "docs", locale, doc.file),
+      "utf-8"
+    );
   } catch {
-    notFound();
+    try {
+      markdown = await fs.readFile(
+        path.join(process.cwd(), "docs", doc.file),
+        "utf-8"
+      );
+    } catch {
+      notFound();
+    }
   }
 
   const html = await marked.parse(markdown);

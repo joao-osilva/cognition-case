@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { RefreshCwIcon } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
