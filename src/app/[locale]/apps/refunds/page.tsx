@@ -1,7 +1,13 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { BanknoteIcon, CheckIcon, RefreshCwIcon, XIcon } from "lucide-react";
+import {
+  BanknoteIcon,
+  CheckIcon,
+  ReceiptIcon,
+  RefreshCwIcon,
+  XIcon,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
@@ -130,7 +136,11 @@ function RefundsPageContent() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        icon={ReceiptIcon}
+      />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -145,7 +155,10 @@ function RefundsPageContent() {
             }),
           },
         ].map((card) => (
-          <Card key={card.label}>
+          <Card
+            key={card.label}
+            className="transition-shadow hover:shadow-md motion-reduce:transition-none"
+          >
             <CardHeader>
               <CardTitle className="text-2xl tabular-nums">
                 {card.value}

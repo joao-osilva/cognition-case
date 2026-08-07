@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { RefreshCwIcon } from "lucide-react";
+import { RefreshCwIcon, ScrollTextIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
@@ -44,7 +44,11 @@ function AuditPageContent() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        icon={ScrollTextIcon}
+      />
 
       <CommandBar>
         <CommandButton icon={RefreshCwIcon} onClick={load}>

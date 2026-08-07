@@ -57,7 +57,7 @@ export default async function AnalysisPage({
             key={key}
             href={`/analysis/${key}`}
             className={cn(
-              "rounded-md px-3 py-1.5",
+              "rounded-md px-3 py-1.5 transition-colors motion-reduce:transition-none",
               key === slug
                 ? "bg-primary text-primary-foreground"
                 : "bg-card text-muted-foreground hover:bg-muted"

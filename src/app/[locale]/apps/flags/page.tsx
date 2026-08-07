@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { PlusIcon, RefreshCwIcon, XIcon } from "lucide-react";
+import { FlagIcon, PlusIcon, RefreshCwIcon, XIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRole } from "@/components/RoleContext";
 import { CommandBar, CommandButton, GridFooter } from "@/components/grid";
@@ -95,7 +95,11 @@ export default function FlagsPage() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        icon={FlagIcon}
+      />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
       {!isAdmin && (
