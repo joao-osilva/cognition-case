@@ -13,6 +13,7 @@ import {
   ScrollTextIcon,
   SearchIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRole } from "./RoleContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { LocaleSwitcher } from "./LocaleSwitcher";
@@ -30,44 +31,44 @@ import { Role } from "@/lib/types";
 
 interface NavItem {
   href: string;
-  label: string;
+  labelKey: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 interface NavGroup {
-  label: string;
+  labelKey: string;
   items: NavItem[];
 }
 
 const GROUPS: NavGroup[] = [
   {
-    label: "Internal Tools",
+    labelKey: "internalTools",
     items: [
-      { href: "/apps/kyc", label: "KYC Queue", icon: ClipboardCheckIcon },
-      { href: "/apps/refunds", label: "Refunds", icon: ReceiptIcon },
-      { href: "/apps/flags", label: "Feature Flags", icon: FlagIcon },
+      { href: "/apps/kyc", labelKey: "kyc", icon: ClipboardCheckIcon },
+      { href: "/apps/refunds", labelKey: "refunds", icon: ReceiptIcon },
+      { href: "/apps/flags", labelKey: "flags", icon: FlagIcon },
     ],
   },
   {
-    label: "Governance",
-    items: [{ href: "/audit", label: "Audit Log", icon: ScrollTextIcon }],
+    labelKey: "governance",
+    items: [{ href: "/audit", labelKey: "audit", icon: ScrollTextIcon }],
   },
   {
-    label: "Assessment",
+    labelKey: "assessment",
     items: [
       {
         href: "/analysis/research",
-        label: "Research",
+        labelKey: "research",
         icon: LayoutGridIcon,
       },
       {
         href: "/analysis/evaluation",
-        label: "Evaluation",
+        labelKey: "evaluation",
         icon: LayoutGridIcon,
       },
       {
         href: "/analysis/recommendation",
-        label: "Recommendation",
+        labelKey: "recommendation",
         icon: LayoutGridIcon,
       },
     ],
@@ -82,10 +83,12 @@ const ROLE_INITIALS: Record<Role, string> = {
 
 function SidebarLink({
   item,
+  label,
   active,
   collapsed,
 }: {
   item: NavItem;
+  label: string;
   active: boolean;
   collapsed: boolean;
 }) {
@@ -93,7 +96,7 @@ function SidebarLink({
   return (
     <Link
       href={item.href}
-      title={collapsed ? item.label : undefined}
+      title={collapsed ? label : undefined}
       className={cn(
         "relative flex items-center gap-2 rounded-sm px-2.5 py-1.5 text-sm",
         active
@@ -102,7 +105,7 @@ function SidebarLink({
       )}
     >
       <Icon className={cn("size-4 shrink-0", active && "text-primary")} />
-      {!collapsed && <span className="truncate">{item.label}</span>}
+      {!collapsed && <span className="truncate">{label}</span>}
     </Link>
   );
 }
@@ -111,13 +114,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { role, setRole } = useRole();
   const [collapsed, setCollapsed] = useState(false);
+  const t = useTranslations("shell");
+  const tNav = useTranslations("shell.nav");
+  const tRoles = useTranslations("roles");
 
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex h-12 shrink-0 items-center gap-3 bg-primary px-3 text-primary-foreground">
         <GripIcon aria-hidden="true" className="size-4 opacity-80" />
         <Link href="/" className="text-sm font-semibold tracking-tight">
-          Fintech Internal Tools
+          {t("appName")}
         </Link>
         <span
           aria-hidden="true"
@@ -126,7 +132,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           |
         </span>
         <span className="hidden text-sm text-primary-foreground/80 sm:inline">
-          Operations
+          {t("area")}
         </span>
         <div className="ml-auto flex items-center gap-2">
           <div className="relative hidden md:block">
@@ -137,8 +143,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <input
               type="search"
               name="q"
-              placeholder="Search…"
-              aria-label="Search"
+              placeholder={t("searchPlaceholder")}
+              aria-label={t("searchLabel")}
               spellCheck={false}
               autoComplete="off"
               className="h-8 w-56 rounded-md bg-primary-foreground/10 pl-8 pr-3 text-sm text-primary-foreground placeholder:text-primary-foreground/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-foreground/40"
@@ -147,24 +153,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Select value={role} onValueChange={(v) => setRole(v as Role)}>
             <SelectTrigger
               size="sm"
-              aria-label="Role"
+              aria-label={t("roleLabel")}
               className="w-28 border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground *:data-[slot=select-value]:text-primary-foreground [&_svg:not([class*='text-'])]:text-primary-foreground/70"
             >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="viewer">Viewer</SelectItem>
-                <SelectItem value="approver">Approver</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="viewer">{tRoles("viewer")}</SelectItem>
+                <SelectItem value="approver">{tRoles("approver")}</SelectItem>
+                <SelectItem value="admin">{tRoles("admin")}</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
+          <div
+            aria-hidden="true"
+            className="h-5 w-px bg-primary-foreground/20"
+          />
           <LocaleSwitcher />
           <ThemeToggle />
           <span
             role="img"
-            aria-label={`Signed in as ${role}`}
+            aria-label={t("signedInAs", { role: tRoles(role) })}
             className="flex size-8 items-center justify-center rounded-full bg-primary-foreground/20 text-xs font-semibold"
           >
             {ROLE_INITIALS[role]}
@@ -183,7 +193,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             variant="ghost"
             size="icon-sm"
             onClick={() => setCollapsed((v) => !v)}
-            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+            aria-label={collapsed ? t("expandNav") : t("collapseNav")}
             className="self-start text-muted-foreground"
           >
             <PanelLeftIcon />
@@ -191,21 +201,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <nav className="flex flex-col gap-4">
             <SidebarLink
-              item={{ href: "/", label: "Home", icon: HomeIcon }}
+              item={{ href: "/", labelKey: "home", icon: HomeIcon }}
+              label={tNav("home")}
               active={pathname === "/"}
               collapsed={collapsed}
             />
             {GROUPS.map((group) => (
-              <div key={group.label} className="flex flex-col gap-0.5">
+              <div key={group.labelKey} className="flex flex-col gap-0.5">
                 {!collapsed && (
                   <div className="px-2.5 pb-1 text-xs font-semibold text-foreground">
-                    {group.label}
+                    {tNav(group.labelKey)}
                   </div>
                 )}
                 {group.items.map((item) => (
                   <SidebarLink
                     key={item.href}
                     item={item}
+                    label={tNav(item.labelKey)}
                     active={pathname.startsWith(item.href)}
                     collapsed={collapsed}
                   />

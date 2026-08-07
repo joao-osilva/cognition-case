@@ -22,24 +22,31 @@ export async function POST(req: NextRequest) {
 
   if (!KEY_PATTERN.test(key)) {
     return NextResponse.json(
-      { error: "Key must be kebab-case (e.g. 'new-payment-flow')." },
+      {
+        error: "Key must be kebab-case (e.g. 'new-payment-flow').",
+        code: "key_kebab_case",
+      },
       { status: 400 }
     );
   }
   if (!description) {
-    return NextResponse.json({ error: "Description is required." }, { status: 400 });
+    return NextResponse.json({ error: "Description is required.", code: "description_required" }, { status: 400 });
   }
   if (!ENVIRONMENTS.includes(environment)) {
-    return NextResponse.json({ error: "Invalid environment." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid environment.", code: "invalid_environment" }, { status: 400 });
   }
   if (!owner) {
-    return NextResponse.json({ error: "Owner is required." }, { status: 400 });
+    return NextResponse.json({ error: "Owner is required.", code: "owner_required" }, { status: 400 });
   }
 
   const store = getStore();
   if (store.flags.some((f) => f.key === key && f.environment === environment)) {
     return NextResponse.json(
-      { error: `Flag '${key}' already exists in ${environment}.` },
+      {
+        error: `Flag '${key}' already exists in ${environment}.`,
+        code: "flag_exists",
+        params: { key, environment },
+      },
       { status: 409 }
     );
   }

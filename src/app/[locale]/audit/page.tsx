@@ -2,6 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { RefreshCwIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
   CommandBar,
@@ -21,6 +22,9 @@ import { useQueryState } from "@/lib/use-query-state";
 import { AuditEntry } from "@/lib/types";
 
 function AuditPageContent() {
+  const t = useTranslations("audit");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [entries, setEntries] = useState<AuditEntry[]>([]);
   const [appFilter, setAppFilter] = useQueryState("view", "all");
 
@@ -40,14 +44,11 @@ function AuditPageContent() {
 
   return (
     <div>
-      <PageHeader
-        title="Audit Log"
-        subtitle="Every state-changing action across all three apps: who did it, in what role, and the before/after values. Mirrors Dataverse auditing."
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <CommandBar>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
-          Refresh
+          {tCommon("refresh")}
         </CommandButton>
       </CommandBar>
 
@@ -55,13 +56,11 @@ function AuditPageContent() {
         <ViewSelector
           value={appFilter}
           onChange={setAppFilter}
-          options={[
-            { value: "all", label: "All app activity" },
-            { value: "kyc", label: "KYC activity" },
-            { value: "refunds", label: "Refunds activity" },
-            { value: "flags", label: "Feature-flag activity" },
-          ]}
-          ariaLabel="View"
+          options={["all", "kyc", "refunds", "flags"].map((v) => ({
+            value: v,
+            label: t(`views.${v}`),
+          }))}
+          ariaLabel={tCommon("view")}
         />
       </div>
 
@@ -69,21 +68,21 @@ function AuditPageContent() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>When</TableHead>
-              <TableHead>Actor</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>App</TableHead>
-              <TableHead>Action</TableHead>
-              <TableHead>Entity</TableHead>
-              <TableHead>Before</TableHead>
-              <TableHead>After</TableHead>
+              <TableHead>{t("columns.when")}</TableHead>
+              <TableHead>{t("columns.actor")}</TableHead>
+              <TableHead>{t("columns.role")}</TableHead>
+              <TableHead>{t("columns.app")}</TableHead>
+              <TableHead>{t("columns.action")}</TableHead>
+              <TableHead>{t("columns.entity")}</TableHead>
+              <TableHead>{t("columns.before")}</TableHead>
+              <TableHead>{t("columns.after")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visible.map((e) => (
               <TableRow key={e.id}>
                 <TableCell className="text-xs tabular-nums text-muted-foreground">
-                  {new Intl.DateTimeFormat(undefined, {
+                  {new Intl.DateTimeFormat(locale, {
                     dateStyle: "medium",
                     timeStyle: "short",
                   }).format(new Date(e.timestamp))}
@@ -111,14 +110,14 @@ function AuditPageContent() {
                   colSpan={8}
                   className="py-8 text-center text-muted-foreground"
                 >
-                  No audit entries yet — take an action in one of the apps.
+                  {t("empty")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <GridFooter count={visible.length} label="entries" />
+      <GridFooter count={visible.length} label={t("footerLabel")} />
     </div>
   );
 }

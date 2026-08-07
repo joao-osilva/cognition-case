@@ -22,23 +22,31 @@ export async function POST(
   const action = body.action as string;
   const transition = TRANSITIONS[action];
   if (!transition) {
-    return NextResponse.json({ error: "Unknown action" }, { status: 400 });
+    return NextResponse.json({ error: "Unknown action", code: "unknown_action" }, { status: 400 });
   }
 
   const store = getStore();
   const kycCase = store.kycCases.find((c) => c.id === id);
   if (!kycCase) {
-    return NextResponse.json({ error: "Case not found" }, { status: 404 });
+    return NextResponse.json({ error: "Case not found", code: "case_not_found" }, { status: 404 });
   }
   if (!transition.from.includes(kycCase.status)) {
     return NextResponse.json(
-      { error: `Cannot ${action} a case in '${kycCase.status}' status.` },
+      {
+        error: `Cannot ${action} a case in '${kycCase.status}' status.`,
+        code: "invalid_transition",
+        params: { action, status: kycCase.status },
+      },
       { status: 409 }
     );
   }
   if ((action === "reject" || action === "escalate") && !body.notes?.trim()) {
     return NextResponse.json(
-      { error: `A note is required to ${action} a case.` },
+      {
+        error: `A note is required to ${action} a case.`,
+        code: "note_required",
+        params: { action },
+      },
       { status: 400 }
     );
   }

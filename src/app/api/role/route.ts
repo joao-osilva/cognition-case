@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const role = body.role as Role;
   if (!ROLES.includes(role)) {
-    return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid role", code: "invalid_role" }, { status: 400 });
   }
   const res = NextResponse.json({ role });
   res.cookies.set(ROLE_COOKIE, role, { path: "/" });

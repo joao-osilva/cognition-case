@@ -1,24 +1,28 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const OPTIONS = [
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
-  { value: "system", label: "System" },
-];
+  { value: "light", labelKey: "themeLight", icon: SunIcon },
+  { value: "dark", labelKey: "themeDark", icon: MoonIcon },
+  { value: "system", labelKey: "themeSystem", icon: MonitorIcon },
+] as const;
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations("shell");
 
   return (
     <DropdownMenu>
@@ -26,7 +30,7 @@ export function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="Change theme"
+          aria-label={t("changeTheme")}
           className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
         >
           <SunIcon className="dark:hidden" />
@@ -34,18 +38,16 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
+        <DropdownMenuLabel>{t("changeTheme")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
           {OPTIONS.map((o) => (
-            <DropdownMenuItem
-              key={o.value}
-              onSelect={() => setTheme(o.value)}
-              data-active={o.value === theme}
-              className="data-[active=true]:font-medium"
-            >
-              {o.label}
-            </DropdownMenuItem>
+            <DropdownMenuRadioItem key={o.value} value={o.value}>
+              <o.icon aria-hidden="true" className="size-4 text-muted-foreground" />
+              {t(o.labelKey)}
+            </DropdownMenuRadioItem>
           ))}
-        </DropdownMenuGroup>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

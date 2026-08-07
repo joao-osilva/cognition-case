@@ -21,6 +21,8 @@ export function forbidden(required: Role, role: Role): NextResponse {
   return NextResponse.json(
     {
       error: `This action requires the '${required}' role or higher. You are currently '${role}'.`,
+      code: "forbidden",
+      params: { required, role },
     },
     { status: 403 }
   );

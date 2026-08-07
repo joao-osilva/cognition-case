@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { GlobeIcon } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -23,6 +25,7 @@ const LABELS: Record<Locale, string> = {
 
 function LocaleSwitcherContent() {
   const locale = useLocale();
+  const t = useTranslations("shell");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -38,25 +41,25 @@ function LocaleSwitcherContent() {
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="Change language"
+          aria-label={t("changeLanguage")}
           className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
         >
           <GlobeIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
+        <DropdownMenuLabel>{t("changeLanguage")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup
+          value={locale}
+          onValueChange={(v) => switchTo(v as Locale)}
+        >
           {routing.locales.map((l) => (
-            <DropdownMenuItem
-              key={l}
-              onSelect={() => switchTo(l)}
-              data-active={l === locale}
-              className="data-[active=true]:font-medium"
-            >
+            <DropdownMenuRadioItem key={l} value={l} lang={l} translate="no">
               {LABELS[l]}
-            </DropdownMenuItem>
+            </DropdownMenuRadioItem>
           ))}
-        </DropdownMenuGroup>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
