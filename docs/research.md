@@ -2,87 +2,60 @@
 
 ## 1. What Power Apps Is
 
-Microsoft Power Apps is a low-code application platform within the Power Platform
-(Power Apps, Power Automate, Power BI, Power Pages, Copilot Studio). It provides a rapid
-development environment for business apps that connect to data in Microsoft Dataverse
-or in 1,000+ external sources (SharePoint, SQL Server, Dynamics 365, Salesforce, and others).
-
-Its core building blocks:
+A low-code app platform, part of Microsoft's Power Platform. Builds business apps on
+top of Dataverse or 1,000+ external data sources.
 
 | Component | What it provides |
 |---|---|
-| **Canvas apps** | Drag-and-drop UI builder: forms, galleries, and buttons wired to data with Excel-like formulas (Power Fx). |
-| **Model-driven apps** | UI generated from the data model. Define tables, relationships, forms, views, and business rules in Dataverse; the app (grids, detail forms, dashboards) is produced automatically. This is the mode most relevant to CRUD-style internal tools. |
-| **Microsoft Dataverse** | The managed data platform: relational tables, column-level security, business rules, server-side validation, and built-in change auditing. |
-| **Connectors** | 1,000+ prebuilt connectors to Microsoft and third-party systems; custom connectors for internal REST APIs. |
-| **Power Automate** | Workflow and automation engine (approvals, notifications, scheduled jobs) that pairs with apps. |
-| **AI / Copilot** | Natural-language app generation and AI Builder models embedded into apps. |
+| **Canvas apps** | Drag-and-drop UI builder with Excel-like formulas (Power Fx). |
+| **Model-driven apps** | UI generated from the data model: define tables and rules, get grids, forms, and dashboards. The mode used for CRUD internal tools. |
+| **Microsoft Dataverse** | Managed data platform: relational tables, column-level security, validation, change auditing. |
+| **Connectors** | 1,000+ prebuilt integrations; custom connectors for internal APIs. |
+| **Power Automate** | Workflows: approvals, notifications, scheduled jobs. |
+| **AI / Copilot** | Natural-language app generation, AI Builder models. |
 
-## 2. The Capabilities That Matter for the Engineering Team
+## 2. The Capabilities the Three Apps Use
 
-The three apps (KYC review queue, refunds dashboard, feature-flag admin panel) rely on
-a specific subset of the platform:
+1. **Data grids**: sortable, filterable views over KYC cases, refunds, flags.
+2. **Validated forms**: required fields, typed inputs, business rules.
+3. **RBAC**: analysts review, compliance leads approve, engineering toggles flags.
+   Required in a regulated fintech.
+4. **Audit trail**: every change logged with old and new values. Required for KYC
+   and refunds.
+5. **Approvals**: pending / approved / rejected state machines with notifications.
+6. **Connectors**: integrations (identity providers, payment processors) the team
+   does not maintain.
+7. **Managed platform**: SSO, hosting, patching, backups are the vendor's problem.
 
-1. **Data tables and views**: sortable, filterable, searchable grids over business
-   records (KYC cases, refund requests, flags).
-2. **Forms with validation**: create and edit records with required fields, typed
-   inputs, and business-rule validation.
-3. **Role-based access control**: Dataverse security roles integrated with Microsoft
-   Entra ID. An analyst can review, only a compliance lead can approve, only
-   engineering can toggle a production flag. In a regulated fintech this is a
-   requirement.
-4. **Audit trail**: Dataverse auditing logs every create, update, and delete with old
-   and new values per record. For KYC and refunds this is a compliance requirement.
-5. **Workflow and approvals**: state machines (pending to approved or rejected) with
-   notifications and escalation via Power Automate.
-6. **Connectors**: internal tools rarely stand alone. KYC queues read from identity
-   verification providers, refund dashboards talk to payment processors. The
-   maintained connector catalog keeps those integrations out of the team's codebase.
-7. **Managed platform**: SSO, hosting, patching, backups, and uptime are the vendor's
-   responsibility.
-
-All three apps follow the same core pattern: table, form, role-gated action, audit log,
-with integrations at the edges. They do not appear to use the platform's remaining
-differentiators such as offline mobile or AI Builder.
+Same pattern in all three apps: table, form, role-gated action, audit log. Offline
+mobile, AI Builder, and the rest of the platform go unused.
 
 ## 3. Where the Value Lies
 
-The platform's value is the bundle rather than any single feature:
+The value is the bundle, not any single feature:
 
-- **Speed to first version**: a working CRUD app in hours or days, without engineers.
-- **Citizen development**: non-engineers (operations, compliance) can build and modify apps.
-- **Governance out of the box**: SSO, RBAC, auditing, and compliance certifications
-  (SOC 2, ISO 27001) inherited from the Microsoft cloud.
-- **A maintained integration ecosystem**: 1,000+ connectors that the vendor keeps
-  working as third-party APIs change, so integrations are configuration rather than
-  code the team owns.
-- **Zero infrastructure ownership**: no servers, deployments, or on-call.
+- **Speed**: a working CRUD app in hours or days, without engineers.
+- **Citizen development**: operations and compliance build their own apps.
+- **Governance**: SSO, RBAC, auditing, SOC 2 / ISO 27001 inherited from Microsoft.
+- **Maintained integrations**: connectors are configuration, not code to own.
+- **No infrastructure**: no servers, deployments, or on-call.
 
-Its documented weaknesses, relevant when evaluating a replacement:
+The documented weaknesses:
 
-- **Licensing cost and complexity**: Premium is roughly $20/user/month at list price;
-  premium connectors, Dataverse capacity, and per-app stacking make real costs hard
-  to predict.
-- **Delegation limits**: queries a connector cannot delegate are evaluated client-side
-  on a capped record set (500 to 2,000 rows), which produces incorrect results at scale.
-- **Constrained data model and UX**: complex relational logic and custom UX beyond
-  forms-over-data are difficult.
-- **API request limits**: per-user daily API caps tied to licensing.
-- **Vendor lock-in**: apps, Power Fx formulas, and Dataverse data are not portable.
+- **Licensing**: ~$20/user/month list, but premium connectors, Dataverse capacity,
+  and per-app stacking make real costs hard to predict.
+- **Delegation limits**: non-delegable queries run client-side on 500 to 2,000 rows
+  and return wrong results at scale.
+- **Constrained UX**: hard to go beyond forms-over-data.
+- **API caps**: per-user daily request limits.
+- **Lock-in**: apps, Power Fx, and Dataverse data are not portable.
 
-## 4. A Caution on the Current Spend: Price May Not Reflect Usage
+## 4. Caution: Price May Not Reflect Usage
 
-What a team pays for a platform often reflects how the contract was structured, not
-how the platform is used: seats, capacity add-ons, premium connectors, and bundled
-enterprise agreements. Three apps' worth of usage can sit inside a contract priced for
-far more. For reference, at Power Apps list price, 60 engineers at $20/user/month is
-roughly $14.4K/year, an order of magnitude below the reported $250K spend.
-
-Two implications:
-
-1. Start with a license and usage audit, regardless of the build-vs-buy decision.
-2. Compare any in-house alternative against the renegotiated platform price, or a
-   cheaper competitor at $10 to $50/user/month, not the current contract.
+Platform spend often reflects contract structure, not usage. At list price, 60 users
+cost roughly $14.4K/year, far below the reported $250K. Start with a license audit.
+Compare building against the renegotiated price or a cheaper competitor, not the
+current contract.
 
 ## Sources
 
