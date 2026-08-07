@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   ClipboardCheckIcon,
   FlagIcon,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { useRole } from "./RoleContext";
 import { ThemeToggle } from "./ThemeToggle";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -160,6 +160,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <LocaleSwitcher />
           <ThemeToggle />
           <span
             role="img"
