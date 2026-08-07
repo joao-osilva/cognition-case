@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Fintech Internal Tools — Power Apps Prototype",
-    "description": "A 2-hour prototype replicating the core Power Apps capabilities used by a fintech internal-tools team."
+    "title": "Internal Tool Platform Assessment",
+    "description": "A working prototype and build-vs-buy assessment of the three Power Apps workloads."
   },
   "shell": {
     "appName": "Fintech Internal Tools",
@@ -68,29 +68,29 @@
   },
   "home": {
     "badge": "Build-vs-Buy Assessment",
-    "title": "Could Two Hours of Building Replace a $250K/Year Platform?",
-    "intro": "A Series C fintech with ~60 engineers runs three internal apps on Microsoft Power Apps. This prototype rebuilds their capability core — data grids, validated forms, role-based access control, and a full audit trail — so the build-vs-buy decision rests on evidence, not guesswork.",
-    "tryIt": "Try it: switch between Viewer, Approver, and Admin in the top-right and watch what each role can and can't do.",
-    "appsHeading": "The Three Internal Apps",
-    "assessmentHeading": "The Assessment",
-    "prototypeNote": "Prototype note: data lives in memory and reseeds on cold starts — a deliberate scope cut, discussed in the evaluation.",
+    "title": "Internal Tool Platform Assessment",
+    "intro": "This assessment pairs a working prototype of the three Power Apps workloads with an evaluation of what replacing the platform would take, and concludes with a recommendation.",
+    "tryIt": "To compare role behavior, switch between Viewer, Approver, and Admin in the top-right.",
+    "heroCtaPrimary": "Explore the Apps",
+    "heroCtaSecondary": "Read the Recommendation",
+    "appsHeading": "Prototype",
+    "assessmentHeading": "Assessment",
+    "assessmentIntro": "The analysis behind the recommendation, in three parts: research, evaluation, and recommendation.",
+    "prototypeNote": "Prototype note: data is stored in memory and reseeds on restart; this scope decision is discussed in the evaluation.",
     "kycTitle": "KYC Review Queue",
-    "kycDescription": "Work through pending identity checks. Approve, reject, or escalate — rejections and escalations always require a note.",
     "kycCta": "Open the Queue",
     "refundsTitle": "Refunds Dashboard",
-    "refundsDescription": "See open exposure at a glance, decide on requests, and process approved payouts. Refunds over 1,000 need an admin.",
     "refundsCta": "Review Refunds",
     "flagsTitle": "Feature-Flag Admin",
-    "flagsDescription": "Toggle flags and dial rollout percentages per environment. Every change is admin-only and lands in the audit log.",
     "flagsCta": "Manage Flags",
     "researchTitle": "Research",
-    "researchDescription": "What Power Apps actually provides, and which slice of it this team pays $250K/year for.",
+    "researchDescription": "What Power Apps provides, and which capabilities the three apps rely on.",
     "researchCta": "Read the Research",
     "evaluationTitle": "Evaluation",
-    "evaluationDescription": "What ~2 hours of building replicated, what it didn't, and what closing the gap would really cost.",
+    "evaluationDescription": "What the prototype replicated, what it didn't, and what closing the gap would cost.",
     "evaluationCta": "Read the Evaluation",
     "recommendationTitle": "Recommendation",
-    "recommendationDescription": "The build-vs-buy call, with the reasoning laid out so you can disagree with it productively.",
+    "recommendationDescription": "The build-vs-buy recommendation and the reasoning behind it.",
     "recommendationCta": "Read the Recommendation"
   },
   "kyc": {
@@ -139,7 +139,7 @@
     "decisionNoteLabel": "Decision note",
     "decisionNotePlaceholder": "Decision note (required for reject / escalate)…",
     "decisionHint": "Use the command bar above to approve, reject, or escalate this case.",
-    "viewerNotice": "You are a <strong>viewer</strong> — switch to approver or admin to make decisions.",
+    "viewerNotice": "You are a <strong>viewer</strong>. Switch to approver or admin to make decisions.",
     "noHistory": "No audit entries for this case yet.",
     "columns": {
       "when": "When",
@@ -187,7 +187,7 @@
   "flags": {
     "title": "Feature-Flag Admin Panel",
     "subtitle": "Toggle flags and adjust rollout percentages per environment. All changes require the admin role and are recorded in the audit log.",
-    "roleNotice": "You are <strong>{role}</strong> — flag changes require admin.",
+    "roleNotice": "You are <strong>{role}</strong>. Flag changes require the admin role.",
     "new": "New",
     "requiresAdmin": "Requires admin role",
     "keyLabel": "Key (kebab-case)",
@@ -212,7 +212,7 @@
   },
   "audit": {
     "title": "Audit Log",
-    "subtitle": "Every state-changing action across all three apps: who did it, in what role, and the before/after values. Mirrors Dataverse auditing.",
+    "subtitle": "Every state-changing action across all three apps: who performed it, in what role, and the before/after values.",
     "views": {
       "all": "All app activity",
       "kyc": "KYC activity",
@@ -229,7 +229,7 @@
       "before": "Before",
       "after": "After"
     },
-    "empty": "No audit entries yet — take an action in one of the apps.",
+    "empty": "No audit entries yet. Actions taken in the apps will appear here.",
     "footerLabel": "entries"
   },
   "analysis": {

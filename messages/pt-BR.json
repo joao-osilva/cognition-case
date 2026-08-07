@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Ferramentas Internas Fintech — Protótipo Power Apps",
-    "description": "Um protótipo de 2 horas replicando as principais capacidades do Power Apps usadas por uma equipe de ferramentas internas de fintech."
+    "title": "Avaliação da Plataforma de Ferramentas Internas",
+    "description": "Um protótipo funcional e uma avaliação de construir versus comprar das três cargas de trabalho do Power Apps."
   },
   "shell": {
     "appName": "Ferramentas Internas Fintech",
@@ -68,29 +68,29 @@
   },
   "home": {
     "badge": "Avaliação Construir vs. Comprar",
-    "title": "Duas Horas de Desenvolvimento Poderiam Substituir uma Plataforma de US$ 250 Mil/Ano?",
-    "intro": "Uma fintech Série C com ~60 engenheiros opera três aplicativos internos no Microsoft Power Apps. Este protótipo reconstrói o núcleo de capacidades — grades de dados, formulários validados, controle de acesso baseado em papéis e uma trilha de auditoria completa — para que a decisão de construir ou comprar se baseie em evidências, não em suposições.",
-    "tryIt": "Experimente: alterne entre Visualizador, Aprovador e Admin no canto superior direito e veja o que cada papel pode e não pode fazer.",
-    "appsHeading": "Os Três Aplicativos Internos",
-    "assessmentHeading": "A Avaliação",
-    "prototypeNote": "Nota sobre o protótipo: os dados vivem em memória e são recriados em cold starts — um corte de escopo deliberado, discutido na análise.",
+    "title": "Avaliação da Plataforma de Ferramentas Internas",
+    "intro": "Esta avaliação combina um protótipo funcional das três cargas de trabalho do Power Apps com uma análise do que seria necessário para substituir a plataforma, e conclui com uma recomendação.",
+    "tryIt": "Para comparar o comportamento dos papéis, alterne entre Visualizador, Aprovador e Admin no canto superior direito.",
+    "heroCtaPrimary": "Explorar os Aplicativos",
+    "heroCtaSecondary": "Ler a Recomendação",
+    "appsHeading": "Protótipo",
+    "assessmentHeading": "Avaliação",
+    "assessmentIntro": "A análise por trás da recomendação, em três partes: pesquisa, análise e recomendação.",
+    "prototypeNote": "Nota sobre o protótipo: os dados são armazenados em memória e recriados a cada reinicialização; essa decisão de escopo é discutida na análise.",
     "kycTitle": "Fila de Revisão KYC",
-    "kycDescription": "Trabalhe nas verificações de identidade pendentes. Aprove, rejeite ou escale — rejeições e escalações sempre exigem uma nota.",
     "kycCta": "Abrir a Fila",
     "refundsTitle": "Painel de Reembolsos",
-    "refundsDescription": "Veja a exposição aberta de relance, decida sobre solicitações e processe pagamentos aprovados. Reembolsos acima de 1.000 exigem um admin.",
     "refundsCta": "Revisar Reembolsos",
     "flagsTitle": "Admin de Feature Flags",
-    "flagsDescription": "Ative flags e ajuste percentuais de rollout por ambiente. Toda alteração é exclusiva de admin e vai para o log de auditoria.",
     "flagsCta": "Gerenciar Flags",
     "researchTitle": "Pesquisa",
-    "researchDescription": "O que o Power Apps realmente oferece, e qual fatia dele esta equipe paga US$ 250 mil/ano para usar.",
+    "researchDescription": "O que o Power Apps oferece, e de quais capacidades os três aplicativos dependem.",
     "researchCta": "Ler a Pesquisa",
     "evaluationTitle": "Análise",
-    "evaluationDescription": "O que ~2 horas de desenvolvimento replicaram, o que não replicaram, e quanto custaria de fato fechar a lacuna.",
+    "evaluationDescription": "O que o protótipo replicou, o que não replicou, e quanto custaria fechar a lacuna.",
     "evaluationCta": "Ler a Análise",
     "recommendationTitle": "Recomendação",
-    "recommendationDescription": "A decisão construir vs. comprar, com o raciocínio exposto para que você possa discordar produtivamente.",
+    "recommendationDescription": "A recomendação de construir ou comprar e o raciocínio por trás dela.",
     "recommendationCta": "Ler a Recomendação"
   },
   "kyc": {
@@ -139,7 +139,7 @@
     "decisionNoteLabel": "Nota de decisão",
     "decisionNotePlaceholder": "Nota de decisão (obrigatória para rejeitar / escalar)…",
     "decisionHint": "Use a barra de comandos acima para aprovar, rejeitar ou escalar este caso.",
-    "viewerNotice": "Você é um <strong>visualizador</strong> — mude para aprovador ou admin para tomar decisões.",
+    "viewerNotice": "Você é um <strong>visualizador</strong>. Mude para aprovador ou admin para tomar decisões.",
     "noHistory": "Ainda não há entradas de auditoria para este caso.",
     "columns": {
       "when": "Quando",
@@ -187,7 +187,7 @@
   "flags": {
     "title": "Painel Admin de Feature Flags",
     "subtitle": "Ative flags e ajuste percentuais de rollout por ambiente. Todas as alterações exigem o papel de admin e são registradas no log de auditoria.",
-    "roleNotice": "Você é <strong>{role}</strong> — alterações em flags exigem admin.",
+    "roleNotice": "Você é <strong>{role}</strong>. Alterações em flags exigem o papel de admin.",
     "new": "Novo",
     "requiresAdmin": "Exige o papel de admin",
     "keyLabel": "Chave (kebab-case)",
@@ -229,7 +229,7 @@
       "before": "Antes",
       "after": "Depois"
     },
-    "empty": "Ainda não há entradas de auditoria — realize uma ação em um dos apps.",
+    "empty": "Ainda não há entradas de auditoria. Ações realizadas nos apps aparecerão aqui.",
     "footerLabel": "entradas"
   },
   "analysis": {
