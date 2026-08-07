@@ -1,3 +1,4 @@
+import { CheckCircle2Icon, CircleAlertIcon, TriangleAlertIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import {
   Table,
@@ -55,7 +56,7 @@ const SOURCES = [
 function Eyebrow({ index, children }: { index: string; children: React.ReactNode }) {
   return (
     <div className="mb-4 flex items-baseline gap-3 border-b pb-2">
-      <span className="font-mono text-xs tabular-nums text-muted-foreground/70">
+      <span className="font-mono text-xs font-semibold tabular-nums text-primary">
         {index}
       </span>
       <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -129,11 +130,23 @@ export async function ResearchView() {
         <p className="mb-6 text-sm text-muted-foreground">{t("value.intro")}</p>
         <div className="grid gap-10 sm:grid-cols-2">
           <div>
-            <h3 className="mb-4 text-sm font-medium">{t("value.bundleTitle")}</h3>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium">
+              <CheckCircle2Icon
+                aria-hidden="true"
+                className="size-4 text-emerald-600 dark:text-emerald-400"
+              />
+              {t("value.bundleTitle")}
+            </h3>
             <ul className="space-y-4">
               {VALUES.map((key) => (
                 <li key={key} className="text-sm">
-                  <span className="font-medium">{t(`value.bundle.${key}.name`)}</span>
+                  <span className="flex items-center gap-2 font-medium">
+                    <span
+                      aria-hidden="true"
+                      className="size-1.5 rounded-full bg-emerald-500"
+                    />
+                    {t(`value.bundle.${key}.name`)}
+                  </span>
                   <p className="mt-0.5 leading-snug text-muted-foreground">
                     {t(`value.bundle.${key}.detail`)}
                   </p>
@@ -142,11 +155,21 @@ export async function ResearchView() {
             </ul>
           </div>
           <div className="sm:border-l sm:pl-10">
-            <h3 className="mb-4 text-sm font-medium">{t("value.weaknessesTitle")}</h3>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium">
+              <CircleAlertIcon
+                aria-hidden="true"
+                className="size-4 text-amber-600 dark:text-amber-400"
+              />
+              {t("value.weaknessesTitle")}
+            </h3>
             <ul className="space-y-4">
               {WEAKNESSES.map((key) => (
                 <li key={key} className="text-sm">
-                  <span className="font-medium">
+                  <span className="flex items-center gap-2 font-medium">
+                    <span
+                      aria-hidden="true"
+                      className="size-1.5 rounded-full bg-amber-500"
+                    />
                     {t(`value.weaknesses.${key}.name`)}
                   </span>
                   <p className="mt-0.5 leading-snug text-muted-foreground">
@@ -161,9 +184,15 @@ export async function ResearchView() {
 
       <section className="mb-12">
         <Eyebrow index="04">{t("caution.title")}</Eyebrow>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          {t("caution.body")}
-        </p>
+        <div className="flex max-w-2xl gap-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-4 dark:bg-amber-500/10">
+          <TriangleAlertIcon
+            aria-hidden="true"
+            className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400"
+          />
+          <p className="text-sm leading-relaxed text-foreground/80">
+            {t("caution.body")}
+          </p>
+        </div>
       </section>
 
       <footer>

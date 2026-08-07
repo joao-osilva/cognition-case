@@ -1,4 +1,4 @@
-import { CheckIcon } from "lucide-react";
+import { CheckCircle2Icon, CheckIcon, CircleAlertIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import {
   Table,
@@ -30,7 +30,7 @@ const EFFORT_DOT: Record<string, string> = {
 function Eyebrow({ index, children }: { index: string; children: React.ReactNode }) {
   return (
     <div className="mb-4 flex items-baseline gap-3 border-b pb-2">
-      <span className="font-mono text-xs tabular-nums text-muted-foreground/70">
+      <span className="font-mono text-xs font-semibold tabular-nums text-primary">
         {index}
       </span>
       <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -65,7 +65,13 @@ export async function EvaluationView() {
         <Eyebrow index="01">{t("comparison.title")}</Eyebrow>
         <div className="grid gap-10 sm:grid-cols-2">
           <div>
-            <h3 className="mb-4 text-sm font-medium">{t("replicated.title")}</h3>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium">
+              <CheckCircle2Icon
+                aria-hidden="true"
+                className="size-4 text-emerald-600 dark:text-emerald-400"
+              />
+              {t("replicated.title")}
+            </h3>
             <ul className="space-y-4">
               {REPLICATED.map((key) => (
                 <li key={key} className="text-sm">
@@ -89,7 +95,13 @@ export async function EvaluationView() {
             </ul>
           </div>
           <div className="sm:border-l sm:pl-10">
-            <h3 className="mb-4 text-sm font-medium">{t("gaps.title")}</h3>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium">
+              <CircleAlertIcon
+                aria-hidden="true"
+                className="size-4 text-amber-600 dark:text-amber-400"
+              />
+              {t("gaps.title")}
+            </h3>
             <ul className="space-y-4">
               {GAPS.map((key) => {
                 const effort = t(`gaps.items.${key}.effort`);
@@ -178,8 +190,8 @@ export async function EvaluationView() {
                   </TableRow>
                 );
               })}
-              <TableRow className="border-t-2 bg-muted/30">
-                <TableCell className="align-top font-medium">
+              <TableRow className="border-t-2 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 dark:hover:bg-primary/15">
+                <TableCell className="align-top font-medium text-primary">
                   {t("capexOpex.buyTitle")}
                 </TableCell>
                 <TableCell className="whitespace-normal align-top text-muted-foreground">
