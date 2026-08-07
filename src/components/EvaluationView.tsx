@@ -44,7 +44,7 @@ export async function EvaluationView() {
   const t = await getTranslations("evaluationPage");
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-5xl">
       <header className="mb-10">
         <h1 className="text-2xl font-semibold tracking-tight text-pretty">
           {t("title")}
@@ -63,7 +63,7 @@ export async function EvaluationView() {
 
       <section className="mb-12">
         <Eyebrow index="01">{t("comparison.title")}</Eyebrow>
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid gap-10 sm:grid-cols-2">
           <div>
             <h3 className="mb-4 text-sm font-medium">{t("replicated.title")}</h3>
             <ul className="space-y-4">
@@ -88,7 +88,7 @@ export async function EvaluationView() {
               ))}
             </ul>
           </div>
-          <div className="sm:border-l sm:pl-8">
+          <div className="sm:border-l sm:pl-10">
             <h3 className="mb-4 text-sm font-medium">{t("gaps.title")}</h3>
             <ul className="space-y-4">
               {GAPS.map((key) => {
@@ -120,7 +120,7 @@ export async function EvaluationView() {
         <Eyebrow index="02">{t("dimensions.title")}</Eyebrow>
         <dl className="divide-y">
           {DIMENSIONS.map((key) => (
-            <div key={key} className="grid gap-2 py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+            <div key={key} className="grid gap-2 py-5 sm:grid-cols-[14rem_1fr] sm:gap-8">
               <dt className="text-sm font-medium">{t(`dimensions.items.${key}.title`)}</dt>
               <dd>
                 <ul className="space-y-2">
@@ -150,7 +150,7 @@ export async function EvaluationView() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="w-[10rem]">
+                <TableHead className="w-[14rem]">
                   {t("capexOpex.columns.dimension")}
                 </TableHead>
                 <TableHead>{t("capexOpex.columns.capex")}</TableHead>
