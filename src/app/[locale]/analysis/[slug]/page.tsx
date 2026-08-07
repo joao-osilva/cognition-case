@@ -4,6 +4,8 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { marked } from "marked";
+import { EvaluationView } from "@/components/EvaluationView";
+import { ResearchView } from "@/components/ResearchView";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +14,33 @@ const DOCS: Record<string, { file: string }> = {
   evaluation: { file: "evaluation.md" },
   recommendation: { file: "recommendation.md" },
 };
+
+function AnalysisNav({
+  active,
+  labels,
+}: {
+  active: string;
+  labels: (key: string) => string;
+}) {
+  return (
+    <div className="mb-6 flex gap-2 text-sm">
+      {Object.keys(DOCS).map((key) => (
+        <Link
+          key={key}
+          href={`/analysis/${key}`}
+          className={cn(
+            "rounded-md px-3 py-1.5 transition-colors",
+            key === active
+              ? "bg-primary text-primary-foreground"
+              : "bg-card text-muted-foreground hover:bg-muted"
+          )}
+        >
+          {labels(key)}
+        </Link>
+      ))}
+    </div>
+  );
+}
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -29,6 +58,15 @@ export default async function AnalysisPage({
   const t = await getTranslations("analysis");
   const doc = DOCS[slug];
   if (!doc) notFound();
+
+  if (slug === "evaluation" || slug === "research") {
+    return (
+      <div>
+        <AnalysisNav active={slug} labels={t} />
+        {slug === "evaluation" ? <EvaluationView /> : <ResearchView />}
+      </div>
+    );
+  }
 
   let markdown: string;
   try {
@@ -51,22 +89,7 @@ export default async function AnalysisPage({
 
   return (
     <div>
-      <div className="mb-6 flex gap-2 text-sm">
-        {Object.keys(DOCS).map((key) => (
-          <Link
-            key={key}
-            href={`/analysis/${key}`}
-            className={cn(
-              "rounded-md px-3 py-1.5",
-              key === slug
-                ? "bg-primary text-primary-foreground"
-                : "bg-card text-muted-foreground hover:bg-muted"
-            )}
-          >
-            {t(key)}
-          </Link>
-        ))}
-      </div>
+      <AnalysisNav active={slug} labels={t} />
       <article
         className="prose prose-slate max-w-3xl rounded-lg border bg-card p-8 shadow-sm prose-headings:tracking-tight dark:prose-invert"
         dangerouslySetInnerHTML={{ __html: html }}
