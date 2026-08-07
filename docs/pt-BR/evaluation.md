@@ -1,66 +1,67 @@
 # Avaliação
 
-_A avaliação completa (o que o protótipo replicou, o que não conseguiu e o que fechar a
-lacuna exigiria em custo de construção, ônus de manutenção, implicações de segurança e
-custo de oportunidade) está sendo escrita na próxima fase. Duas partes já estão
-prontas: os critérios contra os quais o protótipo foi construído e os custos ocultos
-que qualquer substituição precisa precificar._
+## 1. Contexto
 
-## O Que o Protótipo Se Propôs a Demonstrar
+O protótipo foi construído em cerca de duas horas com o Devin. Objetivo: replicar o
+núcleo de capacidades que os três aplicativos usam na plataforma (grades, formulários
+validados, RBAC, trilha de auditoria), não um sistema de produção. Está implantado na
+Vercel e é compartilhável.
 
-Para testar se a equipe conseguiria construir isso internamente com o Devin, o
-protótipo replica o núcleo de capacidades identificado na pesquisa, aplicado aos três
-aplicativos:
+## 2. O Que Foi Replicado, o Que Não Foi, e a Lacuna
 
-- [x] Grade de dados com filtragem e busca para cada aplicativo (fila de KYC,
-      reembolsos, flags)
-- [x] Formulários com validação para ações que alteram estado (aprovar ou rejeitar
-      KYC, processar reembolso, alternar ou criar flag)
-- [x] Controle de acesso baseado em papéis (viewer, approver, admin) restringindo
-      essas ações, aplicado no servidor
-- [x] Um log de auditoria registrando quem fez o quê, quando, com valores antes e
-      depois
-- [x] Implantado e compartilhável (Vercel)
+Replicado:
 
-Fora do escopo de um protótipo de duas horas: SSO real, um banco de dados de produção
-com backups, o ecossistema de conectores, desenvolvimento cidadão e certificação de
-compliance. Essas exclusões são deliberadas e são precificadas abaixo e na
-recomendação.
+- Grades de dados com filtragem e busca (fila de KYC, reembolsos, flags)
+- Formulários validados para ações que alteram estado
+- RBAC (viewer, approver, admin), aplicado no servidor
+- Log de auditoria: quem fez o quê, quando, com valores antes e depois
+- Implantado e compartilhável
 
-## Os Custos Ocultos de Substituir a Plataforma
+Não replicado, e o que fechar cada lacuna exigiria:
 
-Cinco custos são fáceis de subestimar ao propor uma alternativa interna:
+| Lacuna | O que exige |
+|---|---|
+| **SSO real** | Provedor gerenciado (Auth0, Clerk, WorkOS). Dias para integrar, dependência permanente. |
+| **Banco de dados persistente** | Postgres mais migrações, backups, retenção. Dias para configurar, operação contínua. |
+| **Conectores** | Integrações feitas à mão ou uma camada de integração (Composio, Merge, Paragon). A lacuna mais difícil: trabalho contínuo de qualquer forma. |
+| **Desenvolvimento cidadão** | Não há como fechar. Cada nova ferramenta e cada mudança vira um ticket de engenharia. |
+| **Certificação de compliance** | Herdada das escolhas de infraestrutura; meses de auditoria se a certificação for exigida. |
 
-1. **Autenticação e autorização são um compromisso permanente de engenharia.** SSO,
-   gestão de sessões e modelos de papéis vêm integrados à plataforma via Entra ID.
-   Reconstruí-los e mantê-los com segurança em uma fintech regulada é um trabalho
-   contínuo significativo, mesmo com provedores gerenciados (Auth0, Clerk, WorkOS) ou
-   bibliotecas.
-2. **Conectores são um produto, não uma funcionalidade.** Uma plataforma interna teria
-   que construir e manter cada integração manualmente ou adotar uma camada de
-   integração (Composio, Merge, Paragon), o que reintroduz uma conta de fornecedor e
-   ainda deixa código de cola para manter.
-3. **O desenvolvimento cidadão tira custo da equipe de engenharia.** Com a plataforma,
-   usuários não técnicos criam e modificam seus próprios aplicativos dentro de limites
-   definidos pelos administradores. Uma solução interna transforma cada nova
-   ferramenta e cada mudança em um ticket de engenharia. Essa sobrecarga contínua é o
-   maior custo oculto de construir.
-4. **A previsão de demanda é a variável decisiva.** Se a demanda permanecer em
-   aproximadamente esses três aplicativos, ou crescer para cerca de dez aplicativos
-   CRUD semelhantes, uma solução interna simples mantida dentro do escopo da equipe
-   atual é plausível. Se a demanda continuar crescendo, a plataforma precisa de donos
-   dedicados, e um a três engenheiros a mais de US$ 200 mil por ano rapidamente
-   ultrapassam o custo atual da licença, antes mesmo de contar o custo de
-   oportunidade.
-5. **Construir ainda significa comprar ou hospedar as peças.** Replicar as capacidades
-   da plataforma envolve motores de workflow (Temporal, Inngest), plataformas de
-   integração e autenticação gerenciada, cada um com sua própria conta. O caminho
-   open-source (Temporal, Keycloak, n8n auto-hospedados) troca essas assinaturas por
-   uma conta de nuvem maior mais as horas de engenharia para operar, corrigir e
-   atualizar a infraestrutura. Construir nunca é uma opção com zero fornecedores e
-   zero infraestrutura.
+## 3. Dimensões de Avaliação
 
-Uma avaliação completa também deve comparar plataformas alternativas (Retool, Appsmith,
-Budibase, ToolJet) cujos preços podem se ajustar melhor à escala da equipe. Substituir
-o fornecedor e construir internamente não são as únicas opções; migrar para um
-fornecedor mais barato pode superar ambas.
+**Custo de construção.** Horas de engenharia primeiro: transformar o protótipo em um
+sistema de produção (SSO, banco de dados, integrações, testes) leva semanas de tempo
+sênior, não horas. E construir ainda significa comprar: motores de workflow (Temporal,
+Inngest), autenticação gerenciada e camadas de integração têm cada um sua conta.
+Auto-hospedar os equivalentes open-source (Temporal, Keycloak, n8n) troca assinaturas
+por gasto de nuvem. Não existe opção com zero fornecedores.
+
+**Ônus de manutenção.** Conectores são um produto, não uma funcionalidade; alguém
+precisa manter cada integração funcionando conforme as APIs de terceiros mudam.
+Infraestrutura auto-hospedada adiciona patches, upgrades e plantão.
+
+**Implicações de segurança.** Autenticação e autorização são um compromisso
+permanente. Autenticação (SSO, sessões, MFA) e autorização (modelos de papéis,
+verificações de permissão em cada ação) vêm com a plataforma hoje e passariam a ser
+responsabilidade da equipe. Em uma fintech regulada, o mesmo vale para obrigações de
+auditoria e compliance.
+
+**Custo de oportunidade.** O desenvolvimento cidadão desaparece: operações e
+compliance param de construir seus próprios aplicativos e abrem tickets. A previsão de
+demanda define a escala: de três a dez aplicativos CRUD, a equipe atual absorve; além
+disso, um a três engenheiros dedicados a US$ 200 mil+ superam o custo da licença antes
+mesmo do custo de oportunidade.
+
+## 4. Capex vs. Opex
+
+Como as dimensões se distribuem entre custo único e recorrente:
+
+| Dimensão | Capex (único) | Opex (recorrente) |
+|---|---|---|
+| **Custo de construção** | Construção inicial: semanas de engenharia sênior para endurecer o protótipo | Assinaturas de ferramentas ou gasto de nuvem para equivalentes auto-hospedados |
+| **Ônus de manutenção** | - | Manutenção de integrações, patches, upgrades, plantão |
+| **Segurança** | Integração de SSO e autorização | Revisões de acesso, patches de dependências, trabalho de auditoria e compliance |
+| **Custo de oportunidade** | Funcionalidades não entregues durante a construção inicial | Cada mudança de ferramenta como ticket de engenharia; 1 a 3 engenheiros dedicados (US$ 200 mil+ cada) se a demanda crescer |
+
+Comprar inverte o perfil: capex quase zero, uma única linha de opex (a licença), e o
+fornecedor carrega manutenção e segurança.
