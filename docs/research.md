@@ -35,11 +35,9 @@ a specific subset of the platform:
    and new values per record. For KYC and refunds this is a compliance requirement.
 5. **Workflow and approvals**: state machines (pending to approved or rejected) with
    notifications and escalation via Power Automate.
-6. **Connectors**: internal tools rarely stand alone. A KYC queue reads from identity
-   verification providers, a refunds dashboard talks to payment processors, and a flag
-   panel may notify chat or ticketing systems. The maintained connector catalog, plus
-   custom connectors for internal APIs, is what keeps those integrations off the
-   engineering team's plate.
+6. **Connectors**: internal tools rarely stand alone. KYC queues read from identity
+   verification providers, refund dashboards talk to payment processors. The
+   maintained connector catalog keeps those integrations out of the team's codebase.
 7. **Managed platform**: SSO, hosting, patching, backups, and uptime are the vendor's
    responsibility.
 
@@ -74,23 +72,17 @@ Its documented weaknesses, relevant when evaluating a replacement:
 
 ## 4. A Caution on the Current Spend: Price May Not Reflect Usage
 
-A useful check before any build-vs-buy comparison: what a team pays for a platform
-today often reflects how the contract was structured, not how the platform is used.
-Low-code licensing typically mixes per-user seats, capacity add-ons, premium
-connectors, automation licensing, managed environments, and enterprise agreements that
-bundle consulting. Three apps' worth of usage can sit inside a contract priced for far
-more.
+What a team pays for a platform often reflects how the contract was structured, not
+how the platform is used: seats, capacity add-ons, premium connectors, and bundled
+enterprise agreements. Three apps' worth of usage can sit inside a contract priced for
+far more. For reference, at Power Apps list price, 60 engineers at $20/user/month is
+roughly $14.4K/year, an order of magnitude below the reported $250K spend.
 
-For reference, at Power Apps list price, 60 engineers at $20/user/month is roughly
-$14.4K/year, an order of magnitude below the reported $250K spend. Whatever the
-platform, two implications follow:
+Two implications:
 
-1. The first step should be a license and usage audit. The team may be paying for
-   capacity, seats, or bundled services it does not use, regardless of the
-   build-vs-buy decision.
-2. Any in-house alternative must be compared against the renegotiated platform price,
-   or against a cheaper competitor at $10 to $50/user/month, not against the current
-   contract.
+1. Start with a license and usage audit, regardless of the build-vs-buy decision.
+2. Compare any in-house alternative against the renegotiated platform price, or a
+   cheaper competitor at $10 to $50/user/month, not the current contract.
 
 ## Sources
 

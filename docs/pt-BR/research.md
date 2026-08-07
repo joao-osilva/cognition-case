@@ -37,12 +37,10 @@ administração de feature flags) dependem de um subconjunto específico da plat
    reembolsos, isso é um requisito de compliance.
 5. **Fluxos de trabalho e aprovações**: máquinas de estado (de pendente para aprovado
    ou rejeitado) com notificações e escalonamento via Power Automate.
-6. **Conectores**: ferramentas internas raramente funcionam isoladas. Uma fila de KYC
-   lê de provedores de verificação de identidade, um dashboard de reembolsos conversa
-   com processadores de pagamento, e um painel de flags pode notificar sistemas de
-   chat ou de tickets. O catálogo de conectores mantido pelo fornecedor, mais
-   conectores personalizados para APIs internas, é o que mantém essas integrações fora
-   da fila da equipe de engenharia.
+6. **Conectores**: ferramentas internas raramente funcionam isoladas. Filas de KYC
+   leem de provedores de verificação de identidade, dashboards de reembolso conversam
+   com processadores de pagamento. O catálogo de conectores mantido pelo fornecedor
+   mantém essas integrações fora da base de código da equipe.
 7. **Plataforma gerenciada**: SSO, hospedagem, atualizações, backups e disponibilidade
    são responsabilidade do fornecedor.
 
@@ -82,24 +80,20 @@ Suas fraquezas documentadas, relevantes ao avaliar uma substituição:
 
 ## 4. Um Alerta Sobre o Gasto Atual: o Preço Pode Não Refletir o Uso
 
-Uma verificação útil antes de qualquer comparação entre construir e comprar: o que uma
-equipe paga por uma plataforma hoje costuma refletir como o contrato foi estruturado,
-e não como a plataforma é usada. O licenciamento de low-code normalmente mistura
-assentos por usuário, complementos de capacidade, conectores premium, licenciamento de
-automação, ambientes gerenciados e contratos corporativos que incluem consultoria. O
-uso equivalente a três aplicativos pode estar dentro de um contrato precificado para
-muito mais.
-
-Como referência, no preço de tabela do Power Apps, 60 engenheiros a US$ 20/usuário/mês
+O que uma equipe paga por uma plataforma costuma refletir como o contrato foi
+estruturado, e não como a plataforma é usada: assentos, complementos de capacidade,
+conectores premium e contratos corporativos com serviços agregados. O uso equivalente
+a três aplicativos pode estar dentro de um contrato precificado para muito mais. Como
+referência, no preço de tabela do Power Apps, 60 engenheiros a US$ 20/usuário/mês
 somam cerca de US$ 14,4 mil por ano, uma ordem de magnitude abaixo do gasto informado
-de US$ 250 mil. Seja qual for a plataforma, duas implicações se seguem:
+de US$ 250 mil.
 
-1. O primeiro passo deve ser uma auditoria de licenças e de uso. A equipe pode estar
-   pagando por capacidade, assentos ou serviços agregados que não usa,
-   independentemente da decisão de construir ou comprar.
-2. Qualquer alternativa interna deve ser comparada ao preço renegociado da plataforma,
-   ou a um concorrente mais barato de US$ 10 a US$ 50/usuário/mês, e não ao contrato
-   atual.
+Duas implicações:
+
+1. Comece com uma auditoria de licenças e de uso, independentemente da decisão de
+   construir ou comprar.
+2. Compare qualquer alternativa interna ao preço renegociado da plataforma, ou a um
+   concorrente mais barato de US$ 10 a US$ 50/usuário/mês, e não ao contrato atual.
 
 ## Fontes
 
