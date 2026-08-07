@@ -256,23 +256,8 @@
     "flag_exists": "A flag ''{key}'' já existe em {environment}."
   },
   "evaluationPage": {
-    "context": {
-      "title": "Contexto",
-      "time": {
-        "label": "~2 horas",
-        "detail": "Construído com o Devin, escopo de protótipo"
-      },
-      "scope": {
-        "label": "Núcleo de capacidades",
-        "detail": "Grades, formulários validados, RBAC, trilha de auditoria"
-      },
-      "deploy": {
-        "label": "Implantado na Vercel",
-        "detail": "No ar e compartilhável, não é um sistema de produção"
-      }
-    },
     "replicated": {
-      "title": "O Que Foi Replicado",
+      "title": "Replicado",
       "items": {
         "grids": "Grades de dados com filtragem e busca (fila de KYC, reembolsos, flags)",
         "forms": "Formulários validados para ações que alteram estado",
@@ -282,13 +267,7 @@
       }
     },
     "gaps": {
-      "title": "O Que Não Foi, e a Lacuna",
-      "intro": "Não replicado, e o que fechar cada lacuna exigiria.",
-      "columns": {
-        "gap": "Lacuna",
-        "takes": "O que exige",
-        "effort": "Esforço"
-      },
+      "title": "Não replicado",
       "effort": {
         "days": "Dias",
         "ongoing": "Contínuo",
@@ -346,13 +325,7 @@
     },
     "capexOpex": {
       "title": "Capex vs. Opex",
-      "intro": "Como as dimensões se distribuem entre custo único e recorrente.",
-      "columns": {
-        "dimension": "Dimensão",
-        "capex": "Capex (único)",
-        "opex": "Opex (recorrente)"
-      },
-      "none": "Nenhum",
+      "intro": "As mesmas dimensões, divididas em custo único e recorrente.",
       "items": {
         "build": {
           "capex": "Construção inicial: semanas de engenharia sênior para endurecer o protótipo",
@@ -371,7 +344,24 @@
           "opex": "Cada mudança de ferramenta como ticket de engenharia; 1 a 3 engenheiros dedicados (US$ 200 mil+ cada) se a demanda crescer"
         }
       },
-      "buyProfile": "Comprar inverte o perfil: capex quase zero, uma única linha de opex (a licença), e o fornecedor carrega manutenção e segurança."
+      "buyProfile": "Comprar inverte o perfil: capex quase zero, uma única linha de opex (a licença), e o fornecedor carrega manutenção e segurança.",
+      "buildTitle": "Construir",
+      "buyTitle": "Comprar",
+      "legend": {
+        "oneTime": "Único",
+        "recurring": "Recorrente"
+      },
+      "license": "Licença da plataforma"
+    },
+    "title": "Avaliação",
+    "lead": "O protótipo foi construído em cerca de duas horas com o Devin. O objetivo era replicar o núcleo de capacidades que os três aplicativos usam na plataforma, não um sistema de produção.",
+    "facts": {
+      "time": "~2 horas com o Devin",
+      "scope": "Núcleo de capacidades replicado",
+      "deploy": "Implantado na Vercel"
+    },
+    "comparison": {
+      "title": "Replicado vs. a lacuna"
     }
   }
 }

@@ -1,214 +1,177 @@
-import {
-  CheckIcon,
-  ClockIcon,
-  CloudIcon,
-  CrosshairIcon,
-  HammerIcon,
-  HourglassIcon,
-  ShieldIcon,
-  WrenchIcon,
-} from "lucide-react";
+import { CheckIcon, RefreshCwIcon, SquareIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 const GAPS = ["sso", "database", "connectors", "citizen", "compliance"] as const;
 const DIMENSIONS = ["build", "maintenance", "security", "opportunity"] as const;
 const REPLICATED = ["grids", "forms", "rbac", "audit", "deploy"] as const;
 
-const DIMENSION_ICONS = {
-  build: HammerIcon,
-  maintenance: WrenchIcon,
-  security: ShieldIcon,
-  opportunity: HourglassIcon,
-} as const;
-
-const EFFORT_STYLES: Record<string, string> = {
-  days: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-  ongoing: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-  months: "bg-orange-500/15 text-orange-700 dark:text-orange-400",
-  notBridgeable: "bg-rose-500/15 text-rose-700 dark:text-rose-400",
+const EFFORT_DOT: Record<string, string> = {
+  days: "bg-emerald-500",
+  ongoing: "bg-amber-500",
+  months: "bg-orange-500",
+  notBridgeable: "bg-rose-500",
 };
+
+function Eyebrow({ index, children }: { index: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-4 flex items-baseline gap-3 border-b pb-2">
+      <span className="font-mono text-xs tabular-nums text-muted-foreground/70">
+        {index}
+      </span>
+      <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        {children}
+      </h2>
+    </div>
+  );
+}
 
 export async function EvaluationView() {
   const t = await getTranslations("evaluationPage");
 
-  const contextItems = [
-    { icon: ClockIcon, key: "time" },
-    { icon: CrosshairIcon, key: "scope" },
-    { icon: CloudIcon, key: "deploy" },
-  ] as const;
-
   return (
-    <div className="max-w-4xl space-y-8">
-      <section>
-        <h2 className="mb-3 text-lg font-semibold tracking-tight">
-          {t("context.title")}
-        </h2>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {contextItems.map(({ icon: Icon, key }) => (
-            <Card key={key} className="gap-2 py-4">
-              <CardContent className="flex items-start gap-3 px-4">
-                <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <Icon aria-hidden="true" className="size-4" />
-                </span>
-                <div>
-                  <div className="text-sm font-medium">
-                    {t(`context.${key}.label`)}
-                  </div>
-                  <div className="mt-0.5 text-xs text-muted-foreground">
-                    {t(`context.${key}.detail`)}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    <div className="max-w-3xl">
+      <header className="mb-10">
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+          {t("lead")}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+          {(["time", "scope", "deploy"] as const).map((key) => (
+            <span key={key} className="text-foreground/80">
+              {t(`facts.${key}`)}
+            </span>
           ))}
         </div>
-      </section>
+      </header>
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold tracking-tight">
-          {t("replicated.title")}
-        </h2>
-        <Card className="py-4">
-          <CardContent className="px-4">
-            <ul className="grid gap-2 sm:grid-cols-2">
+      <section className="mb-12">
+        <Eyebrow index="01">{t("comparison.title")}</Eyebrow>
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 className="mb-3 text-sm font-medium">{t("replicated.title")}</h3>
+            <ul className="space-y-2.5">
               {REPLICATED.map((key) => (
-                <li key={key} className="flex items-start gap-2 text-sm">
-                  <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400">
-                    <CheckIcon aria-hidden="true" className="size-3" />
-                  </span>
+                <li key={key} className="flex items-start gap-2.5 text-sm leading-snug">
+                  <CheckIcon
+                    aria-hidden="true"
+                    className="mt-0.5 size-3.5 shrink-0 text-emerald-600 dark:text-emerald-400"
+                  />
                   {t(`replicated.items.${key}`)}
                 </li>
               ))}
             </ul>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section>
-        <h2 className="mb-1 text-lg font-semibold tracking-tight">
-          {t("gaps.title")}
-        </h2>
-        <p className="mb-3 text-sm text-muted-foreground">{t("gaps.intro")}</p>
-        <div className="overflow-hidden rounded-lg border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("gaps.columns.gap")}</TableHead>
-                <TableHead>{t("gaps.columns.takes")}</TableHead>
-                <TableHead>{t("gaps.columns.effort")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          </div>
+          <div className="sm:border-l sm:pl-8">
+            <h3 className="mb-3 text-sm font-medium">{t("gaps.title")}</h3>
+            <ul className="space-y-4">
               {GAPS.map((key) => {
                 const effort = t(`gaps.items.${key}.effort`);
                 return (
-                  <TableRow key={key}>
-                    <TableCell className="font-medium">
-                      {t(`gaps.items.${key}.name`)}
-                    </TableCell>
-                    <TableCell className="whitespace-normal text-muted-foreground">
-                      {t(`gaps.items.${key}.takes`)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="secondary"
-                        className={cn("border-0", EFFORT_STYLES[effort])}
-                      >
+                  <li key={key} className="text-sm">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span className="font-medium">{t(`gaps.items.${key}.name`)}</span>
+                      <span className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
+                        <span
+                          aria-hidden="true"
+                          className={cn("size-1.5 rounded-full", EFFORT_DOT[effort])}
+                        />
                         {t(`gaps.effort.${effort}`)}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
+                      </span>
+                    </div>
+                    <p className="mt-0.5 leading-snug text-muted-foreground">
+                      {t(`gaps.items.${key}.takes`)}
+                    </p>
+                  </li>
                 );
               })}
-            </TableBody>
-          </Table>
+            </ul>
+          </div>
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold tracking-tight">
-          {t("dimensions.title")}
-        </h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {DIMENSIONS.map((key) => {
-            const Icon = DIMENSION_ICONS[key];
-            return (
-              <Card key={key} className="gap-2 py-4">
-                <CardHeader className="px-4">
-                  <CardTitle className="flex items-center gap-2 text-sm">
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                      <Icon aria-hidden="true" className="size-4" />
-                    </span>
-                    {t(`dimensions.items.${key}.title`)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="px-4 text-sm text-muted-foreground">
-                  {t(`dimensions.items.${key}.body`)}
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+      <section className="mb-12">
+        <Eyebrow index="02">{t("dimensions.title")}</Eyebrow>
+        <dl className="divide-y">
+          {DIMENSIONS.map((key) => (
+            <div key={key} className="grid gap-1 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6">
+              <dt className="text-sm font-medium">{t(`dimensions.items.${key}.title`)}</dt>
+              <dd className="text-sm leading-relaxed text-muted-foreground">
+                {t(`dimensions.items.${key}.body`)}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <section>
-        <h2 className="mb-1 text-lg font-semibold tracking-tight">
-          {t("capexOpex.title")}
-        </h2>
-        <p className="mb-3 text-sm text-muted-foreground">
-          {t("capexOpex.intro")}
-        </p>
-        <div className="overflow-hidden rounded-lg border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("capexOpex.columns.dimension")}</TableHead>
-                <TableHead>{t("capexOpex.columns.capex")}</TableHead>
-                <TableHead>{t("capexOpex.columns.opex")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+        <Eyebrow index="03">{t("capexOpex.title")}</Eyebrow>
+        <p className="mb-5 text-sm text-muted-foreground">{t("capexOpex.intro")}</p>
+        <div className="grid gap-4 sm:grid-cols-[3fr_2fr]">
+          <div className="rounded-md border">
+            <div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2.5">
+              <h3 className="text-sm font-semibold">{t("capexOpex.buildTitle")}</h3>
+              <div className="flex gap-4 text-[11px] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <SquareIcon aria-hidden="true" className="size-2.5 fill-current" />
+                  {t("capexOpex.legend.oneTime")}
+                </span>
+                <span className="flex items-center gap-1">
+                  <RefreshCwIcon aria-hidden="true" className="size-2.5" />
+                  {t("capexOpex.legend.recurring")}
+                </span>
+              </div>
+            </div>
+            <div className="divide-y">
               {DIMENSIONS.map((key) => {
                 const capex = t(`capexOpex.items.${key}.capex`);
                 return (
-                  <TableRow key={key}>
-                    <TableCell className="font-medium">
+                  <div key={key} className="px-4 py-3">
+                    <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground/80">
                       {t(`dimensions.items.${key}.title`)}
-                    </TableCell>
-                    <TableCell className="whitespace-normal text-muted-foreground">
-                      {capex === "-" ? (
-                        <span aria-label={t("capexOpex.none")}>-</span>
-                      ) : (
-                        capex
+                    </div>
+                    <ul className="space-y-1.5 text-sm leading-snug">
+                      {capex !== "-" && (
+                        <li className="flex items-start gap-2">
+                          <SquareIcon
+                            aria-label={t("capexOpex.legend.oneTime")}
+                            className="mt-1.5 size-2 shrink-0 fill-current text-foreground/60"
+                          />
+                          {capex}
+                        </li>
                       )}
-                    </TableCell>
-                    <TableCell className="whitespace-normal text-muted-foreground">
-                      {t(`capexOpex.items.${key}.opex`)}
-                    </TableCell>
-                  </TableRow>
+                      <li className="flex items-start gap-2">
+                        <RefreshCwIcon
+                          aria-label={t("capexOpex.legend.recurring")}
+                          className="mt-1 size-3 shrink-0 text-foreground/60"
+                        />
+                        {t(`capexOpex.items.${key}.opex`)}
+                      </li>
+                    </ul>
+                  </div>
                 );
               })}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
-          {t("capexOpex.buyProfile")}
+            </div>
+          </div>
+          <div className="flex flex-col rounded-md border">
+            <div className="border-b bg-muted/50 px-4 py-2.5">
+              <h3 className="text-sm font-semibold">{t("capexOpex.buyTitle")}</h3>
+            </div>
+            <div className="px-4 py-3">
+              <ul className="text-sm leading-snug">
+                <li className="flex items-start gap-2">
+                  <RefreshCwIcon
+                    aria-label={t("capexOpex.legend.recurring")}
+                    className="mt-1 size-3 shrink-0 text-foreground/60"
+                  />
+                  {t("capexOpex.license")}
+                </li>
+              </ul>
+            </div>
+            <p className="mt-auto border-t px-4 py-3 text-sm leading-snug text-muted-foreground">
+              {t("capexOpex.buyProfile")}
+            </p>
+          </div>
         </div>
       </section>
     </div>

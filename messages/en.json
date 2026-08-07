@@ -256,23 +256,8 @@
     "flag_exists": "Flag ''{key}'' already exists in {environment}."
   },
   "evaluationPage": {
-    "context": {
-      "title": "Context",
-      "time": {
-        "label": "~2 hours",
-        "detail": "Built with Devin, prototype scope"
-      },
-      "scope": {
-        "label": "Capability core",
-        "detail": "Grids, validated forms, RBAC, audit trail"
-      },
-      "deploy": {
-        "label": "Deployed on Vercel",
-        "detail": "Live and shareable, not a production system"
-      }
-    },
     "replicated": {
-      "title": "What Was Replicated",
+      "title": "Replicated",
       "items": {
         "grids": "Data grids with filtering and search (KYC queue, refunds, flags)",
         "forms": "Validated forms for state-changing actions",
@@ -282,13 +267,7 @@
       }
     },
     "gaps": {
-      "title": "What Was Not, and the Gap",
-      "intro": "Not replicated, and what bridging each gap would take.",
-      "columns": {
-        "gap": "Gap",
-        "takes": "What it takes",
-        "effort": "Effort"
-      },
+      "title": "Not replicated",
       "effort": {
         "days": "Days",
         "ongoing": "Ongoing",
@@ -346,13 +325,7 @@
     },
     "capexOpex": {
       "title": "Capex vs. Opex",
-      "intro": "How the dimensions land as one-time versus recurring cost.",
-      "columns": {
-        "dimension": "Dimension",
-        "capex": "Capex (one-time)",
-        "opex": "Opex (recurring)"
-      },
-      "none": "None",
+      "intro": "The same dimensions, split into one-time and recurring cost.",
       "items": {
         "build": {
           "capex": "Initial build: weeks of senior engineering to harden the prototype",
@@ -371,7 +344,24 @@
           "opex": "Every tool change as an engineering ticket; 1 to 3 dedicated engineers ($200K+ each) if demand grows"
         }
       },
-      "buyProfile": "Buying inverts the profile: near-zero capex, a single opex line (the license), and the vendor carries maintenance and security."
+      "buyProfile": "Buying inverts the profile: near-zero capex, a single opex line (the license), and the vendor carries maintenance and security.",
+      "buildTitle": "Build",
+      "buyTitle": "Buy",
+      "legend": {
+        "oneTime": "One-time",
+        "recurring": "Recurring"
+      },
+      "license": "Platform license"
+    },
+    "title": "Evaluation",
+    "lead": "The prototype was built in roughly two hours with Devin. The goal was to replicate the capability core the three apps use on the platform, not a production system.",
+    "facts": {
+      "time": "~2 hours with Devin",
+      "scope": "Capability core replicated",
+      "deploy": "Deployed on Vercel"
+    },
+    "comparison": {
+      "title": "Replicated vs. the gap"
     }
   }
 }
