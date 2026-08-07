@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { RefreshCwIcon } from "lucide-react";
+import { ClipboardCheckIcon, RefreshCwIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
@@ -80,7 +80,11 @@ function KycPageContent() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        icon={ClipboardCheckIcon}
+      />
       <CommandBar>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
           {tCommon("refresh")}

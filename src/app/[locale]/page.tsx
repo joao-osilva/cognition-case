@@ -7,6 +7,7 @@ import {
   ReceiptIcon,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { Reveal } from "@/components/Reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface Tile {
   href: string;
@@ -26,10 +28,18 @@ interface Tile {
 
 const APP_ICONS = [ClipboardCheckIcon, ReceiptIcon, FlagIcon];
 
-function TileCard({ item, number }: { item: Tile; number?: string }) {
+function TileCard({
+  item,
+  number,
+  className,
+}: {
+  item: Tile;
+  number?: string;
+  className?: string;
+}) {
   const Icon = number ? APP_ICONS[Number(number) - 1] : undefined;
   return (
-    <Link href={item.href} className="group">
+    <Link href={item.href} className={cn("group block", className)}>
       <Card className="h-full transition-all group-hover:-translate-y-0.5 group-hover:border-primary/50 group-hover:shadow-md motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
         <CardHeader>
           {number && Icon && (
@@ -143,28 +153,36 @@ export default async function Home({
         </div>
       </div>
 
-      <h2 className="mb-4 mt-10 text-xl font-semibold tracking-tight">
-        {t("appsHeading")}
-      </h2>
+      <Reveal>
+        <h2 className="mb-4 mt-10 text-xl font-semibold tracking-tight">
+          {t("appsHeading")}
+        </h2>
+      </Reveal>
       <div className="grid gap-4 sm:grid-cols-3">
         {apps.map((item, i) => (
-          <TileCard key={item.href} item={item} number={String(i + 1)} />
+          <Reveal key={item.href} delay={i * 100} className="h-full">
+            <TileCard item={item} number={String(i + 1)} className="h-full" />
+          </Reveal>
         ))}
       </div>
 
-      <section className="mt-12 rounded-2xl border bg-muted/40 p-6 sm:p-8">
-        <h2 className="text-xl font-semibold tracking-tight">
-          {t("assessmentHeading")}
-        </h2>
-        <p className="mt-2 max-w-2xl text-pretty text-sm text-muted-foreground">
-          {t("assessmentIntro")}
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {analysis.map((item) => (
-            <TileCard key={item.href} item={item} />
-          ))}
-        </div>
-      </section>
+      <Reveal>
+        <section className="mt-12 rounded-2xl border bg-muted/40 p-6 sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight">
+            {t("assessmentHeading")}
+          </h2>
+          <p className="mt-2 max-w-2xl text-pretty text-sm text-muted-foreground">
+            {t("assessmentIntro")}
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {analysis.map((item, i) => (
+              <Reveal key={item.href} delay={i * 100} className="h-full">
+                <TileCard item={item} className="h-full" />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </Reveal>
 
       <p className="mt-10 text-sm text-muted-foreground">
         {t("prototypeNote")}

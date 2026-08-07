@@ -65,18 +65,27 @@ export function ErrorBanner({
 export function PageHeader({
   title,
   subtitle,
+  icon: Icon,
 }: {
   title: string;
   subtitle: string;
+  icon?: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="mb-6">
-      <h1 className="text-balance text-2xl font-semibold tracking-tight">
-        {title}
-      </h1>
-      <p className="mt-1 max-w-3xl text-pretty text-sm text-muted-foreground">
-        {subtitle}
-      </p>
+    <div className="mb-6 flex items-start gap-3">
+      {Icon && (
+        <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Icon aria-hidden="true" className="size-5" />
+        </span>
+      )}
+      <div>
+        <h1 className="text-balance text-2xl font-semibold tracking-tight">
+          {title}
+        </h1>
+        <p className="mt-1 max-w-3xl text-pretty text-sm text-muted-foreground">
+          {subtitle}
+        </p>
+      </div>
     </div>
   );
 }

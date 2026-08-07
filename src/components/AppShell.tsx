@@ -98,7 +98,7 @@ function SidebarLink({
       href={item.href}
       title={collapsed ? label : undefined}
       className={cn(
-        "relative flex items-center gap-2 rounded-sm px-2.5 py-1.5 text-sm",
+        "relative flex items-center gap-2 rounded-sm px-2.5 py-1.5 text-sm transition-colors motion-reduce:transition-none",
         active
           ? "bg-accent font-medium text-accent-foreground before:absolute before:inset-y-1 before:left-0 before:w-0.5 before:rounded-full before:bg-primary"
           : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -227,7 +227,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
         </aside>
 
-        <main className="min-w-0 flex-1 px-6 py-6">{children}</main>
+        <main
+          key={pathname}
+          className="min-w-0 flex-1 animate-in fade-in slide-in-from-bottom-2 px-6 py-6 duration-500 motion-reduce:animate-none"
+        >
+          {children}
+        </main>
       </div>
     </div>
   );
