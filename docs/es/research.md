@@ -19,9 +19,9 @@ Sus bloques de construcción principales:
 | **Power Automate** | Motor de flujos de trabajo y automatización (aprobaciones, notificaciones, tareas programadas) que se integra con las aplicaciones. |
 | **IA / Copilot** | Generación de aplicaciones por lenguaje natural y modelos de AI Builder incorporados en las aplicaciones. |
 
-## 2. Las Capacidades Que Importan para Este Cliente
+## 2. Las Capacidades Que Importan para el Equipo de Ingeniería
 
-Las tres aplicaciones del cliente (cola de revisión KYC, panel de reembolsos, panel de
+Las tres aplicaciones (cola de revisión KYC, panel de reembolsos, panel de
 administración de feature flags) dependen de un subconjunto específico de la plataforma:
 
 1. **Tablas de datos y vistas**: cuadrículas ordenables, filtrables y con búsqueda sobre
@@ -37,17 +37,23 @@ administración de feature flags) dependen de un subconjunto específico de la p
    reembolsos esto es un requisito de compliance.
 5. **Flujos de trabajo y aprobaciones**: máquinas de estado (de pendiente a aprobado o
    rechazado) con notificaciones y escalamiento vía Power Automate.
-6. **Plataforma administrada**: SSO, alojamiento, parches, copias de seguridad y
-   disponibilidad son responsabilidad de Microsoft.
+6. **Conectores**: las herramientas internas rara vez funcionan aisladas. Una cola KYC
+   lee de proveedores de verificación de identidad, un panel de reembolsos se comunica
+   con procesadores de pago, y un panel de flags puede notificar a sistemas de chat o
+   de tickets. El catálogo de conectores mantenido por el proveedor, más los conectores
+   personalizados para APIs internas, es lo que mantiene esas integraciones fuera de la
+   cola del equipo de ingeniería.
+7. **Plataforma administrada**: SSO, alojamiento, parches, copias de seguridad y
+   disponibilidad son responsabilidad del proveedor.
 
-Las tres aplicaciones usan una porción pequeña de la plataforma. Todas siguen el mismo
-patrón: tabla, formulario, acción restringida por rol, registro de auditoría. No parecen
-usar los diferenciadores de cola larga, como el catálogo de conectores, el modo móvil
-sin conexión o AI Builder.
+Las tres aplicaciones siguen el mismo patrón central: tabla, formulario, acción
+restringida por rol, registro de auditoría, con integraciones en los bordes. No parecen
+usar los demás diferenciadores de la plataforma, como el modo móvil sin conexión o
+AI Builder.
 
 ## 3. Dónde Está el Valor
 
-El valor de Power Apps está en el paquete, no en una única funcionalidad:
+El valor de la plataforma está en el paquete, no en una única funcionalidad:
 
 - **Velocidad hasta la primera versión**: una aplicación CRUD funcional en horas o
   días, sin ingenieros.
@@ -55,6 +61,9 @@ El valor de Power Apps está en el paquete, no en una única funcionalidad:
   crear y modificar aplicaciones.
 - **Gobernanza lista para usar**: SSO, RBAC, auditoría y certificaciones de compliance
   (SOC 2, ISO 27001) heredadas de la nube de Microsoft.
+- **Un ecosistema de integraciones mantenido**: más de 1.000 conectores que el
+  proveedor mantiene funcionando a medida que cambian las APIs de terceros, de modo
+  que las integraciones son configuración y no código que el equipo debe mantener.
 - **Cero propiedad de infraestructura**: sin servidores, despliegues ni guardias.
 
 Sus debilidades documentadas, relevantes al evaluar un reemplazo:
@@ -73,78 +82,26 @@ Sus debilidades documentadas, relevantes al evaluar un reemplazo:
 - **Dependencia del proveedor**: las aplicaciones, las fórmulas Power Fx y los datos de
   Dataverse no son portables.
 
-## 4. Los Costos Ocultos de Reemplazar la Plataforma
+## 4. Una Advertencia Sobre el Gasto Actual: el Precio Puede No Reflejar el Uso
 
-Cinco costos son fáciles de subestimar al proponer una alternativa interna:
+Una verificación útil antes de cualquier comparación entre construir y comprar: lo que
+un equipo paga hoy por una plataforma suele reflejar cómo se estructuró el contrato, no
+cómo se usa la plataforma. El licenciamiento low-code normalmente mezcla asientos por
+usuario, complementos de capacidad, conectores premium, licenciamiento de
+automatización, entornos administrados y contratos empresariales que incluyen
+consultoría. El uso equivalente a tres aplicaciones puede estar dentro de un contrato
+cotizado para mucho más.
 
-1. **La autenticación y la autorización son un compromiso permanente de ingeniería.**
-   El SSO, la gestión de sesiones y los modelos de roles vienen integrados en Power
-   Apps vía Entra ID. Reconstruirlos y mantenerlos seguros en una fintech regulada es
-   un trabajo continuo significativo, incluso con proveedores administrados (Auth0,
-   Clerk, WorkOS) o bibliotecas.
-2. **Los conectores son un producto, no una funcionalidad.** Una plataforma interna
-   tendría que construir y mantener cada integración manualmente o adoptar una capa de
-   integración (Composio, Merge, Paragon), lo que reintroduce una factura de proveedor
-   y aún deja código de integración por mantener.
-3. **El desarrollo ciudadano traslada el costo fuera del equipo de ingeniería.** Con
-   Power Apps, usuarios no técnicos crean y modifican sus propias aplicaciones dentro
-   de límites definidos por los administradores. Una solución interna convierte cada
-   nueva herramienta y cada cambio en un ticket de ingeniería. Esa sobrecarga continua
-   es el mayor costo oculto de construir.
-4. **El pronóstico de demanda es la variable decisiva.** Si la demanda se mantiene en
-   aproximadamente estas tres aplicaciones, o crece hasta unas diez aplicaciones CRUD
-   similares, una solución interna simple mantenida dentro del alcance del equipo
-   actual es plausible. Si la demanda sigue creciendo, la plataforma necesitará
-   responsables dedicados, y de uno a tres ingenieros a más de 200 mil USD por año
-   cada uno superan rápidamente el costo actual de la licencia, antes de contar el
-   costo de oportunidad.
-5. **Construir sigue implicando comprar o alojar las piezas.** Replicar las capacidades
-   de la plataforma requiere motores de workflow (Temporal, Inngest), plataformas de
-   integración y autenticación administrada, cada uno con su propia factura. La ruta de
-   código abierto (Temporal, Keycloak, n8n autoalojados) cambia esas suscripciones por
-   una factura de nube mayor, más las horas de ingeniería para operar, parchear y
-   actualizar la infraestructura. Construir nunca es una opción con cero proveedores y
-   cero infraestructura.
+Como referencia, a precio de lista de Power Apps, 60 ingenieros a 20 USD/usuario/mes
+suman unos 14,4 mil USD al año, un orden de magnitud por debajo del gasto informado de
+250 mil USD. Sea cual sea la plataforma, se siguen dos implicaciones:
 
-Una evaluación completa también debe comparar plataformas alternativas (Retool,
-Appsmith, Budibase, ToolJet), cuyos precios pueden ajustarse mejor a la escala del
-cliente. Reemplazar al proveedor y construir internamente no son las únicas opciones;
-cambiar a un proveedor más barato puede superar a ambas.
-
-## 5. Interpretando el Gasto Anual de 250 Mil USD
-
-A precio de lista, 60 ingenieros a 20 USD/usuario/mes suman unos 14,4 mil USD al año,
-muy por debajo de 250 mil USD. Un gasto de 250 mil USD implica alguna combinación de
-licenciamiento para toda la organización, complementos de capacidad de Dataverse,
-conectores premium, licenciamiento de Power Automate, entornos administrados o un
-contrato empresarial que incluye consultoría. Dos implicaciones:
-
-1. La primera pregunta al cliente debe ser una auditoría de licencias. Pueden tener
-   licencias en exceso para tres aplicaciones internas, independientemente de la
-   decisión de construir o comprar.
-2. Cualquier alternativa interna debe compararse con el precio renegociado de Power
-   Apps, o con un competidor más barato de 10 a 50 USD/usuario/mes, no con los 250 mil
-   USD actuales.
-
-## 6. Qué Debe Demostrar un Prototipo
-
-Para probar si el equipo podría construir esto internamente con Devin, el prototipo debe
-replicar el núcleo de capacidades de la sección 2, aplicado a las tres aplicaciones del
-cliente:
-
-- [ ] Cuadrícula de datos con filtro y búsqueda para cada aplicación (cola KYC,
-      reembolsos, flags)
-- [ ] Formularios con validación para acciones que cambian el estado (aprobar o
-      rechazar KYC, procesar reembolso, alternar o crear flag)
-- [ ] Control de acceso basado en roles (visualizador, aprobador, admin) restringiendo
-      esas acciones
-- [ ] Un registro de auditoría que capture quién hizo qué, cuándo, con valores antes y
-      después
-- [ ] Desplegado y compartible (Vercel)
-
-Fuera del alcance de un prototipo de dos horas, y señalado en la evaluación: SSO real,
-una base de datos de producción con copias de seguridad, el ecosistema de conectores,
-el desarrollo ciudadano y la certificación de compliance.
+1. El primer paso debe ser una auditoría de licencias y de uso. El equipo puede estar
+   pagando por capacidad, asientos o servicios agregados que no usa,
+   independientemente de la decisión de construir o comprar.
+2. Cualquier alternativa interna debe compararse con el precio renegociado de la
+   plataforma, o con un competidor más barato de 10 a 50 USD/usuario/mes, no con el
+   contrato actual.
 
 ## Fuentes
 

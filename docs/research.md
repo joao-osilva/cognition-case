@@ -18,10 +18,10 @@ Its core building blocks:
 | **Power Automate** | Workflow and automation engine (approvals, notifications, scheduled jobs) that pairs with apps. |
 | **AI / Copilot** | Natural-language app generation and AI Builder models embedded into apps. |
 
-## 2. The Capabilities That Matter for This Client
+## 2. The Capabilities That Matter for the Engineering Team
 
-The client's three apps (KYC review queue, refunds dashboard, feature-flag admin panel)
-rely on a specific subset of the platform:
+The three apps (KYC review queue, refunds dashboard, feature-flag admin panel) rely on
+a specific subset of the platform:
 
 1. **Data tables and views**: sortable, filterable, searchable grids over business
    records (KYC cases, refund requests, flags).
@@ -35,21 +35,29 @@ rely on a specific subset of the platform:
    and new values per record. For KYC and refunds this is a compliance requirement.
 5. **Workflow and approvals**: state machines (pending to approved or rejected) with
    notifications and escalation via Power Automate.
-6. **Managed platform**: SSO, hosting, patching, backups, and uptime are Microsoft's
+6. **Connectors**: internal tools rarely stand alone. A KYC queue reads from identity
+   verification providers, a refunds dashboard talks to payment processors, and a flag
+   panel may notify chat or ticketing systems. The maintained connector catalog, plus
+   custom connectors for internal APIs, is what keeps those integrations off the
+   engineering team's plate.
+7. **Managed platform**: SSO, hosting, patching, backups, and uptime are the vendor's
    responsibility.
 
-The three apps use a small slice of the platform. All of them follow the same pattern:
-table, form, role-gated action, audit log. They do not appear to use the long-tail
-differentiators such as the connector catalog, offline mobile, or AI Builder.
+All three apps follow the same core pattern: table, form, role-gated action, audit log,
+with integrations at the edges. They do not appear to use the platform's remaining
+differentiators such as offline mobile or AI Builder.
 
 ## 3. Where the Value Lies
 
-Power Apps' value is the bundle rather than any single feature:
+The platform's value is the bundle rather than any single feature:
 
 - **Speed to first version**: a working CRUD app in hours or days, without engineers.
 - **Citizen development**: non-engineers (operations, compliance) can build and modify apps.
 - **Governance out of the box**: SSO, RBAC, auditing, and compliance certifications
   (SOC 2, ISO 27001) inherited from the Microsoft cloud.
+- **A maintained integration ecosystem**: 1,000+ connectors that the vendor keeps
+  working as third-party APIs change, so integrations are configuration rather than
+  code the team owns.
 - **Zero infrastructure ownership**: no servers, deployments, or on-call.
 
 Its documented weaknesses, relevant when evaluating a replacement:
@@ -64,66 +72,25 @@ Its documented weaknesses, relevant when evaluating a replacement:
 - **API request limits**: per-user daily API caps tied to licensing.
 - **Vendor lock-in**: apps, Power Fx formulas, and Dataverse data are not portable.
 
-## 4. The Hidden Costs of Replacing the Platform
+## 4. A Caution on the Current Spend: Price May Not Reflect Usage
 
-Five costs are easy to underestimate when proposing an in-house alternative:
+A useful check before any build-vs-buy comparison: what a team pays for a platform
+today often reflects how the contract was structured, not how the platform is used.
+Low-code licensing typically mixes per-user seats, capacity add-ons, premium
+connectors, automation licensing, managed environments, and enterprise agreements that
+bundle consulting. Three apps' worth of usage can sit inside a contract priced for far
+more.
 
-1. **Authentication and authorization are a permanent engineering commitment.** SSO,
-   session management, and role models come integrated with Power Apps via Entra ID.
-   Rebuilding and maintaining them securely in a regulated fintech is significant
-   ongoing work, even with managed providers (Auth0, Clerk, WorkOS) or libraries.
-2. **Connectors are a product, not a feature.** An in-house platform would either
-   hand-build and maintain each integration or adopt an integration layer (Composio,
-   Merge, Paragon), which reintroduces a vendor bill and still leaves glue code to own.
-3. **Citizen development shifts cost off the engineering team.** With Power Apps,
-   non-technical users build and modify their own apps within admin-set guardrails.
-   An in-house solution turns every new tool and every change into an engineering
-   ticket. This ongoing overhead is the largest hidden cost of building.
-4. **Demand forecast is the pivotal variable.** If demand stays at roughly these three
-   apps, or grows to around ten similar CRUD apps, a simple internal solution
-   maintained within the existing team's scope is plausible. If demand keeps growing,
-   the platform needs dedicated owners, and one to three engineers at $200K+ per year
-   quickly exceeds the current license cost before opportunity cost is counted.
-5. **Building still means buying or hosting the pieces.** Replicating the platform's
-   capabilities pulls in workflow engines (Temporal, Inngest), integration platforms,
-   and managed auth, each with its own bill. The open-source route (self-hosted
-   Temporal, Keycloak, n8n) trades those subscriptions for a larger cloud bill plus
-   the engineering hours to run, patch, and upgrade the infrastructure. Building is
-   never a zero-vendor, zero-infrastructure option.
+For reference, at Power Apps list price, 60 engineers at $20/user/month is roughly
+$14.4K/year, an order of magnitude below the reported $250K spend. Whatever the
+platform, two implications follow:
 
-A complete assessment should also benchmark alternative platforms (Retool, Appsmith,
-Budibase, ToolJet) whose pricing may fit the client's scale better. Replacing the
-vendor and building in-house are not the only options; switching to a cheaper vendor
-may dominate both.
-
-## 5. Interpreting the $250K Annual Spend
-
-At list price, 60 engineers at $20/user/month is roughly $14.4K/year, far below $250K.
-A $250K spend implies some combination of organization-wide licensing, Dataverse
-capacity add-ons, premium connectors, Power Automate licensing, managed environments,
-or an enterprise agreement bundling consulting. Two implications:
-
-1. The first question to the client should be a license audit. They may be
-   over-licensed for three internal apps regardless of the build-vs-buy decision.
-2. Any in-house alternative must be compared against the renegotiated Power Apps
-   price, or a cheaper competitor at $10 to $50/user/month, not against the current
-   $250K.
-
-## 6. What a Prototype Must Demonstrate
-
-To test whether the team could build this in-house with Devin, the prototype should
-replicate the capability core from section 2, applied to the client's three apps:
-
-- [ ] Data grid with filtering and search for each app (KYC queue, refunds, flags)
-- [ ] Forms with validation for state-changing actions (approve or reject KYC,
-      process refund, toggle or create flag)
-- [ ] Role-based access control (viewer, approver, admin) gating those actions
-- [ ] An audit log capturing who did what, when, with before and after values
-- [ ] Deployed and shareable (Vercel)
-
-Out of scope for a two-hour prototype, and flagged in the evaluation: real SSO,
-a production database with backups, the connector ecosystem, citizen development,
-and compliance certification.
+1. The first step should be a license and usage audit. The team may be paying for
+   capacity, seats, or bundled services it does not use, regardless of the
+   build-vs-buy decision.
+2. Any in-house alternative must be compared against the renegotiated platform price,
+   or against a cheaper competitor at $10 to $50/user/month, not against the current
+   contract.
 
 ## Sources
 
