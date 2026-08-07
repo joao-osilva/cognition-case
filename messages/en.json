@@ -522,5 +522,119 @@
     "sources": {
       "title": "Sources"
     }
+  },
+  "recommendationPage": {
+    "title": "Recommendation",
+    "bluf": "Renegotiate or replace the contract first. Build only if that fails, or when demand for internal tools outgrows three apps.",
+    "situation": {
+      "title": "Situation",
+      "body": "The engineering team pays $250K/year for a platform running three CRUD apps. At list price, 60 users cost roughly $14.4K/year. The prototype proves the capability core is replicable in hours. The real cost of building is ownership: SSO, database, connector upkeep, compliance, and the loss of citizen development."
+    },
+    "options": {
+      "title": "The options",
+      "columns": {
+        "option": "Option",
+        "cost": "Annual cost",
+        "effort": "Engineering effort",
+        "risk": "Risk",
+        "customization": "Customization"
+      },
+      "ratings": {
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
+      },
+      "items": {
+        "renegotiate": {
+          "name": "Renegotiate the contract",
+          "cost": "List price is ~$14.4K; even 3x that is far below today",
+          "effort": "None",
+          "risk": "Nothing changes operationally",
+          "customization": "Constraints stay"
+        },
+        "vendor": {
+          "name": "Move to a cheaper vendor (Retool, Appsmith, Budibase)",
+          "cost": "$20-40K/year range for this size",
+          "effort": "Weeks of migration for three small apps",
+          "risk": "New lock-in, better exit terms",
+          "customization": "More flexible, still a platform"
+        },
+        "build": {
+          "name": "Build in-house",
+          "cost": "Tool subscriptions now; $200K+ per dedicated engineer if demand grows",
+          "effort": "Weeks of hardening, then permanent upkeep",
+          "risk": "Security and compliance become the team's problem",
+          "customization": "Full control"
+        }
+      }
+    },
+    "reasoning": {
+      "title": "Reasoning",
+      "items": {
+        "commodity": {
+          "name": "Commodity test",
+          "detail": "Internal CRUD tools do not differentiate the business. Commodity capability defaults to buy."
+        },
+        "tco": {
+          "name": "Honest TCO",
+          "detail": "Build estimates for internal tooling overrun 2.5 to 3x. Compare three-year build cost against the corrected license price, not the current contract. Build only wins against the inflated number."
+        },
+        "hybrid": {
+          "name": "There is no pure build",
+          "detail": "Auth, database, and integration layers would still be bought. The real choice is which vendor set to own."
+        },
+        "citizen": {
+          "name": "The silent loss",
+          "detail": "Today operations and compliance ship their own changes; in-house, every change is an engineering ticket."
+        },
+        "devin": {
+          "name": "Devin changes the slope, not the intercept",
+          "detail": "The prototype took two hours, and the follow-on work is the same shape of well-scoped task. Building gets cheaper, but the ownership costs remain."
+        }
+      }
+    },
+    "triggers": {
+      "title": "What would change the call",
+      "intro": "The recommendation flips toward build if any of these hold.",
+      "items": {
+        "audit": {
+          "name": "The audit fails",
+          "detail": "Spend cannot be brought near list price."
+        },
+        "demand": {
+          "name": "Demand grows",
+          "detail": "A roadmap of ten or more internal tools makes dedicated ownership worth it."
+        },
+        "customization": {
+          "name": "Customization becomes a constraint",
+          "detail": "Delegation limits or UX ceilings block the workflows."
+        },
+        "compliance": {
+          "name": "Compliance requires data control",
+          "detail": "The vendor cannot provide the required data control."
+        }
+      }
+    },
+    "steps": {
+      "title": "Next steps",
+      "items": {
+        "audit": {
+          "name": "License and usage audit",
+          "detail": "One week, finance plus one engineer."
+        },
+        "quotes": {
+          "name": "Competitor quotes",
+          "detail": "Quotes from two competitor platforms, same week."
+        },
+        "checkpoint": {
+          "name": "Decision checkpoint",
+          "detail": "Renegotiated total under roughly $50K/year means buy, and the question closes for a year."
+        },
+        "pilot": {
+          "name": "Four-week build pilot with Devin",
+          "detail": "Production-harden the KYC app end to end, including SSO and persistence, and re-measure the cost line before committing to the other two."
+        }
+      }
+    }
   }
 }

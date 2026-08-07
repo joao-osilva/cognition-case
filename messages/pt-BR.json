@@ -522,5 +522,119 @@
     "sources": {
       "title": "Fontes"
     }
+  },
+  "recommendationPage": {
+    "title": "Recomendação",
+    "bluf": "Renegocie ou substitua o contrato primeiro. Construa apenas se isso falhar, ou quando a demanda por ferramentas internas superar três aplicativos.",
+    "situation": {
+      "title": "Situação",
+      "body": "A equipe de engenharia paga US$ 250 mil/ano por uma plataforma que roda três aplicativos CRUD. No preço de tabela, 60 usuários custam cerca de US$ 14,4 mil/ano. O protótipo prova que o núcleo de capacidades é replicável em horas. O custo real de construir é a propriedade: SSO, banco de dados, manutenção de conectores, compliance e a perda do desenvolvimento cidadão."
+    },
+    "options": {
+      "title": "As opções",
+      "columns": {
+        "option": "Opção",
+        "cost": "Custo anual",
+        "effort": "Esforço de engenharia",
+        "risk": "Risco",
+        "customization": "Customização"
+      },
+      "ratings": {
+        "good": "Bom",
+        "fair": "Razoável",
+        "poor": "Ruim"
+      },
+      "items": {
+        "renegotiate": {
+          "name": "Renegociar o contrato",
+          "cost": "O preço de tabela é ~US$ 14,4 mil; mesmo 3x isso fica muito abaixo do valor atual",
+          "effort": "Nenhum",
+          "risk": "Nada muda operacionalmente",
+          "customization": "As restrições permanecem"
+        },
+        "vendor": {
+          "name": "Migrar para um fornecedor mais barato (Retool, Appsmith, Budibase)",
+          "cost": "Faixa de US$ 20-40 mil/ano para este porte",
+          "effort": "Semanas de migração para três aplicativos pequenos",
+          "risk": "Novo lock-in, melhores condições de saída",
+          "customization": "Mais flexível, ainda uma plataforma"
+        },
+        "build": {
+          "name": "Construir internamente",
+          "cost": "Assinaturas de ferramentas agora; US$ 200 mil+ por engenheiro dedicado se a demanda crescer",
+          "effort": "Semanas de robustecimento, depois manutenção permanente",
+          "risk": "Segurança e compliance passam a ser problema da equipe",
+          "customization": "Controle total"
+        }
+      }
+    },
+    "reasoning": {
+      "title": "Raciocínio",
+      "items": {
+        "commodity": {
+          "name": "Teste de commodity",
+          "detail": "Ferramentas internas CRUD não diferenciam o negócio. Capacidade commodity tende a compra."
+        },
+        "tco": {
+          "name": "TCO honesto",
+          "detail": "Estimativas de construção de ferramentas internas estouram de 2,5 a 3x. Compare o custo de três anos de construção com o preço corrigido da licença, não com o contrato atual. Construir só vence contra o número inflado."
+        },
+        "hybrid": {
+          "name": "Não existe construção pura",
+          "detail": "Auth, banco de dados e camadas de integração ainda seriam comprados. A escolha real é qual conjunto de fornecedores possuir."
+        },
+        "citizen": {
+          "name": "A perda silenciosa",
+          "detail": "Hoje operações e compliance entregam suas próprias mudanças; internamente, cada mudança vira um ticket de engenharia."
+        },
+        "devin": {
+          "name": "Devin muda a inclinação, não o intercepto",
+          "detail": "O protótipo levou duas horas, e o trabalho seguinte tem o mesmo formato de tarefa bem delimitada. Construir fica mais barato, mas os custos de propriedade permanecem."
+        }
+      }
+    },
+    "triggers": {
+      "title": "O que mudaria a decisão",
+      "intro": "A recomendação vira para construir se qualquer um destes valer.",
+      "items": {
+        "audit": {
+          "name": "A auditoria falha",
+          "detail": "O gasto não consegue se aproximar do preço de tabela."
+        },
+        "demand": {
+          "name": "A demanda cresce",
+          "detail": "Um roadmap de dez ou mais ferramentas internas justifica a propriedade dedicada."
+        },
+        "customization": {
+          "name": "A customização vira restrição",
+          "detail": "Limites de delegação ou tetos de UX bloqueiam os fluxos de trabalho."
+        },
+        "compliance": {
+          "name": "Compliance exige controle dos dados",
+          "detail": "O fornecedor não consegue oferecer o controle de dados exigido."
+        }
+      }
+    },
+    "steps": {
+      "title": "Próximos passos",
+      "items": {
+        "audit": {
+          "name": "Auditoria de licenças e uso",
+          "detail": "Uma semana, financeiro mais um engenheiro."
+        },
+        "quotes": {
+          "name": "Cotações de concorrentes",
+          "detail": "Cotações de duas plataformas concorrentes, na mesma semana."
+        },
+        "checkpoint": {
+          "name": "Ponto de decisão",
+          "detail": "Total renegociado abaixo de cerca de US$ 50 mil/ano significa comprar, e a questão se encerra por um ano."
+        },
+        "pilot": {
+          "name": "Piloto de construção de quatro semanas com Devin",
+          "detail": "Robustecer o aplicativo de KYC de ponta a ponta, incluindo SSO e persistência, e remedir a linha de custo antes de se comprometer com os outros dois."
+        }
+      }
+    }
   }
 }
