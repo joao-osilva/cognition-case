@@ -238,12 +238,12 @@
     "recommendation": "Recommendation"
   },
   "apiErrors": {
-    "forbidden": "This action requires the '{required}' role or higher. You are currently '{role}'.",
+    "forbidden": "This action requires the ''{required}'' role or higher. You are currently ''{role}''.",
     "unknown_action": "Unknown action",
     "case_not_found": "Case not found",
     "refund_not_found": "Refund not found",
     "flag_not_found": "Flag not found",
-    "invalid_transition": "Cannot {action} a case in '{status}' status.",
+    "invalid_transition": "Cannot {action} a case in ''{status}'' status.",
     "note_required": "A note is required to {action} a case.",
     "refund_over_limit": "Refunds over 1,000 require an admin to approve.",
     "key_kebab_case": "Key must be kebab-case (e.g. 'new-payment-flow').",
@@ -252,7 +252,7 @@
     "owner_required": "Owner is required.",
     "rollout_range": "Rollout must be between 0 and 100.",
     "invalid_role": "Invalid role",
-    "refund_invalid_transition": "Cannot {action} a refund in '{status}' status.",
-    "flag_exists": "Flag '{key}' already exists in {environment}."
+    "refund_invalid_transition": "Cannot {action} a refund in ''{status}'' status.",
+    "flag_exists": "Flag ''{key}'' already exists in {environment}."
   }
 }

@@ -238,13 +238,13 @@
     "recommendation": "Recomendación"
   },
   "apiErrors": {
-    "forbidden": "Esta acción requiere el rol '{required}' o superior. Actualmente eres '{role}'.",
+    "forbidden": "Esta acción requiere el rol ''{required}'' o superior. Actualmente eres ''{role}''.",
     "unknown_action": "Acción desconocida",
     "case_not_found": "Caso no encontrado",
     "refund_not_found": "Reembolso no encontrado",
     "flag_not_found": "Flag no encontrada",
-    "invalid_transition": "No se puede ejecutar '{action}' en un caso con estado '{status}'.",
-    "note_required": "Se requiere una nota para ejecutar '{action}' en un caso.",
+    "invalid_transition": "No se puede ejecutar ''{action}'' en un caso con estado ''{status}''.",
+    "note_required": "Se requiere una nota para ejecutar ''{action}'' en un caso.",
     "refund_over_limit": "Los reembolsos superiores a 1.000 requieren la aprobación de un admin.",
     "key_kebab_case": "La clave debe estar en kebab-case (p. ej., 'new-payment-flow').",
     "description_required": "La descripción es obligatoria.",
@@ -252,7 +252,7 @@
     "owner_required": "El responsable es obligatorio.",
     "rollout_range": "El rollout debe estar entre 0 y 100.",
     "invalid_role": "Rol inválido",
-    "refund_invalid_transition": "No se puede ejecutar '{action}' en un reembolso con estado '{status}'.",
-    "flag_exists": "La flag '{key}' ya existe en {environment}."
+    "refund_invalid_transition": "No se puede ejecutar ''{action}'' en un reembolso con estado ''{status}''.",
+    "flag_exists": "La flag ''{key}'' ya existe en {environment}."
   }
 }
