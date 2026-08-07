@@ -254,5 +254,273 @@
     "invalid_role": "Rol inválido",
     "refund_invalid_transition": "No se puede ejecutar ''{action}'' en un reembolso con estado ''{status}''.",
     "flag_exists": "La flag ''{key}'' ya existe en {environment}."
+  },
+  "evaluationPage": {
+    "replicated": {
+      "title": "Replicado",
+      "items": {
+        "grids": {
+          "name": "Cuadrículas de datos",
+          "detail": "Filtrado y búsqueda en la cola KYC, reembolsos y flags."
+        },
+        "forms": {
+          "name": "Formularios validados",
+          "detail": "Campos obligatorios y reglas de negocio en cada acción que cambia estado."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Roles viewer, approver y admin, aplicados en el servidor."
+        },
+        "audit": {
+          "name": "Registro de auditoría",
+          "detail": "Quién hizo qué, cuándo, con valores antes y después."
+        },
+        "deploy": {
+          "name": "Despliegue",
+          "detail": "En línea en Vercel, compartible con el equipo."
+        }
+      },
+      "done": "Hecho"
+    },
+    "gaps": {
+      "title": "No replicado",
+      "effort": {
+        "days": "Días",
+        "ongoing": "Continuo",
+        "months": "Meses",
+        "notBridgeable": "Sin solución"
+      },
+      "items": {
+        "sso": {
+          "name": "SSO real",
+          "takes": "Proveedor gestionado (Auth0, Clerk, WorkOS). Días para integrar, dependencia permanente.",
+          "effort": "days"
+        },
+        "database": {
+          "name": "Base de datos persistente",
+          "takes": "Postgres más migraciones, copias de seguridad, retención. Días para configurar, operación continua.",
+          "effort": "days"
+        },
+        "connectors": {
+          "name": "Conectores",
+          "takes": "Integraciones hechas a mano o una capa de integración (Composio, Merge, Paragon). La brecha más difícil: trabajo continuo en cualquier caso.",
+          "effort": "ongoing"
+        },
+        "citizen": {
+          "name": "Desarrollo ciudadano",
+          "takes": "Cada nueva herramienta y cada cambio se convierte en un ticket de ingeniería.",
+          "effort": "notBridgeable"
+        },
+        "compliance": {
+          "name": "Certificación de compliance",
+          "takes": "Heredada de las decisiones de infraestructura; meses de auditoría si se exige certificación.",
+          "effort": "months"
+        }
+      }
+    },
+    "dimensions": {
+      "title": "Dimensiones de Evaluación",
+      "items": {
+        "build": {
+          "title": "Costo de construcción",
+          "points": [
+            "Horas de ingeniería primero: convertir el prototipo en un sistema de producción (SSO, base de datos, integraciones, pruebas) toma semanas de tiempo sénior, no horas.",
+            "Construir sigue significando comprar: motores de workflow (Temporal, Inngest), autenticación gestionada y capas de integración tienen cada uno su factura.",
+            "Autohospedar los equivalentes open-source cambia suscripciones por gasto de nube. No existe una opción con cero proveedores."
+          ]
+        },
+        "maintenance": {
+          "title": "Carga de mantenimiento",
+          "points": [
+            "Los conectores son un producto, no una funcionalidad; alguien debe mantener cada integración funcionando a medida que cambian las APIs de terceros.",
+            "La infraestructura autohospedada agrega parches, actualizaciones y guardias."
+          ]
+        },
+        "security": {
+          "title": "Implicaciones de seguridad",
+          "points": [
+            "La autenticación (SSO, sesiones, MFA) y la autorización (modelos de roles, verificaciones de permisos en cada acción) vienen con la plataforma hoy y pasarían a ser responsabilidad del equipo.",
+            "En una fintech regulada, lo mismo aplica a las obligaciones de auditoría y compliance."
+          ]
+        },
+        "opportunity": {
+          "title": "Costo de oportunidad",
+          "points": [
+            "El desarrollo ciudadano desaparece: operaciones y compliance dejan de construir sus propias aplicaciones y abren tickets.",
+            "El pronóstico de demanda define la escala: de tres a diez aplicaciones CRUD, el equipo actual lo absorbe; más allá, de uno a tres ingenieros dedicados a más de 200 mil USD superan el costo de la licencia antes de contar el costo de oportunidad."
+          ]
+        }
+      }
+    },
+    "capexOpex": {
+      "title": "Capex vs. Opex",
+      "intro": "Las mismas dimensiones, divididas en costo único y recurrente.",
+      "items": {
+        "build": {
+          "capex": "Construcción inicial: semanas de ingeniería sénior para endurecer el prototipo",
+          "opex": "Suscripciones de herramientas o gasto de nube para equivalentes autohospedados"
+        },
+        "maintenance": {
+          "capex": "-",
+          "opex": "Mantenimiento de integraciones, parches, actualizaciones, guardias"
+        },
+        "security": {
+          "capex": "Integración de SSO y autorización",
+          "opex": "Revisiones de acceso, parches de dependencias, trabajo de auditoría y compliance"
+        },
+        "opportunity": {
+          "capex": "Funcionalidades no entregadas durante la construcción inicial",
+          "opex": "Cada cambio de herramienta como ticket de ingeniería; 1 a 3 ingenieros dedicados (200 mil USD+ cada uno) si la demanda crece"
+        }
+      },
+      "buyProfile": "Comprar invierte el perfil: capex casi cero y una sola línea de opex.",
+      "buyTitle": "Comprar (contraste)",
+      "columns": {
+        "dimension": "Dimensión",
+        "capex": "Único (capex)",
+        "opex": "Recurrente (opex)"
+      },
+      "none": "Ninguno",
+      "buyCapex": "Casi cero",
+      "buyOpex": "Licencia de la plataforma; el proveedor carga con el mantenimiento y la seguridad"
+    },
+    "title": "Evaluación",
+    "lead": "El prototipo se construyó en aproximadamente dos horas con Devin. El objetivo era replicar el núcleo de capacidades que las tres aplicaciones usan en la plataforma, no un sistema de producción.",
+    "facts": {
+      "time": "~2 horas con Devin",
+      "scope": "Núcleo de capacidades replicado",
+      "deploy": "Desplegado en Vercel"
+    },
+    "comparison": {
+      "title": "Replicado vs. la brecha"
+    }
+  },
+  "researchPage": {
+    "title": "Investigación",
+    "lead": "Qué hace Microsoft Power Apps, qué capacidades usan las tres aplicaciones y dónde está el valor de la plataforma.",
+    "components": {
+      "title": "Qué es Power Apps",
+      "columns": {
+        "component": "Componente",
+        "provides": "Qué ofrece"
+      },
+      "items": {
+        "canvas": {
+          "name": "Aplicaciones de lienzo (canvas)",
+          "provides": "Constructor de UI de arrastrar y soltar con fórmulas al estilo Excel (Power Fx)."
+        },
+        "modelDriven": {
+          "name": "Aplicaciones basadas en modelo",
+          "provides": "UI generada a partir del modelo de datos: defina tablas y reglas, obtenga cuadrículas, formularios y paneles. El modo usado para herramientas internas CRUD."
+        },
+        "dataverse": {
+          "name": "Microsoft Dataverse",
+          "provides": "Plataforma de datos administrada: tablas relacionales, seguridad por columna, validación, auditoría de cambios."
+        },
+        "connectors": {
+          "name": "Conectores",
+          "provides": "Más de 1.000 integraciones listas; conectores personalizados para APIs internas."
+        },
+        "automate": {
+          "name": "Power Automate",
+          "provides": "Flujos de trabajo: aprobaciones, notificaciones, tareas programadas."
+        },
+        "ai": {
+          "name": "IA / Copilot",
+          "provides": "Generación de aplicaciones por lenguaje natural, modelos de AI Builder."
+        }
+      }
+    },
+    "capabilities": {
+      "title": "Las capacidades que usan las tres aplicaciones",
+      "items": {
+        "grids": {
+          "name": "Cuadrículas de datos",
+          "detail": "Vistas ordenables y filtrables sobre casos KYC, reembolsos, flags."
+        },
+        "forms": {
+          "name": "Formularios validados",
+          "detail": "Campos obligatorios, entradas tipadas, reglas de negocio."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Los analistas revisan, los líderes de compliance aprueban, ingeniería alterna flags. Obligatorio en una fintech regulada."
+        },
+        "audit": {
+          "name": "Registro de auditoría",
+          "detail": "Cada cambio registrado con valores antiguos y nuevos. Obligatorio para KYC y reembolsos."
+        },
+        "approvals": {
+          "name": "Aprobaciones",
+          "detail": "Máquinas de estado pendiente / aprobado / rechazado con notificaciones."
+        },
+        "connectors": {
+          "name": "Conectores",
+          "detail": "Integraciones (proveedores de identidad, procesadores de pago) que el equipo no mantiene."
+        },
+        "managed": {
+          "name": "Plataforma administrada",
+          "detail": "SSO, alojamiento, parches y copias de seguridad son problema del proveedor."
+        }
+      },
+      "note": "El mismo patrón en las tres aplicaciones: tabla, formulario, acción restringida por rol, registro de auditoría. El modo móvil sin conexión, AI Builder y el resto de la plataforma quedan sin uso."
+    },
+    "value": {
+      "title": "Dónde está el valor",
+      "intro": "El valor está en el paquete, no en una única funcionalidad.",
+      "bundleTitle": "El paquete de valor",
+      "weaknessesTitle": "Debilidades documentadas",
+      "bundle": {
+        "speed": {
+          "name": "Velocidad",
+          "detail": "Una aplicación CRUD funcional en horas o días, sin ingenieros."
+        },
+        "citizen": {
+          "name": "Desarrollo ciudadano",
+          "detail": "Operaciones y compliance construyen sus propias aplicaciones."
+        },
+        "governance": {
+          "name": "Gobernanza",
+          "detail": "SSO, RBAC, auditoría, SOC 2 / ISO 27001 heredados de Microsoft."
+        },
+        "integrations": {
+          "name": "Integraciones mantenidas",
+          "detail": "Los conectores son configuración, no código que mantener."
+        },
+        "infra": {
+          "name": "Sin infraestructura",
+          "detail": "Sin servidores, despliegues ni guardias."
+        }
+      },
+      "weaknesses": {
+        "licensing": {
+          "name": "Licenciamiento",
+          "detail": "~20 USD/usuario/mes de lista, pero los conectores premium, la capacidad de Dataverse y la acumulación por aplicación hacen los costos reales difíciles de predecir."
+        },
+        "delegation": {
+          "name": "Límites de delegación",
+          "detail": "Las consultas no delegables corren en el cliente sobre 500 a 2.000 filas y devuelven resultados erróneos a escala."
+        },
+        "ux": {
+          "name": "UX restringida",
+          "detail": "Difícil ir más allá de formularios sobre datos."
+        },
+        "api": {
+          "name": "Cuotas de API",
+          "detail": "Límites diarios de solicitudes por usuario."
+        },
+        "lockin": {
+          "name": "Lock-in",
+          "detail": "Las aplicaciones, Power Fx y los datos de Dataverse no son portables."
+        }
+      }
+    },
+    "caution": {
+      "title": "Advertencia: el precio puede no reflejar el uso",
+      "body": "El gasto en la plataforma suele reflejar la estructura del contrato, no el uso. A precio de lista, 60 usuarios cuestan unos 14,4 mil USD/año, muy por debajo de los 250 mil USD informados. Comience con una auditoría de licencias. Compare construir con el precio renegociado o un competidor más barato, no con el contrato actual."
+    },
+    "sources": {
+      "title": "Fuentes"
+    }
   }
 }
