@@ -1,155 +1,157 @@
-# Investigación: Qué hace Microsoft Power Apps y dónde reside su valor
+# Investigación: Qué Hace Microsoft Power Apps y Dónde Está Su Valor
 
-## 1. Qué es Power Apps
+## 1. Qué Es Power Apps
 
-Microsoft Power Apps es una plataforma de aplicaciones low-code, parte de la Power Platform
-(Power Apps, Power Automate, Power BI, Power Pages, Copilot Studio). Ofrece un entorno de
-desarrollo rápido para construir aplicaciones de negocio personalizadas que se conectan a
-datos en Microsoft Dataverse o en más de 1.000 fuentes externas (SharePoint, SQL Server,
+Microsoft Power Apps es una plataforma de aplicaciones low-code dentro de la Power
+Platform (Power Apps, Power Automate, Power BI, Power Pages, Copilot Studio). Ofrece un
+entorno de desarrollo rápido para aplicaciones de negocio que se conectan a datos en
+Microsoft Dataverse o en más de 1.000 fuentes externas (SharePoint, SQL Server,
 Dynamics 365, Salesforce, entre otras).
 
 Sus bloques de construcción principales:
 
 | Componente | Qué ofrece |
 |---|---|
-| **Canvas apps** | Constructor de UI drag-and-drop con control a nivel de píxel. "Empieza por la experiencia de usuario" — formularios, galerías y botones conectados a datos con fórmulas al estilo Excel (Power Fx). |
-| **Model-driven apps** | UI generada automáticamente a partir del modelo de datos. Define tablas, relaciones, formularios, vistas y reglas de negocio en Dataverse; la aplicación (grillas, formularios de detalle, dashboards) se produce por ti. Este es el modo más relevante para herramientas internas de tipo CRUD. |
-| **Microsoft Dataverse** | La plataforma de datos gestionada: tablas relacionales, seguridad a nivel de columna, reglas de negocio, validación en el servidor y auditoría de cambios integrada. |
-| **Conectores** | Más de 1.000 conectores preconstruidos para sistemas de Microsoft y de terceros; conectores personalizados para APIs REST internas. |
-| **Power Automate** | Motor de workflow/automatización — aprobaciones, notificaciones, tareas programadas — que se combina con las aplicaciones. |
-| **IA / Copilot** | Generación de aplicaciones mediante lenguaje natural y modelos de AI Builder integrados en las aplicaciones. |
+| **Aplicaciones de lienzo (canvas)** | Constructor de UI de arrastrar y soltar: formularios, galerías y botones conectados a datos con fórmulas al estilo Excel (Power Fx). |
+| **Aplicaciones basadas en modelo** | UI generada a partir del modelo de datos. Se definen tablas, relaciones, formularios, vistas y reglas de negocio en Dataverse; la aplicación (cuadrículas, formularios de detalle, paneles) se produce automáticamente. Es el modo más relevante para herramientas internas de tipo CRUD. |
+| **Microsoft Dataverse** | La plataforma de datos administrada: tablas relacionales, seguridad a nivel de columna, reglas de negocio, validación en el servidor y auditoría de cambios integrada. |
+| **Conectores** | Más de 1.000 conectores listos para sistemas de Microsoft y de terceros; conectores personalizados para APIs REST internas. |
+| **Power Automate** | Motor de flujos de trabajo y automatización (aprobaciones, notificaciones, tareas programadas) que se integra con las aplicaciones. |
+| **IA / Copilot** | Generación de aplicaciones por lenguaje natural y modelos de AI Builder incorporados en las aplicaciones. |
 
-## 2. Las capacidades que importan para un equipo de herramientas internas de una fintech
+## 2. Las Capacidades Que Importan para Este Cliente
 
-Mapeando el valor de Power Apps a las tres aplicaciones del cliente (cola de revisión KYC,
-dashboard de reembolsos, panel de administración de feature flags), las capacidades que hacen
-el trabajo real son:
+Las tres aplicaciones del cliente (cola de revisión KYC, panel de reembolsos, panel de
+administración de feature flags) dependen de un subconjunto específico de la plataforma:
 
-1. **Tablas de datos + vistas** — grillas ordenables, filtrables y con búsqueda sobre registros
-   de negocio (casos KYC, solicitudes de reembolso, flags). Esta es la columna vertebral de toda
-   herramienta interna.
-2. **Formularios con validación** — crear/editar registros con campos obligatorios, entradas
-   tipadas, desplegables y validación por reglas de negocio.
-3. **Control de acceso basado en roles (RBAC)** — roles de seguridad de Dataverse + integración
-   con Microsoft Entra ID (Azure AD). Un analista de KYC puede revisar; solo un líder de
-   compliance puede aprobar; solo ingeniería puede alternar una flag de producción. En una
-   fintech regulada esto es innegociable.
-4. **Traza de auditoría** — la auditoría de Dataverse registra cada creación/actualización/
-   eliminación y acceso de usuario, con historial de valor antiguo → valor nuevo por registro.
-   Para KYC y reembolsos esto es un requisito de compliance, no un lujo.
-5. **Workflow / aprobaciones** — máquinas de estado (pendiente → aprobado/rechazado) con
-   notificaciones y escalamiento vía Power Automate.
-6. **Plataforma gestionada** — SSO, hosting, parches, backups, adaptabilidad móvil y
-   disponibilidad son problema de Microsoft, no del equipo.
+1. **Tablas de datos y vistas**: cuadrículas ordenables, filtrables y con búsqueda sobre
+   registros de negocio (casos KYC, solicitudes de reembolso, flags).
+2. **Formularios con validación**: creación y edición de registros con campos
+   obligatorios, entradas tipadas y validación por reglas de negocio.
+3. **Control de acceso basado en roles**: roles de seguridad de Dataverse integrados
+   con Microsoft Entra ID. Un analista puede revisar, solo un líder de compliance puede
+   aprobar, solo ingeniería puede alternar una flag de producción. En una fintech
+   regulada esto es un requisito.
+4. **Registro de auditoría**: la auditoría de Dataverse registra cada creación,
+   actualización y eliminación con valores antiguos y nuevos por registro. Para KYC y
+   reembolsos esto es un requisito de compliance.
+5. **Flujos de trabajo y aprobaciones**: máquinas de estado (de pendiente a aprobado o
+   rechazado) con notificaciones y escalamiento vía Power Automate.
+6. **Plataforma administrada**: SSO, alojamiento, parches, copias de seguridad y
+   disponibilidad son responsabilidad de Microsoft.
 
-Cabe destacar que las tres aplicaciones del cliente usan una porción pequeña de la plataforma:
-todas son aplicaciones de tipo "tabla + formulario + acción restringida por rol + log de
-auditoría". No parecen usar los diferenciadores de cola larga (más de 200 conectores, móvil
-offline, AI Builder, citizen development a escala).
+Las tres aplicaciones usan una porción pequeña de la plataforma. Todas siguen el mismo
+patrón: tabla, formulario, acción restringida por rol, registro de auditoría. No parecen
+usar los diferenciadores de cola larga, como el catálogo de conectores, el modo móvil
+sin conexión o AI Builder.
 
-## 3. Dónde reside realmente el valor
+## 3. Dónde Está el Valor
 
-**La verdadera propuesta de valor de Power Apps no es ninguna funcionalidad aislada — es:**
+El valor de Power Apps está en el paquete, no en una única funcionalidad:
 
-- **Velocidad hasta la primera versión**: una aplicación CRUD funcional en horas/días sin ingenieros.
-- **Citizen development**: personas no ingenieras (operaciones, compliance) pueden construir y modificar aplicaciones.
+- **Velocidad hasta la primera versión**: una aplicación CRUD funcional en horas o
+  días, sin ingenieros.
+- **Desarrollo ciudadano**: personas no ingenieras (operaciones, compliance) pueden
+  crear y modificar aplicaciones.
 - **Gobernanza lista para usar**: SSO, RBAC, auditoría y certificaciones de compliance
-  (SOC 2, ISO 27001, etc.) heredadas de la nube de Microsoft.
-- **Cero propiedad de infraestructura**: sin servidores, sin despliegues, sin guardias.
+  (SOC 2, ISO 27001) heredadas de la nube de Microsoft.
+- **Cero propiedad de infraestructura**: sin servidores, despliegues ni guardias.
 
-**Sus debilidades bien documentadas** (relevantes al evaluar un reemplazo):
+Sus debilidades documentadas, relevantes al evaluar un reemplazo:
 
-- **Costo y complejidad de licenciamiento**: Premium cuesta ~US$ 20/usuario/mes de lista;
-  los conectores premium, la capacidad de Dataverse y el apilamiento por aplicación hacen que
-  los costos reales sean difíciles de predecir.
-- **Límites de delegación**: las consultas que el conector no puede delegar se evalúan en el
-  cliente sobre un conjunto limitado de registros (500–2.000 filas) — los resultados se vuelven
-  silenciosamente incorrectos a escala.
-- **Modelo de datos y UX restringidos**: la lógica relacional compleja, la UX personalizada y
-  cualquier cosa más allá de "formularios sobre datos" se vuelve incómoda rápidamente.
-- **Límites de solicitudes de API**: topes diarios de API por usuario ligados al licenciamiento.
-- **Lock-in de proveedor**: las aplicaciones, las fórmulas (Power Fx) y los datos (Dataverse) no son portables.
+- **Costo y complejidad de licenciamiento**: el plan Premium cuesta alrededor de
+  20 USD/usuario/mes a precio de lista; los conectores premium, la capacidad de
+  Dataverse y la acumulación por aplicación hacen que los costos reales sean difíciles
+  de predecir.
+- **Límites de delegación**: las consultas que un conector no puede delegar se evalúan
+  en el cliente sobre un conjunto limitado de registros (500 a 2.000 filas), lo que
+  produce resultados incorrectos a escala.
+- **Modelo de datos y UX restringidos**: la lógica relacional compleja y la UX
+  personalizada más allá de formularios sobre datos resultan difíciles.
+- **Límites de solicitudes de API**: cuotas diarias de API por usuario ligadas al
+  licenciamiento.
+- **Dependencia del proveedor**: las aplicaciones, las fórmulas Power Fx y los datos de
+  Dataverse no son portables.
 
-## 4. Los costos ocultos de reemplazar la plataforma
+## 4. Los Costos Ocultos de Reemplazar la Plataforma
 
-El checklist de funcionalidades anterior subestima lo que "comprar" realmente adquiere. Cuatro
-costos son fáciles de subestimar al proponer una alternativa interna:
+Cinco costos son fáciles de subestimar al proponer una alternativa interna:
 
-1. **La autenticación no es trivial.** SSO, gestión de sesiones, modelos de roles/permisos y su
-   mantenimiento continuo (parches de seguridad, revisiones de acceso, offboarding) vienen
-   integrados y listos en Power Apps vía Entra ID. Reconstruir esto desde cero — y mantenerlo
-   seguro en una fintech regulada — es un compromiso de ingeniería significativo y permanente,
-   incluso con bibliotecas como NextAuth/Auth.js o proveedores gestionados (Auth0, Clerk, WorkOS).
-2. **Los conectores son un producto, no una funcionalidad.** Power Apps incluye más de 1.000
-   conectores mantenidos. Una plataforma interna tendría que construir y mantener cada
-   integración a mano o adoptar una capa de integración (p. ej. Composio, Merge, Paragon) — lo
-   que reintroduce una factura de proveedor y aún deja código de pegamento que mantener. Si las
-   herramientas del cliente necesitan muchas integraciones de terceros, solo esto ya hace difícil
-   justificar la reconstrucción.
-3. **El citizen development traslada el TCO fuera del equipo de ingeniería.** Que usuarios no
-   técnicos construyan/modifiquen sus propias aplicaciones — dentro de guardrails y límites
-   definidos por los administradores para toda la empresa — significa que las herramientas
-   internas no hacen fila detrás del trabajo de producto. Una solución interna convierte cada
-   nueva herramienta y cada cambio en un ticket de ingeniería; ese overhead continuo es el mayor
-   costo oculto de "construir".
-4. **La previsión de demanda es la variable decisiva.** Si estas 3 aplicaciones son
-   prácticamente todo (o un crecimiento hasta ~10 aplicaciones CRUD similares), una solución
-   interna simple mantenida dentro del alcance del equipo existente es plausible. Si la demanda
-   de nuevas aplicaciones internas probablemente siga creciendo, la plataforma necesita dueños
-   dedicados — y 1–3 FTEs a US$ 200 mil+/año cada uno superan rápidamente el costo actual de la
-   licencia, antes de contar el costo de oportunidad.
-5. **"Construir" sigue significando comprar (u hospedar) las piezas.** Replicar las capacidades
-   de Power Apps internamente casi inevitablemente incorpora otras plataformas — motores de
-   workflow duraderos (p. ej. Temporal, Inngest), plataformas de conectores/integración
-   (p. ej. Composio), authn/authz gestionados (p. ej. Auth0, Clerk, WorkOS) — cada una con su
-   propia factura que debe descontarse del ahorro de licencias. La ruta open-source (Temporal
-   auto-hospedado, Keycloak, n8n, etc.) cambia esas suscripciones por una factura de nube mayor
-   más las horas de ingeniería para montar la infraestructura y mantenerla parcheada, monitoreada
-   y actualizada. De cualquier forma, "construir" nunca es una opción con cero proveedores y cero
-   infraestructura.
+1. **La autenticación y la autorización son un compromiso permanente de ingeniería.**
+   El SSO, la gestión de sesiones y los modelos de roles vienen integrados en Power
+   Apps vía Entra ID. Reconstruirlos y mantenerlos seguros en una fintech regulada es
+   un trabajo continuo significativo, incluso con proveedores administrados (Auth0,
+   Clerk, WorkOS) o bibliotecas.
+2. **Los conectores son un producto, no una funcionalidad.** Una plataforma interna
+   tendría que construir y mantener cada integración manualmente o adoptar una capa de
+   integración (Composio, Merge, Paragon), lo que reintroduce una factura de proveedor
+   y aún deja código de integración por mantener.
+3. **El desarrollo ciudadano traslada el costo fuera del equipo de ingeniería.** Con
+   Power Apps, usuarios no técnicos crean y modifican sus propias aplicaciones dentro
+   de límites definidos por los administradores. Una solución interna convierte cada
+   nueva herramienta y cada cambio en un ticket de ingeniería. Esa sobrecarga continua
+   es el mayor costo oculto de construir.
+4. **El pronóstico de demanda es la variable decisiva.** Si la demanda se mantiene en
+   aproximadamente estas tres aplicaciones, o crece hasta unas diez aplicaciones CRUD
+   similares, una solución interna simple mantenida dentro del alcance del equipo
+   actual es plausible. Si la demanda sigue creciendo, la plataforma necesitará
+   responsables dedicados, y de uno a tres ingenieros a más de 200 mil USD por año
+   cada uno superan rápidamente el costo actual de la licencia, antes de contar el
+   costo de oportunidad.
+5. **Construir sigue implicando comprar o alojar las piezas.** Replicar las capacidades
+   de la plataforma requiere motores de workflow (Temporal, Inngest), plataformas de
+   integración y autenticación administrada, cada uno con su propia factura. La ruta de
+   código abierto (Temporal, Keycloak, n8n autoalojados) cambia esas suscripciones por
+   una factura de nube mayor, más las horas de ingeniería para operar, parchear y
+   actualizar la infraestructura. Construir nunca es una opción con cero proveedores y
+   cero infraestructura.
 
-Una evaluación completa también debe comparar **plataformas alternativas** (Retool, Appsmith,
-Budibase, ToolJet, etc.) cuyos precios pueden alinearse mejor con la escala y el uso del cliente —
-"reemplazar al proveedor" y "construir internamente" no son las únicas dos opciones; "cambiar a
-un proveedor más barato" puede superar a ambas.
+Una evaluación completa también debe comparar plataformas alternativas (Retool,
+Appsmith, Budibase, ToolJet), cuyos precios pueden ajustarse mejor a la escala del
+cliente. Reemplazar al proveedor y construir internamente no son las únicas opciones;
+cambiar a un proveedor más barato puede superar a ambas.
 
-## 5. La pregunta de los US$ 250 mil/año
+## 5. Interpretando el Gasto Anual de 250 Mil USD
 
-A precio de lista, 60 ingenieros × US$ 20/usuario/mes ≈ **US$ 14,4 mil/año** — ni cerca de
-US$ 250 mil. Un gasto anual de US$ 250 mil implica alguna combinación de: licenciamiento para
-toda la organización (todos los empleados, no solo ingenieros), add-ons de almacenamiento/
-capacidad de Dataverse, conectores premium, licenciamiento de Power Automate, entornos
-gestionados y/o un acuerdo enterprise que incluye consultoría. Dos implicaciones:
+A precio de lista, 60 ingenieros a 20 USD/usuario/mes suman unos 14,4 mil USD al año,
+muy por debajo de 250 mil USD. Un gasto de 250 mil USD implica alguna combinación de
+licenciamiento para toda la organización, complementos de capacidad de Dataverse,
+conectores premium, licenciamiento de Power Automate, entornos administrados o un
+contrato empresarial que incluye consultoría. Dos implicaciones:
 
-1. La oportunidad de ahorro es real, pero la primera pregunta al cliente debería ser una
-   auditoría de licencias — pueden estar sobre-licenciados para tres aplicaciones internas,
-   independientemente de construir o comprar.
-2. Cualquier alternativa interna debe compararse con el precio *renegociado* de Power Apps
-   (o un competidor más barato como Retool a ~US$ 10–50/usuario/mes), no con los US$ 250 mil actuales.
+1. La primera pregunta al cliente debe ser una auditoría de licencias. Pueden tener
+   licencias en exceso para tres aplicaciones internas, independientemente de la
+   decisión de construir o comprar.
+2. Cualquier alternativa interna debe compararse con el precio renegociado de Power
+   Apps, o con un competidor más barato de 10 a 50 USD/usuario/mes, no con los 250 mil
+   USD actuales.
 
-## 6. Qué debe demostrar un prototipo
+## 6. Qué Debe Demostrar un Prototipo
 
-Para probar con credibilidad "¿podríamos construir esto internamente con Devin?", el prototipo
-debe replicar el núcleo de capacidades identificado en el §2, aplicado a las tres aplicaciones
-reales del cliente:
+Para probar si el equipo podría construir esto internamente con Devin, el prototipo debe
+replicar el núcleo de capacidades de la sección 2, aplicado a las tres aplicaciones del
+cliente:
 
-- [ ] Grilla de datos con filtrado/búsqueda para cada aplicación (cola KYC, reembolsos, flags)
-- [ ] Formularios con validación para acciones que cambian estado (aprobar/rechazar KYC,
-      procesar reembolso, alternar/crear flag)
-- [ ] Control de acceso basado en roles (visualizador / aprobador / admin) restringiendo esas acciones
-- [ ] Un log de auditoría que capture quién hizo qué, cuándo, con valores antes/después
-- [ ] Desplegado y compartible (Vercel), demostrando que la historia de "cero infra" es alcanzable
+- [ ] Cuadrícula de datos con filtro y búsqueda para cada aplicación (cola KYC,
+      reembolsos, flags)
+- [ ] Formularios con validación para acciones que cambian el estado (aprobar o
+      rechazar KYC, procesar reembolso, alternar o crear flag)
+- [ ] Control de acceso basado en roles (visualizador, aprobador, admin) restringiendo
+      esas acciones
+- [ ] Un registro de auditoría que capture quién hizo qué, cuándo, con valores antes y
+      después
+- [ ] Desplegado y compartible (Vercel)
 
-Fuera de alcance para un prototipo de 2 horas (y señalado honestamente en la evaluación): SSO
-real (Entra ID/Okta), una base de datos de producción con backups, el ecosistema de conectores,
-citizen development (no ingenieros modificando aplicaciones) y certificación de compliance.
+Fuera del alcance de un prototipo de dos horas, y señalado en la evaluación: SSO real,
+una base de datos de producción con copias de seguridad, el ecosistema de conectores,
+el desarrollo ciudadano y la certificación de compliance.
 
 ## Fuentes
 
-- Microsoft, "What is Power Apps?" — learn.microsoft.com/power-apps/powerapps-overview
-- Microsoft, Power Apps components (canvas, model-driven, Dataverse) — learn.microsoft.com/power-apps/maker
-- Microsoft, Power Apps pricing — microsoft.com/power-platform/products/power-apps/pricing
-- Microsoft, Power Platform Licensing Guide (ago 2025)
-- Microsoft, Dataverse auditing — learn.microsoft.com/power-platform/admin/manage-dataverse-auditing
+- Microsoft, "What is Power Apps?" - learn.microsoft.com/power-apps/powerapps-overview
+- Microsoft, componentes de Power Apps (canvas, basado en modelo, Dataverse) - learn.microsoft.com/power-apps/maker
+- Microsoft, precios de Power Apps - microsoft.com/power-platform/products/power-apps/pricing
+- Microsoft, Guía de Licenciamiento de Power Platform (ago. 2025)
+- Microsoft, auditoría de Dataverse - learn.microsoft.com/power-platform/admin/manage-dataverse-auditing
 - TechTarget, "Top Microsoft Power Apps limitations"
 - Conduct, "Power Apps limitations: when to move off low-code"
