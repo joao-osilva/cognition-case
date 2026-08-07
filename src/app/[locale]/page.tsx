@@ -1,5 +1,6 @@
-import { Link } from "@/i18n/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRightIcon } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -15,54 +16,6 @@ interface Tile {
   description: string;
   cta: string;
 }
-
-const APPS: Tile[] = [
-  {
-    href: "/apps/kyc",
-    title: "KYC Review Queue",
-    description:
-      "Work through pending identity checks. Approve, reject, or escalate — rejections and escalations always require a note.",
-    cta: "Open the Queue",
-  },
-  {
-    href: "/apps/refunds",
-    title: "Refunds Dashboard",
-    description:
-      "See open exposure at a glance, decide on requests, and process approved payouts. Refunds over 1,000 need an admin.",
-    cta: "Review Refunds",
-  },
-  {
-    href: "/apps/flags",
-    title: "Feature-Flag Admin",
-    description:
-      "Toggle flags and dial rollout percentages per environment. Every change is admin-only and lands in the audit log.",
-    cta: "Manage Flags",
-  },
-];
-
-const ANALYSIS: Tile[] = [
-  {
-    href: "/analysis/research",
-    title: "Research",
-    description:
-      "What Power Apps actually provides, and which slice of it this team pays $250K/year for.",
-    cta: "Read the Research",
-  },
-  {
-    href: "/analysis/evaluation",
-    title: "Evaluation",
-    description:
-      "What ~2 hours of building replicated, what it didn't, and what closing the gap would really cost.",
-    cta: "Read the Evaluation",
-  },
-  {
-    href: "/analysis/recommendation",
-    title: "Recommendation",
-    description:
-      "The build-vs-buy call, with the reasoning laid out so you can disagree with it productively.",
-    cta: "Read the Recommendation",
-  },
-];
 
 function CardGrid({ items }: { items: Tile[] }) {
   return (
@@ -92,38 +45,82 @@ function CardGrid({ items }: { items: Tile[] }) {
   );
 }
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("home");
+
+  const apps: Tile[] = [
+    {
+      href: "/apps/kyc",
+      title: t("kycTitle"),
+      description: t("kycDescription"),
+      cta: t("kycCta"),
+    },
+    {
+      href: "/apps/refunds",
+      title: t("refundsTitle"),
+      description: t("refundsDescription"),
+      cta: t("refundsCta"),
+    },
+    {
+      href: "/apps/flags",
+      title: t("flagsTitle"),
+      description: t("flagsDescription"),
+      cta: t("flagsCta"),
+    },
+  ];
+
+  const analysis: Tile[] = [
+    {
+      href: "/analysis/research",
+      title: t("researchTitle"),
+      description: t("researchDescription"),
+      cta: t("researchCta"),
+    },
+    {
+      href: "/analysis/evaluation",
+      title: t("evaluationTitle"),
+      description: t("evaluationDescription"),
+      cta: t("evaluationCta"),
+    },
+    {
+      href: "/analysis/recommendation",
+      title: t("recommendationTitle"),
+      description: t("recommendationDescription"),
+      cta: t("recommendationCta"),
+    },
+  ];
+
   return (
     <div>
       <div className="mb-10">
         <Badge variant="secondary" className="mb-3">
-          Build-vs-Buy Assessment
+          {t("badge")}
         </Badge>
         <h1 className="text-balance text-3xl font-semibold tracking-tight">
-          Could Two Hours of Building Replace a $250K/Year Platform?
+          {t("title")}
         </h1>
         <p className="mt-3 max-w-3xl text-pretty text-muted-foreground">
-          A Series C fintech with ~60 engineers runs three internal apps on
-          Microsoft Power Apps. This prototype rebuilds their capability core —
-          data grids, validated forms, role-based access control, and a full
-          audit trail — so the build-vs-buy decision rests on evidence, not
-          guesswork.
+          {t("intro")}
         </p>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Try it: switch between Viewer, Approver, and Admin in the top-right
-          and watch what each role can and can&apos;t do.
-        </p>
+        <p className="mt-3 text-sm text-muted-foreground">{t("tryIt")}</p>
       </div>
 
-      <h2 className="mb-4 text-lg font-semibold">The Three Internal Apps</h2>
-      <CardGrid items={APPS} />
+      <h2 className="mb-4 text-lg font-semibold">{t("appsHeading")}</h2>
+      <CardGrid items={apps} />
 
-      <h2 className="mb-4 mt-10 text-lg font-semibold">The Assessment</h2>
-      <CardGrid items={ANALYSIS} />
+      <h2 className="mb-4 mt-10 text-lg font-semibold">
+        {t("assessmentHeading")}
+      </h2>
+      <CardGrid items={analysis} />
 
       <p className="mt-10 text-sm text-muted-foreground">
-        Prototype note: data lives in memory and reseeds on cold starts — a
-        deliberate scope cut, discussed in the evaluation.
+        {t("prototypeNote")}
       </p>
     </div>
   );

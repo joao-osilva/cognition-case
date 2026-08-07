@@ -11,6 +11,7 @@ import {
   RefreshCwIcon,
   XIcon,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, StatusBadge } from "@/components/ui";
 import { CommandBar, CommandButton } from "@/components/grid";
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useApiErrorMessage } from "@/lib/api-error";
 import { useQueryState } from "@/lib/use-query-state";
 import { AuditEntry, KycCase } from "@/lib/types";
 
@@ -32,6 +34,10 @@ function KycCasePageContent() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { role } = useRole();
+  const t = useTranslations("kycCase");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const apiError = useApiErrorMessage();
   const [kycCase, setKycCase] = useState<KycCase | null>(null);
   const [history, setHistory] = useState<AuditEntry[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -68,7 +74,7 @@ function KycCasePageContent() {
     });
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Something went wrong.");
+      setError(apiError(data));
       return;
     }
     setNotes("");
@@ -85,12 +91,11 @@ function KycCasePageContent() {
             icon={ArrowLeftIcon}
             onClick={() => router.push("/apps/kyc")}
           >
-            Back
+            {tCommon("back")}
           </CommandButton>
         </CommandBar>
         <div className="rounded-b-lg border bg-card p-8 text-center text-muted-foreground">
-          Case {id} was not found. It may have been removed when the in-memory
-          store reseeded.
+          {t("notFound", { id })}
         </div>
       </div>
     );
@@ -105,33 +110,33 @@ function KycCasePageContent() {
           icon={ArrowLeftIcon}
           onClick={() => router.push("/apps/kyc")}
         >
-          Back
+          {tCommon("back")}
         </CommandButton>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
-          Refresh
+          {tCommon("refresh")}
         </CommandButton>
         {canDecide && (
           <>
             {kycCase.status === "pending" && (
               <CommandButton icon={PlayIcon} onClick={() => act("start_review")}>
-                Start Review
+                {t("startReview")}
               </CommandButton>
             )}
             <CommandButton icon={CheckIcon} onClick={() => act("approve")}>
-              Approve
+              {tCommon("approve")}
             </CommandButton>
             <CommandButton
               icon={XIcon}
               onClick={() => act("reject")}
               className="text-destructive hover:text-destructive"
             >
-              Reject
+              {tCommon("reject")}
             </CommandButton>
             <CommandButton
               icon={ArrowUpRightIcon}
               onClick={() => act("escalate")}
             >
-              Escalate
+              {t("escalate")}
             </CommandButton>
           </>
         )}
@@ -147,24 +152,28 @@ function KycCasePageContent() {
               <StatusBadge value={kycCase.status} />
             </div>
             <p className="mt-0.5 font-mono text-xs text-muted-foreground">
-              {kycCase.id} · KYC Case
+              {kycCase.id} · {t("caseType")}
             </p>
           </div>
           <dl className="flex gap-6 text-sm">
             <div>
-              <dt className="text-xs text-muted-foreground">Risk</dt>
+              <dt className="text-xs text-muted-foreground">{t("risk")}</dt>
               <dd className="mt-0.5">
                 <StatusBadge value={kycCase.riskLevel} />
               </dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">Country</dt>
+              <dt className="text-xs text-muted-foreground">
+                {t("country")}
+              </dt>
               <dd className="mt-0.5">{kycCase.country}</dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">Submitted</dt>
+              <dt className="text-xs text-muted-foreground">
+                {t("submitted")}
+              </dt>
               <dd className="mt-0.5 tabular-nums">
-                {new Intl.DateTimeFormat(undefined, {
+                {new Intl.DateTimeFormat(locale, {
                   dateStyle: "medium",
                 }).format(new Date(kycCase.submittedAt))}
               </dd>
@@ -178,13 +187,13 @@ function KycCasePageContent() {
               value="summary"
               className="rounded-none border-0 border-b-2 border-transparent px-3 py-2.5 data-[state=active]:border-primary data-[state=active]:shadow-none"
             >
-              Summary
+              {t("tabSummary")}
             </TabsTrigger>
             <TabsTrigger
               value="history"
               className="rounded-none border-0 border-b-2 border-transparent px-3 py-2.5 data-[state=active]:border-primary data-[state=active]:shadow-none"
             >
-              Audit History
+              {t("tabHistory")}
             </TabsTrigger>
           </TabsList>
 
@@ -195,14 +204,14 @@ function KycCasePageContent() {
             <div className="grid gap-6 lg:grid-cols-2">
               <section>
                 <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Customer Information
+                  {t("customerInformation")}
                 </h2>
                 <dl className="grid gap-3 text-sm">
                   {[
-                    ["Full name", kycCase.customerName],
-                    ["Email", kycCase.customerEmail],
-                    ["Country", kycCase.country],
-                    ["Document type", kycCase.documentType],
+                    [t("fullName"), kycCase.customerName],
+                    [t("email"), kycCase.customerEmail],
+                    [t("country"), kycCase.country],
+                    [t("documentType"), kycCase.documentType],
                   ].map(([label, value]) => (
                     <div
                       key={label}
@@ -218,7 +227,7 @@ function KycCasePageContent() {
                 {kycCase.notes && (
                   <div className="mt-4">
                     <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      Case Notes
+                      {t("caseNotes")}
                     </h2>
                     <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
                       {kycCase.notes}
@@ -229,27 +238,27 @@ function KycCasePageContent() {
 
               <section>
                 <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Decision
+                  {t("decision")}
                 </h2>
                 {canDecide ? (
                   <div className="flex flex-col gap-2">
                     <Textarea
-                      aria-label="Decision note"
-                      placeholder="Decision note (required for reject / escalate)…"
+                      aria-label={t("decisionNoteLabel")}
+                      placeholder={t("decisionNotePlaceholder")}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={3}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Use the command bar above to approve, reject, or escalate
-                      this case.
+                      {t("decisionHint")}
                     </p>
                   </div>
                 ) : (
                   <Alert>
                     <AlertDescription>
-                      You are a <strong>viewer</strong> — switch to approver or
-                      admin to make decisions.
+                      {t.rich("viewerNotice", {
+                        strong: (chunks) => <strong>{chunks}</strong>,
+                      })}
                     </AlertDescription>
                   </Alert>
                 )}
@@ -260,26 +269,26 @@ function KycCasePageContent() {
           <TabsContent value="history" className="px-6 py-5">
             {history.length === 0 ? (
               <p className="py-6 text-center text-sm text-muted-foreground">
-                No audit entries for this case yet.
+                {t("noHistory")}
               </p>
             ) : (
               <div className="rounded-md border">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>When</TableHead>
-                      <TableHead>Actor</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Before</TableHead>
-                      <TableHead>After</TableHead>
+                      <TableHead>{t("columns.when")}</TableHead>
+                      <TableHead>{t("columns.actor")}</TableHead>
+                      <TableHead>{t("columns.role")}</TableHead>
+                      <TableHead>{t("columns.action")}</TableHead>
+                      <TableHead>{t("columns.before")}</TableHead>
+                      <TableHead>{t("columns.after")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {history.map((e) => (
                       <TableRow key={e.id}>
                         <TableCell className="text-xs tabular-nums text-muted-foreground">
-                          {new Intl.DateTimeFormat(undefined, {
+                          {new Intl.DateTimeFormat(locale, {
                             dateStyle: "medium",
                             timeStyle: "short",
                           }).format(new Date(e.timestamp))}

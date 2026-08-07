@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircleIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,9 +28,10 @@ const VALUE_VARIANTS: Record<string, BadgeVariant> = {
 };
 
 export function StatusBadge({ value }: { value: string }) {
+  const t = useTranslations("status");
   return (
     <Badge variant={VALUE_VARIANTS[value] ?? "secondary"}>
-      {value.replace("_", " ")}
+      {t.has(value) ? t(value) : value.replace("_", " ")}
     </Badge>
   );
 }
@@ -41,12 +43,18 @@ export function ErrorBanner({
   message: string;
   onDismiss: () => void;
 }) {
+  const t = useTranslations("common");
   return (
     <Alert variant="destructive" className="mb-4">
       <AlertCircleIcon />
       <AlertDescription className="flex items-center justify-between gap-4">
         <span>{message}</span>
-        <Button variant="ghost" size="icon-sm" onClick={onDismiss} aria-label="Dismiss">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onDismiss}
+          aria-label={t("dismiss")}
+        >
           <XIcon />
         </Button>
       </AlertDescription>

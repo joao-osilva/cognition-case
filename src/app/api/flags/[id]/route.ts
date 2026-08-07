@@ -15,7 +15,7 @@ export async function PATCH(
   const store = getStore();
   const flag = store.flags.find((f) => f.id === id);
   if (!flag) {
-    return NextResponse.json({ error: "Flag not found" }, { status: 404 });
+    return NextResponse.json({ error: "Flag not found", code: "flag_not_found" }, { status: 404 });
   }
 
   const changes: string[] = [];
@@ -30,7 +30,7 @@ export async function PATCH(
     const pct = Math.round(body.rolloutPercent);
     if (pct < 0 || pct > 100) {
       return NextResponse.json(
-        { error: "Rollout must be between 0 and 100." },
+        { error: "Rollout must be between 0 and 100.", code: "rollout_range" },
         { status: 400 }
       );
     }

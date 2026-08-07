@@ -2,6 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { BanknoteIcon, CheckIcon, RefreshCwIcon, XIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRole } from "@/components/RoleContext";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
 import {
@@ -35,19 +36,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useApiErrorMessage } from "@/lib/api-error";
 import { useQueryState } from "@/lib/use-query-state";
 import { Refund } from "@/lib/types";
 
-const VIEWS = [
-  { value: "all", label: "All refunds" },
-  { value: "requested", label: "Requested refunds" },
-  { value: "approved", label: "Approved refunds" },
-  { value: "rejected", label: "Rejected refunds" },
-  { value: "processed", label: "Processed refunds" },
-];
+const VIEW_KEYS = [
+  "all",
+  "requested",
+  "approved",
+  "rejected",
+  "processed",
+] as const;
 
 function RefundsPageContent() {
   const { role } = useRole();
+  const t = useTranslations("refunds");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const apiError = useApiErrorMessage();
   const [refunds, setRefunds] = useState<Refund[]>([]);
   const [view, setView] = useQueryState("view", "all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -74,7 +80,7 @@ function RefundsPageContent() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error ?? "Something went wrong.");
+        setError(apiError(data));
         break;
       }
     }
@@ -124,20 +130,17 @@ function RefundsPageContent() {
 
   return (
     <div>
-      <PageHeader
-        title="Refunds Dashboard"
-        subtitle="Select requests in the grid, then decide from the command bar. Refunds over 1,000 and payout processing require admin."
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "Awaiting decision", value: totals.requested },
-          { label: "Approved, unprocessed", value: totals.approved },
-          { label: "Processed", value: totals.processed },
+          { label: t("awaitingDecision"), value: totals.requested },
+          { label: t("approvedUnprocessed"), value: totals.approved },
+          { label: t("processed"), value: totals.processed },
           {
-            label: "Open exposure",
-            value: totals.exposure.toLocaleString(undefined, {
+            label: t("openExposure"),
+            value: totals.exposure.toLocaleString(locale, {
               maximumFractionDigits: 0,
             }),
           },
@@ -155,36 +158,36 @@ function RefundsPageContent() {
 
       <CommandBar>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
-          Refresh
+          {tCommon("refresh")}
         </CommandButton>
         <CommandButton
           icon={CheckIcon}
           disabled={!canApprove || selectedRequested.length === 0}
-          title={canApprove ? undefined : "Requires approver role"}
+          title={canApprove ? undefined : t("requiresApprover")}
           onClick={() => actOnSelected("approve", selectedRequested)}
         >
-          Approve
+          {tCommon("approve")}
         </CommandButton>
         <CommandButton
           icon={XIcon}
           disabled={!canApprove || selectedRequested.length === 0}
-          title={canApprove ? undefined : "Requires approver role"}
+          title={canApprove ? undefined : t("requiresApprover")}
           onClick={() => setConfirmReject(true)}
           className="text-destructive hover:text-destructive"
         >
-          Reject
+          {tCommon("reject")}
         </CommandButton>
         <CommandButton
           icon={BanknoteIcon}
           disabled={!canProcess || selectedApproved.length === 0}
-          title={canProcess ? undefined : "Requires admin role"}
+          title={canProcess ? undefined : t("requiresAdmin")}
           onClick={() => actOnSelected("process", selectedApproved)}
         >
-          Process Payout
+          {t("processPayout")}
         </CommandButton>
         {selected.size > 0 && (
           <span className="ml-2 text-xs tabular-nums text-muted-foreground">
-            {selected.size} selected
+            {tCommon("selectedCount", { count: selected.size })}
           </span>
         )}
       </CommandBar>
@@ -193,8 +196,8 @@ function RefundsPageContent() {
         <ViewSelector
           value={view}
           onChange={setView}
-          options={VIEWS}
-          ariaLabel="View"
+          options={VIEW_KEYS.map((v) => ({ value: v, label: t(`views.${v}`) }))}
+          ariaLabel={tCommon("view")}
         />
       </div>
 
@@ -206,16 +209,16 @@ function RefundsPageContent() {
                 <Checkbox
                   checked={allSelected}
                   onCheckedChange={(v) => toggleAll(v === true)}
-                  aria-label="Select all refunds"
+                  aria-label={t("selectAll")}
                 />
               </TableHead>
-              <TableHead>Refund</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Reason</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Requested</TableHead>
+              <TableHead>{t("columns.refund")}</TableHead>
+              <TableHead>{t("columns.customer")}</TableHead>
+              <TableHead>{t("columns.order")}</TableHead>
+              <TableHead>{t("columns.amount")}</TableHead>
+              <TableHead>{t("columns.reason")}</TableHead>
+              <TableHead>{t("columns.status")}</TableHead>
+              <TableHead>{t("columns.requested")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -228,14 +231,14 @@ function RefundsPageContent() {
                   <Checkbox
                     checked={selected.has(r.id)}
                     onCheckedChange={(v) => toggleOne(r.id, v === true)}
-                    aria-label={`Select ${r.id}`}
+                    aria-label={t("selectOne", { id: r.id })}
                   />
                 </TableCell>
                 <TableCell className="font-mono text-xs">{r.id}</TableCell>
                 <TableCell className="font-medium">{r.customerName}</TableCell>
                 <TableCell className="font-mono text-xs">{r.orderId}</TableCell>
                 <TableCell className="tabular-nums">
-                  {new Intl.NumberFormat(undefined, {
+                  {new Intl.NumberFormat(locale, {
                     style: "currency",
                     currency: r.currency,
                   }).format(r.amount)}
@@ -247,7 +250,7 @@ function RefundsPageContent() {
                   <StatusBadge value={r.status} />
                 </TableCell>
                 <TableCell className="text-xs tabular-nums text-muted-foreground">
-                  {new Intl.DateTimeFormat(undefined, {
+                  {new Intl.DateTimeFormat(locale, {
                     dateStyle: "medium",
                   }).format(new Date(r.requestedAt))}
                 </TableCell>
@@ -259,36 +262,34 @@ function RefundsPageContent() {
                   colSpan={8}
                   className="py-8 text-center text-muted-foreground"
                 >
-                  No refunds match the current view.
+                  {t("empty")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <GridFooter count={visible.length} label="refunds" />
+      <GridFooter count={visible.length} label={t("footerLabel")} />
 
       <AlertDialog open={confirmReject} onOpenChange={setConfirmReject}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Reject {selectedRequested.length}{" "}
-              {selectedRequested.length === 1 ? "refund" : "refunds"}?
+              {t("confirmRejectTitle", { count: selectedRequested.length })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              The selected requested{" "}
-              {selectedRequested.length === 1 ? "refund" : "refunds"} will be
-              rejected and the decision recorded in the audit log. This cannot
-              be undone from this dashboard.
+              {t("confirmRejectDescription", {
+                count: selectedRequested.length,
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => actOnSelected("reject", selectedRequested)}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              Reject {selectedRequested.length === 1 ? "Refund" : "Refunds"}
+              {t("confirmRejectAction", { count: selectedRequested.length })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

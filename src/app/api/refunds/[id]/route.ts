@@ -20,7 +20,7 @@ export async function POST(
   const body = await req.json();
   const transition = TRANSITIONS[body.action as string];
   if (!transition) {
-    return NextResponse.json({ error: "Unknown action" }, { status: 400 });
+    return NextResponse.json({ error: "Unknown action", code: "unknown_action" }, { status: 400 });
   }
 
   const role = await getRole();
@@ -31,17 +31,24 @@ export async function POST(
   const store = getStore();
   const refund = store.refunds.find((r) => r.id === id);
   if (!refund) {
-    return NextResponse.json({ error: "Refund not found" }, { status: 404 });
+    return NextResponse.json({ error: "Refund not found", code: "refund_not_found" }, { status: 404 });
   }
   if (!transition.from.includes(refund.status)) {
     return NextResponse.json(
-      { error: `Cannot ${body.action} a refund in '${refund.status}' status.` },
+      {
+        error: `Cannot ${body.action} a refund in '${refund.status}' status.`,
+        code: "refund_invalid_transition",
+        params: { action: body.action, status: refund.status },
+      },
       { status: 409 }
     );
   }
   if (refund.amount > 1000 && body.action === "approve" && role !== "admin") {
     return NextResponse.json(
-      { error: "Refunds over 1,000 require an admin to approve." },
+      {
+        error: "Refunds over 1,000 require an admin to approve.",
+        code: "refund_over_limit",
+      },
       { status: 403 }
     );
   }

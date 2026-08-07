@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon, RefreshCwIcon, XIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRole } from "@/components/RoleContext";
 import { CommandBar, CommandButton, GridFooter } from "@/components/grid";
 import { ErrorBanner, PageHeader, StatusBadge } from "@/components/ui";
@@ -27,10 +28,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useApiErrorMessage } from "@/lib/api-error";
 import { FeatureFlag } from "@/lib/types";
 
 export default function FlagsPage() {
   const { role } = useRole();
+  const t = useTranslations("flags");
+  const tCommon = useTranslations("common");
+  const tRoles = useTranslations("roles");
+  const locale = useLocale();
+  const apiError = useApiErrorMessage();
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -62,7 +69,7 @@ export default function FlagsPage() {
     });
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Something went wrong.");
+      setError(apiError(data));
       return;
     }
     await load();
@@ -78,7 +85,7 @@ export default function FlagsPage() {
     });
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Something went wrong.");
+      setError(apiError(data));
       return;
     }
     setForm({ key: "", description: "", environment: "development", owner: "" });
@@ -88,16 +95,16 @@ export default function FlagsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Feature-Flag Admin Panel"
-        subtitle="Toggle flags and adjust rollout percentages per environment. All changes require the admin role and are recorded in the audit log."
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
 
       {!isAdmin && (
         <Alert variant="warning" className="mb-4">
           <AlertDescription>
-            You are <strong>{role}</strong> — flag changes require admin.
+            {t.rich("roleNotice", {
+              role: tRoles(role),
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </AlertDescription>
         </Alert>
       )}
@@ -107,12 +114,12 @@ export default function FlagsPage() {
           icon={showForm ? XIcon : PlusIcon}
           onClick={() => setShowForm((v) => !v)}
           disabled={!isAdmin}
-          title={isAdmin ? undefined : "Requires admin role"}
+          title={isAdmin ? undefined : t("requiresAdmin")}
         >
-          {showForm ? "Cancel" : "New"}
+          {showForm ? tCommon("cancel") : t("new")}
         </CommandButton>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
-          Refresh
+          {tCommon("refresh")}
         </CommandButton>
       </CommandBar>
 
@@ -122,13 +129,13 @@ export default function FlagsPage() {
             <form onSubmit={createFlag} className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5 text-sm">
                 <label htmlFor="flag-key" className="text-muted-foreground">
-                  Key (kebab-case)
+                  {t("keyLabel")}
                 </label>
                 <Input
                   id="flag-key"
                   value={form.key}
                   onChange={(e) => setForm({ ...form, key: e.target.value })}
-                  placeholder="new-payment-flow"
+                  placeholder={t("keyPlaceholder")}
                   spellCheck={false}
                   autoComplete="off"
                   required
@@ -136,13 +143,13 @@ export default function FlagsPage() {
               </div>
               <div className="flex flex-col gap-1.5 text-sm">
                 <label htmlFor="flag-owner" className="text-muted-foreground">
-                  Owner
+                  {t("ownerLabel")}
                 </label>
                 <Input
                   id="flag-owner"
                   value={form.owner}
                   onChange={(e) => setForm({ ...form, owner: e.target.value })}
-                  placeholder="payments-team"
+                  placeholder={t("ownerPlaceholder")}
                   spellCheck={false}
                   autoComplete="off"
                   required
@@ -150,7 +157,7 @@ export default function FlagsPage() {
               </div>
               <div className="flex flex-col gap-1.5 text-sm sm:col-span-2">
                 <label htmlFor="flag-desc" className="text-muted-foreground">
-                  Description
+                  {t("descriptionLabel")}
                 </label>
                 <Input
                   id="flag-desc"
@@ -158,19 +165,19 @@ export default function FlagsPage() {
                   onChange={(e) =>
                     setForm({ ...form, description: e.target.value })
                   }
-                  placeholder="What does this flag control?"
+                  placeholder={t("descriptionPlaceholder")}
                   required
                 />
               </div>
               <div className="flex flex-col gap-1.5 text-sm">
                 <label htmlFor="flag-env" className="text-muted-foreground">
-                  Environment
+                  {t("environmentLabel")}
                 </label>
                 <Select
                   value={form.environment}
                   onValueChange={(v) => setForm({ ...form, environment: v })}
                 >
-                  <SelectTrigger id="flag-env" aria-label="Environment">
+                  <SelectTrigger id="flag-env" aria-label={t("environmentLabel")}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,7 +190,7 @@ export default function FlagsPage() {
                 </Select>
               </div>
               <div className="flex items-end">
-                <Button type="submit">Create Flag</Button>
+                <Button type="submit">{t("createFlag")}</Button>
               </div>
             </form>
           </CardContent>
@@ -194,12 +201,12 @@ export default function FlagsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Flag</TableHead>
-              <TableHead>Environment</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Rollout</TableHead>
-              <TableHead>Updated</TableHead>
-              <TableHead>Enabled</TableHead>
+              <TableHead>{t("columns.flag")}</TableHead>
+              <TableHead>{t("columns.environment")}</TableHead>
+              <TableHead>{t("columns.owner")}</TableHead>
+              <TableHead>{t("columns.rollout")}</TableHead>
+              <TableHead>{t("columns.updated")}</TableHead>
+              <TableHead>{t("columns.enabled")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -229,7 +236,7 @@ export default function FlagsPage() {
                         patch(f.id, { rolloutPercent: value })
                       }
                       className="w-28"
-                      aria-label={`Rollout percentage for ${f.key}`}
+                      aria-label={t("rolloutFor", { key: f.key })}
                     />
                     <span className="w-10 text-xs tabular-nums text-muted-foreground">
                       {f.rolloutPercent}%
@@ -237,7 +244,7 @@ export default function FlagsPage() {
                   </div>
                 </TableCell>
                 <TableCell className="text-xs tabular-nums text-muted-foreground">
-                  {new Intl.DateTimeFormat(undefined, {
+                  {new Intl.DateTimeFormat(locale, {
                     dateStyle: "medium",
                   }).format(new Date(f.updatedAt))}
                 </TableCell>
@@ -248,8 +255,8 @@ export default function FlagsPage() {
                       patch(f.id, { enabled: checked })
                     }
                     disabled={!isAdmin}
-                    aria-label={`Toggle ${f.key}`}
-                    title={isAdmin ? undefined : "Requires admin role"}
+                    aria-label={t("toggleFlag", { key: f.key })}
+                    title={isAdmin ? undefined : t("requiresAdmin")}
                   />
                 </TableCell>
               </TableRow>
@@ -257,7 +264,7 @@ export default function FlagsPage() {
           </TableBody>
         </Table>
       </div>
-      <GridFooter count={flags.length} label="flags" />
+      <GridFooter count={flags.length} label={t("footerLabel")} />
     </div>
   );
 }

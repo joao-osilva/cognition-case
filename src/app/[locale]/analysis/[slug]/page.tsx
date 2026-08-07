@@ -2,15 +2,15 @@ import fs from "fs/promises";
 import path from "path";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { marked } from "marked";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-const DOCS: Record<string, { file: string; title: string }> = {
-  research: { file: "research.md", title: "Research" },
-  evaluation: { file: "evaluation.md", title: "Evaluation" },
-  recommendation: { file: "recommendation.md", title: "Recommendation" },
+const DOCS: Record<string, { file: string }> = {
+  research: { file: "research.md" },
+  evaluation: { file: "evaluation.md" },
+  recommendation: { file: "recommendation.md" },
 };
 
 export function generateStaticParams() {
@@ -26,6 +26,7 @@ export default async function AnalysisPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("analysis");
   const doc = DOCS[slug];
   if (!doc) notFound();
 
@@ -51,7 +52,7 @@ export default async function AnalysisPage({
   return (
     <div>
       <div className="mb-6 flex gap-2 text-sm">
-        {Object.entries(DOCS).map(([key, value]) => (
+        {Object.keys(DOCS).map((key) => (
           <Link
             key={key}
             href={`/analysis/${key}`}
@@ -62,7 +63,7 @@ export default async function AnalysisPage({
                 : "bg-card text-muted-foreground hover:bg-muted"
             )}
           >
-            {value.title}
+            {t(key)}
           </Link>
         ))}
       </div>

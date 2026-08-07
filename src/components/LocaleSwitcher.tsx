@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { GlobeIcon } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -23,6 +23,7 @@ const LABELS: Record<Locale, string> = {
 
 function LocaleSwitcherContent() {
   const locale = useLocale();
+  const t = useTranslations("shell");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -38,7 +39,7 @@ function LocaleSwitcherContent() {
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="Change language"
+          aria-label={t("changeLanguage")}
           className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
         >
           <GlobeIcon />

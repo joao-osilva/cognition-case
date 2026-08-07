@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDownIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -90,9 +91,10 @@ export function ViewSelector({
 }
 
 export function GridFooter({ count, label }: { count: number; label: string }) {
+  const t = useTranslations("common");
   return (
     <div className="rounded-b-lg border border-t-0 bg-card px-3 py-1.5 text-xs tabular-nums text-muted-foreground">
-      {count === 0 ? `0 ${label}` : `1–${count} of ${count} ${label}`}
+      {t("gridFooter", { count, label })}
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { RefreshCwIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import {
   CommandBar,
@@ -23,16 +24,19 @@ import {
 import { useQueryState } from "@/lib/use-query-state";
 import { KycCase } from "@/lib/types";
 
-const VIEWS = [
-  { value: "all", label: "All cases" },
-  { value: "pending", label: "Pending cases" },
-  { value: "in_review", label: "Cases in review" },
-  { value: "escalated", label: "Escalated cases" },
-  { value: "approved", label: "Approved cases" },
-  { value: "rejected", label: "Rejected cases" },
-];
+const VIEW_KEYS = [
+  "all",
+  "pending",
+  "in_review",
+  "escalated",
+  "approved",
+  "rejected",
+] as const;
 
 function KycPageContent() {
+  const t = useTranslations("kyc");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [cases, setCases] = useState<KycCase[]>([]);
   const [search, setSearch] = useQueryState("q", "");
   const [view, setView] = useQueryState("view", "all");
@@ -76,24 +80,21 @@ function KycPageContent() {
 
   return (
     <div>
-      <PageHeader
-        title="KYC Review Queue"
-        subtitle="Identity verification cases awaiting compliance review. Open a case to review it; decisions require the approver role."
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
       <CommandBar>
         <CommandButton icon={RefreshCwIcon} onClick={load}>
-          Refresh
+          {tCommon("refresh")}
         </CommandButton>
         {selected.size > 0 && (
           <span className="ml-2 text-xs tabular-nums text-muted-foreground">
-            {selected.size} selected
+            {tCommon("selectedCount", { count: selected.size })}
           </span>
         )}
         <div className="ml-auto">
           <Input
             type="search"
-            placeholder="Search this view…"
-            aria-label="Search cases"
+            placeholder={t("searchPlaceholder")}
+            aria-label={t("searchLabel")}
             spellCheck={false}
             autoComplete="off"
             value={search}
@@ -107,8 +108,8 @@ function KycPageContent() {
         <ViewSelector
           value={view}
           onChange={setView}
-          options={VIEWS}
-          ariaLabel="View"
+          options={VIEW_KEYS.map((v) => ({ value: v, label: t(`views.${v}`) }))}
+          ariaLabel={tCommon("view")}
         />
       </div>
 
@@ -120,16 +121,16 @@ function KycPageContent() {
                 <Checkbox
                   checked={allSelected}
                   onCheckedChange={(v) => toggleAll(v === true)}
-                  aria-label="Select all cases"
+                  aria-label={t("selectAll")}
                 />
               </TableHead>
-              <TableHead>Case</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Document</TableHead>
-              <TableHead>Risk</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Submitted</TableHead>
+              <TableHead>{t("columns.case")}</TableHead>
+              <TableHead>{t("columns.customer")}</TableHead>
+              <TableHead>{t("columns.country")}</TableHead>
+              <TableHead>{t("columns.document")}</TableHead>
+              <TableHead>{t("columns.risk")}</TableHead>
+              <TableHead>{t("columns.status")}</TableHead>
+              <TableHead>{t("columns.submitted")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -139,7 +140,7 @@ function KycPageContent() {
                   <Checkbox
                     checked={selected.has(c.id)}
                     onCheckedChange={(v) => toggleOne(c.id, v === true)}
-                    aria-label={`Select ${c.id}`}
+                    aria-label={t("selectOne", { id: c.id })}
                   />
                 </TableCell>
                 <TableCell className="font-mono text-xs">
@@ -165,7 +166,7 @@ function KycPageContent() {
                   <StatusBadge value={c.status} />
                 </TableCell>
                 <TableCell className="text-xs tabular-nums text-muted-foreground">
-                  {new Intl.DateTimeFormat(undefined, {
+                  {new Intl.DateTimeFormat(locale, {
                     dateStyle: "medium",
                   }).format(new Date(c.submittedAt))}
                 </TableCell>
@@ -177,14 +178,14 @@ function KycPageContent() {
                   colSpan={8}
                   className="py-8 text-center text-muted-foreground"
                 >
-                  No cases match the current view.
+                  {t("empty")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <GridFooter count={visible.length} label="cases" />
+      <GridFooter count={visible.length} label={t("footerLabel")} />
     </div>
   );
 }
