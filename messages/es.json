@@ -254,5 +254,124 @@
     "invalid_role": "Rol inválido",
     "refund_invalid_transition": "No se puede ejecutar ''{action}'' en un reembolso con estado ''{status}''.",
     "flag_exists": "La flag ''{key}'' ya existe en {environment}."
+  },
+  "evaluationPage": {
+    "context": {
+      "title": "Contexto",
+      "time": {
+        "label": "~2 horas",
+        "detail": "Construido con Devin, alcance de prototipo"
+      },
+      "scope": {
+        "label": "Núcleo de capacidades",
+        "detail": "Cuadrículas, formularios validados, RBAC, registro de auditoría"
+      },
+      "deploy": {
+        "label": "Desplegado en Vercel",
+        "detail": "En línea y compartible, no es un sistema de producción"
+      }
+    },
+    "replicated": {
+      "title": "Qué Se Replicó",
+      "items": {
+        "grids": "Cuadrículas de datos con filtrado y búsqueda (cola KYC, reembolsos, flags)",
+        "forms": "Formularios validados para acciones que cambian estado",
+        "rbac": "RBAC (viewer, approver, admin), aplicado en el servidor",
+        "audit": "Registro de auditoría: quién hizo qué, cuándo, con valores antes y después",
+        "deploy": "Desplegado y compartible"
+      }
+    },
+    "gaps": {
+      "title": "Qué No, y la Brecha",
+      "intro": "No replicado, y qué exigiría cerrar cada brecha.",
+      "columns": {
+        "gap": "Brecha",
+        "takes": "Qué exige",
+        "effort": "Esfuerzo"
+      },
+      "effort": {
+        "days": "Días",
+        "ongoing": "Continuo",
+        "months": "Meses",
+        "notBridgeable": "Sin solución"
+      },
+      "items": {
+        "sso": {
+          "name": "SSO real",
+          "takes": "Proveedor gestionado (Auth0, Clerk, WorkOS). Días para integrar, dependencia permanente.",
+          "effort": "days"
+        },
+        "database": {
+          "name": "Base de datos persistente",
+          "takes": "Postgres más migraciones, copias de seguridad, retención. Días para configurar, operación continua.",
+          "effort": "days"
+        },
+        "connectors": {
+          "name": "Conectores",
+          "takes": "Integraciones hechas a mano o una capa de integración (Composio, Merge, Paragon). La brecha más difícil: trabajo continuo en cualquier caso.",
+          "effort": "ongoing"
+        },
+        "citizen": {
+          "name": "Desarrollo ciudadano",
+          "takes": "Cada nueva herramienta y cada cambio se convierte en un ticket de ingeniería.",
+          "effort": "notBridgeable"
+        },
+        "compliance": {
+          "name": "Certificación de compliance",
+          "takes": "Heredada de las decisiones de infraestructura; meses de auditoría si se exige certificación.",
+          "effort": "months"
+        }
+      }
+    },
+    "dimensions": {
+      "title": "Dimensiones de Evaluación",
+      "items": {
+        "build": {
+          "title": "Costo de construcción",
+          "body": "Horas de ingeniería primero: convertir el prototipo en un sistema de producción (SSO, base de datos, integraciones, pruebas) toma semanas de tiempo sénior, no horas. Y construir sigue significando comprar: motores de workflow (Temporal, Inngest), autenticación gestionada y capas de integración tienen cada uno su factura. Autohospedar los equivalentes open-source cambia suscripciones por gasto de nube. No existe una opción con cero proveedores."
+        },
+        "maintenance": {
+          "title": "Carga de mantenimiento",
+          "body": "Los conectores son un producto, no una funcionalidad; alguien debe mantener cada integración funcionando a medida que cambian las APIs de terceros. La infraestructura autohospedada agrega parches, actualizaciones y guardias."
+        },
+        "security": {
+          "title": "Implicaciones de seguridad",
+          "body": "La autenticación y la autorización son un compromiso permanente. La autenticación (SSO, sesiones, MFA) y la autorización (modelos de roles, verificaciones de permisos en cada acción) vienen con la plataforma hoy y pasarían a ser responsabilidad del equipo. En una fintech regulada, lo mismo aplica a las obligaciones de auditoría y compliance."
+        },
+        "opportunity": {
+          "title": "Costo de oportunidad",
+          "body": "El desarrollo ciudadano desaparece: operaciones y compliance dejan de construir sus propias aplicaciones y abren tickets. El pronóstico de demanda define la escala: de tres a diez aplicaciones CRUD, el equipo actual lo absorbe; más allá, de uno a tres ingenieros dedicados a más de 200 mil USD superan el costo de la licencia antes de contar el costo de oportunidad."
+        }
+      }
+    },
+    "capexOpex": {
+      "title": "Capex vs. Opex",
+      "intro": "Cómo se distribuyen las dimensiones entre costo único y recurrente.",
+      "columns": {
+        "dimension": "Dimensión",
+        "capex": "Capex (único)",
+        "opex": "Opex (recurrente)"
+      },
+      "none": "Ninguno",
+      "items": {
+        "build": {
+          "capex": "Construcción inicial: semanas de ingeniería sénior para endurecer el prototipo",
+          "opex": "Suscripciones de herramientas o gasto de nube para equivalentes autohospedados"
+        },
+        "maintenance": {
+          "capex": "-",
+          "opex": "Mantenimiento de integraciones, parches, actualizaciones, guardias"
+        },
+        "security": {
+          "capex": "Integración de SSO y autorización",
+          "opex": "Revisiones de acceso, parches de dependencias, trabajo de auditoría y compliance"
+        },
+        "opportunity": {
+          "capex": "Funcionalidades no entregadas durante la construcción inicial",
+          "opex": "Cada cambio de herramienta como ticket de ingeniería; 1 a 3 ingenieros dedicados (200 mil USD+ cada uno) si la demanda crece"
+        }
+      },
+      "buyProfile": "Comprar invierte el perfil: capex casi cero, una sola línea de opex (la licencia), y el proveedor carga con el mantenimiento y la seguridad."
+    }
   }
 }

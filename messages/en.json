@@ -254,5 +254,124 @@
     "invalid_role": "Invalid role",
     "refund_invalid_transition": "Cannot {action} a refund in ''{status}'' status.",
     "flag_exists": "Flag ''{key}'' already exists in {environment}."
+  },
+  "evaluationPage": {
+    "context": {
+      "title": "Context",
+      "time": {
+        "label": "~2 hours",
+        "detail": "Built with Devin, prototype scope"
+      },
+      "scope": {
+        "label": "Capability core",
+        "detail": "Grids, validated forms, RBAC, audit trail"
+      },
+      "deploy": {
+        "label": "Deployed on Vercel",
+        "detail": "Live and shareable, not a production system"
+      }
+    },
+    "replicated": {
+      "title": "What Was Replicated",
+      "items": {
+        "grids": "Data grids with filtering and search (KYC queue, refunds, flags)",
+        "forms": "Validated forms for state-changing actions",
+        "rbac": "RBAC (viewer, approver, admin), enforced server-side",
+        "audit": "Audit log: who did what, when, with before and after values",
+        "deploy": "Deployed and shareable"
+      }
+    },
+    "gaps": {
+      "title": "What Was Not, and the Gap",
+      "intro": "Not replicated, and what bridging each gap would take.",
+      "columns": {
+        "gap": "Gap",
+        "takes": "What it takes",
+        "effort": "Effort"
+      },
+      "effort": {
+        "days": "Days",
+        "ongoing": "Ongoing",
+        "months": "Months",
+        "notBridgeable": "Not bridgeable"
+      },
+      "items": {
+        "sso": {
+          "name": "Real SSO",
+          "takes": "Managed provider (Auth0, Clerk, WorkOS). Days to integrate, permanent dependency.",
+          "effort": "days"
+        },
+        "database": {
+          "name": "Persistent database",
+          "takes": "Postgres plus migrations, backups, retention. Days to set up, ongoing operations.",
+          "effort": "days"
+        },
+        "connectors": {
+          "name": "Connectors",
+          "takes": "Hand-built integrations or an integration layer (Composio, Merge, Paragon). The hardest gap: ongoing work either way.",
+          "effort": "ongoing"
+        },
+        "citizen": {
+          "name": "Citizen development",
+          "takes": "Every new tool and every change becomes an engineering ticket.",
+          "effort": "notBridgeable"
+        },
+        "compliance": {
+          "name": "Compliance certification",
+          "takes": "Inherited from infrastructure choices; months of audit work if certification is required.",
+          "effort": "months"
+        }
+      }
+    },
+    "dimensions": {
+      "title": "Evaluation Dimensions",
+      "items": {
+        "build": {
+          "title": "Build cost",
+          "body": "Engineering hours first: hardening the prototype into a production system (SSO, database, integrations, testing) is weeks of senior time, not hours. And building still means buying: workflow engines (Temporal, Inngest), managed auth, integration layers each have a bill. Self-hosting the open-source equivalents trades subscriptions for cloud spend. There is no zero-vendor option."
+        },
+        "maintenance": {
+          "title": "Maintenance burden",
+          "body": "Connectors are a product, not a feature; someone must keep every integration working as third-party APIs change. Self-hosted infrastructure adds patching, upgrades, and on-call."
+        },
+        "security": {
+          "title": "Security implications",
+          "body": "Authentication and authorization are a permanent commitment. Authentication (SSO, sessions, MFA) and authorization (role models, permission checks on every action) come with the platform today and would become the team's responsibility. In a regulated fintech, so do audit and compliance obligations."
+        },
+        "opportunity": {
+          "title": "Opportunity cost",
+          "body": "Citizen development disappears: operations and compliance stop building their own apps and file tickets instead. Demand forecast decides the scale: at three to ten CRUD apps the current team absorbs it; beyond that, one to three dedicated engineers at $200K+ exceed the license cost before opportunity cost is counted."
+        }
+      }
+    },
+    "capexOpex": {
+      "title": "Capex vs. Opex",
+      "intro": "How the dimensions land as one-time versus recurring cost.",
+      "columns": {
+        "dimension": "Dimension",
+        "capex": "Capex (one-time)",
+        "opex": "Opex (recurring)"
+      },
+      "none": "None",
+      "items": {
+        "build": {
+          "capex": "Initial build: weeks of senior engineering to harden the prototype",
+          "opex": "Tool subscriptions or cloud spend for self-hosted equivalents"
+        },
+        "maintenance": {
+          "capex": "-",
+          "opex": "Integration upkeep, patching, upgrades, on-call"
+        },
+        "security": {
+          "capex": "SSO and authorization integration",
+          "opex": "Access reviews, dependency patching, audit and compliance work"
+        },
+        "opportunity": {
+          "capex": "Features not shipped during the initial build",
+          "opex": "Every tool change as an engineering ticket; 1 to 3 dedicated engineers ($200K+ each) if demand grows"
+        }
+      },
+      "buyProfile": "Buying inverts the profile: near-zero capex, a single opex line (the license), and the vendor carries maintenance and security."
+    }
   }
 }
