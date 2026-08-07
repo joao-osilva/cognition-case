@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { marked } from "marked";
 import { EvaluationView } from "@/components/EvaluationView";
+import { ResearchView } from "@/components/ResearchView";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -58,11 +59,11 @@ export default async function AnalysisPage({
   const doc = DOCS[slug];
   if (!doc) notFound();
 
-  if (slug === "evaluation") {
+  if (slug === "evaluation" || slug === "research") {
     return (
       <div>
         <AnalysisNav active={slug} labels={t} />
-        <EvaluationView />
+        {slug === "evaluation" ? <EvaluationView /> : <ResearchView />}
       </div>
     );
   }

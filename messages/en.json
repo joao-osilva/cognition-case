@@ -394,5 +394,133 @@
     "comparison": {
       "title": "Replicated vs. the gap"
     }
+  },
+  "researchPage": {
+    "title": "Research",
+    "lead": "What Microsoft Power Apps does, which capabilities the three apps use, and where the platform's value lies.",
+    "components": {
+      "title": "What Power Apps is",
+      "columns": {
+        "component": "Component",
+        "provides": "What it provides"
+      },
+      "items": {
+        "canvas": {
+          "name": "Canvas apps",
+          "provides": "Drag-and-drop UI builder with Excel-like formulas (Power Fx)."
+        },
+        "modelDriven": {
+          "name": "Model-driven apps",
+          "provides": "UI generated from the data model: define tables and rules, get grids, forms, and dashboards. The mode used for CRUD internal tools."
+        },
+        "dataverse": {
+          "name": "Microsoft Dataverse",
+          "provides": "Managed data platform: relational tables, column-level security, validation, change auditing."
+        },
+        "connectors": {
+          "name": "Connectors",
+          "provides": "1,000+ prebuilt integrations; custom connectors for internal APIs."
+        },
+        "automate": {
+          "name": "Power Automate",
+          "provides": "Workflows: approvals, notifications, scheduled jobs."
+        },
+        "ai": {
+          "name": "AI / Copilot",
+          "provides": "Natural-language app generation, AI Builder models."
+        }
+      }
+    },
+    "capabilities": {
+      "title": "The capabilities the three apps use",
+      "items": {
+        "grids": {
+          "name": "Data grids",
+          "detail": "Sortable, filterable views over KYC cases, refunds, flags."
+        },
+        "forms": {
+          "name": "Validated forms",
+          "detail": "Required fields, typed inputs, business rules."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Analysts review, compliance leads approve, engineering toggles flags. Required in a regulated fintech."
+        },
+        "audit": {
+          "name": "Audit trail",
+          "detail": "Every change logged with old and new values. Required for KYC and refunds."
+        },
+        "approvals": {
+          "name": "Approvals",
+          "detail": "Pending / approved / rejected state machines with notifications."
+        },
+        "connectors": {
+          "name": "Connectors",
+          "detail": "Integrations (identity providers, payment processors) the team does not maintain."
+        },
+        "managed": {
+          "name": "Managed platform",
+          "detail": "SSO, hosting, patching, backups are the vendor's problem."
+        }
+      },
+      "note": "Same pattern in all three apps: table, form, role-gated action, audit log. Offline mobile, AI Builder, and the rest of the platform go unused."
+    },
+    "value": {
+      "title": "Where the value lies",
+      "intro": "The value is the bundle, not any single feature.",
+      "bundleTitle": "The value bundle",
+      "weaknessesTitle": "Documented weaknesses",
+      "bundle": {
+        "speed": {
+          "name": "Speed",
+          "detail": "A working CRUD app in hours or days, without engineers."
+        },
+        "citizen": {
+          "name": "Citizen development",
+          "detail": "Operations and compliance build their own apps."
+        },
+        "governance": {
+          "name": "Governance",
+          "detail": "SSO, RBAC, auditing, SOC 2 / ISO 27001 inherited from Microsoft."
+        },
+        "integrations": {
+          "name": "Maintained integrations",
+          "detail": "Connectors are configuration, not code to own."
+        },
+        "infra": {
+          "name": "No infrastructure",
+          "detail": "No servers, deployments, or on-call."
+        }
+      },
+      "weaknesses": {
+        "licensing": {
+          "name": "Licensing",
+          "detail": "~$20/user/month list, but premium connectors, Dataverse capacity, and per-app stacking make real costs hard to predict."
+        },
+        "delegation": {
+          "name": "Delegation limits",
+          "detail": "Non-delegable queries run client-side on 500 to 2,000 rows and return wrong results at scale."
+        },
+        "ux": {
+          "name": "Constrained UX",
+          "detail": "Hard to go beyond forms-over-data."
+        },
+        "api": {
+          "name": "API caps",
+          "detail": "Per-user daily request limits."
+        },
+        "lockin": {
+          "name": "Lock-in",
+          "detail": "Apps, Power Fx, and Dataverse data are not portable."
+        }
+      }
+    },
+    "caution": {
+      "title": "Caution: price may not reflect usage",
+      "body": "Platform spend often reflects contract structure, not usage. At list price, 60 users cost roughly $14.4K/year, far below the reported $250K. Start with a license audit. Compare building against the renegotiated price or a cheaper competitor, not the current contract."
+    },
+    "sources": {
+      "title": "Sources"
+    }
   }
 }
