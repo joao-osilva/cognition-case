@@ -27,11 +27,10 @@ upkeep, compliance, and the loss of citizen development.
   Build only wins against the inflated number.
 - There is no pure build: auth, database, and integration layers would still be
   bought. The real choice is which vendor set to own.
-- Citizen development is the silent loss: today operations and compliance ship their
-  own changes; in-house, every change is an engineering ticket.
-- Devin changes the slope, not the intercept: the prototype took two hours, and the
-  follow-on work is the same shape of well-scoped task. Building gets cheaper, but the
-  ownership costs remain.
+- Citizen development is lost: today operations and compliance ship their own
+  changes; in-house, every change is an engineering ticket.
+- Where Devin fits: the prototype took two hours, and the follow-on work is the same
+  shape of well-scoped task. Building gets cheaper, but the ownership costs remain.
 
 ## 4. What Would Change the Call
 

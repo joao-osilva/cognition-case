@@ -584,11 +584,11 @@
           "detail": "Auth, banco de dados e camadas de integração ainda seriam comprados. A escolha real é qual conjunto de fornecedores possuir."
         },
         "citizen": {
-          "name": "A perda silenciosa",
+          "name": "O desenvolvimento cidadão se perde",
           "detail": "Hoje operações e compliance entregam suas próprias mudanças; internamente, cada mudança vira um ticket de engenharia."
         },
         "devin": {
-          "name": "Devin muda a inclinação, não o intercepto",
+          "name": "Onde o Devin entra",
           "detail": "O protótipo levou duas horas, e o trabalho seguinte tem o mesmo formato de tarefa bem delimitada. Construir fica mais barato, mas os custos de propriedade permanecem."
         }
       }

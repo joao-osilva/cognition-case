@@ -584,11 +584,11 @@
           "detail": "Auth, database, and integration layers would still be bought. The real choice is which vendor set to own."
         },
         "citizen": {
-          "name": "The silent loss",
+          "name": "Citizen development is lost",
           "detail": "Today operations and compliance ship their own changes; in-house, every change is an engineering ticket."
         },
         "devin": {
-          "name": "Devin changes the slope, not the intercept",
+          "name": "Where Devin fits",
           "detail": "The prototype took two hours, and the follow-on work is the same shape of well-scoped task. Building gets cheaper, but the ownership costs remain."
         }
       }
