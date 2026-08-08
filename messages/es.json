@@ -28,7 +28,8 @@
       "assessment": "Evaluación",
       "research": "Investigación",
       "evaluation": "Análisis",
-      "recommendation": "Recomendación"
+      "recommendation": "Recomendación",
+      "architecture": "Arquitectura"
     }
   },
   "roles": {
@@ -235,7 +236,8 @@
   "analysis": {
     "research": "Investigación",
     "evaluation": "Análisis",
-    "recommendation": "Recomendación"
+    "recommendation": "Recomendación",
+    "architecture": "Arquitectura"
   },
   "apiErrors": {
     "forbidden": "Esta acción requiere el rol ''{required}'' o superior. Actualmente eres ''{role}''.",
@@ -635,6 +637,44 @@
           "detail": "Endurecer la aplicación de KYC de extremo a extremo, incluyendo SSO y persistencia, y volver a medir la línea de costo antes de comprometerse con las otras dos."
         }
       }
+    }
+  },
+  "architecturePage": {
+    "title": "Visión General de la Arquitectura",
+    "lead": "Cómo está construido el prototipo y por qué: la forma del sistema, las decisiones clave y sus tradeoffs, y lo que la arquitectura deliberadamente no afirma.",
+    "shape": {
+      "title": "Forma del Sistema",
+      "body": "Una única aplicación Next.js 15 (App Router) que contiene las tres apps internas, un registro de auditoría compartido y la evaluación escrita. Un repositorio, un destino de despliegue (Vercel, más una imagen Docker para ejecución local), cero servicios externos. Fue deliberado: el ejercicio es un prototipo de ~2 horas cuyo trabajo es demostrar el núcleo de capacidades de Power Apps, así que toda infraestructura que no sirviera a esa demostración se recortó.",
+      "storeLine": "Almacenamiento en memoria (singleton a nivel de módulo, poblado al iniciar)"
+    },
+    "decisions": {
+      "title": "Decisiones Clave y Tradeoffs",
+      "items": {
+        "store": {
+          "name": "Almacenamiento en memoria en lugar de base de datos",
+          "detail": "Un singleton a nivel de módulo, poblado al iniciar, guarda todos los datos; cada mutación pasa por él y agrega una entrada de auditoría con valores antes/después. Costo: los datos se reinician en cold starts. Beneficio: toda la capa de datos tomó minutos, y los flujos, la validación y la semántica de auditoría son totalmente reales. Cambiar a Postgres después modifica un módulo, no las apps. Es el recorte de alcance más importante, declarado en la página de inicio y en la evaluación."
+        },
+        "auth": {
+          "name": "Identidad simulada, autorización real",
+          "detail": "Una cookie demo-role más un selector de roles sustituye al SSO; construir auth real en dos horas habría consumido el presupuesto probando poco. Pero la autorización se aplica en el servidor en cada ruta de API, no solo oculta en la UI: cambiar de rol cambia de verdad lo que la API permite. La identidad es falsa, el control de acceso no."
+        },
+        "ux": {
+          "name": "Réplica deliberada de la UX de Power Apps",
+          "detail": "El shell (barra superior, navegación lateral, barras de comandos, selectores de vista, registros de página completa) copia Power Apps model-driven a propósito, basado en un análisis de la documentación de Microsoft. Una comparación justa de construir vs. comprar exige que el prototipo se parezca a lo que el equipo ya usa; una UI más bonita pero ajena la sesgaría."
+        },
+        "docs": {
+          "name": "La evaluación vive en la app",
+          "detail": "Investigación, evaluación, recomendación y esta visión general acompañan al artefacto que analizan, renderizadas como páginas diseñadas a partir de catálogos de mensajes por idioma, con los documentos fuente mantenidos en el repositorio."
+        },
+        "boring": {
+          "name": "Todo lo demás es simple a propósito",
+          "detail": "TypeScript en todo, shadcn/ui sobre tokens semánticos de diseño (un único punto de cambio de paleta, dark mode casi gratis), next-intl con catálogos por idioma y traducciones de documentos, Intl.* para fechas y moneda. Estas elecciones maximizaron lo que dos horas podían producir y dejaron costuras obvias (almacenamiento, auth) donde encajarían las preocupaciones de producción."
+        }
+      }
+    },
+    "limits": {
+      "title": "Lo Que Esta Arquitectura No Afirma",
+      "body": "Sin persistencia, sin proveedor real de identidad, sin conectores a sistemas externos, sin administración delegada ni gestión de entornos. Son exactamente las capacidades de Power Apps cuyo costo de reemplazo la evaluación cuantifica; el trabajo del prototipo era hacer concreta esa brecha, no cerrarla."
     }
   }
 }

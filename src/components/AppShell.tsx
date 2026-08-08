@@ -71,6 +71,11 @@ const GROUPS: NavGroup[] = [
         labelKey: "recommendation",
         icon: LayoutGridIcon,
       },
+      {
+        href: "/analysis/architecture",
+        labelKey: "architecture",
+        icon: LayoutGridIcon,
+      },
     ],
   },
 ];
