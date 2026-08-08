@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.agents
+*.md
+!docs/**/*.md
+Dockerfile
+compose.yaml
+.dockerignore
+.vercel

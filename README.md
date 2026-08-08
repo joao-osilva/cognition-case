@@ -34,16 +34,47 @@ three locales (English, Brazilian Portuguese, Spanish).
 
 ## Running locally
 
+### Option 1: Docker (no Node.js required)
+
+Prerequisites: [Docker](https://docs.docker.com/get-docker/) (Docker Desktop on
+Mac/Windows, or Docker Engine with the Compose plugin on Linux).
+
+```bash
+git clone https://github.com/joao-osilva/cognition-case.git
+cd cognition-case
+docker compose up --build
+```
+
+The first build takes a few minutes; subsequent starts are instant. Open
+http://localhost:3000. Stop with `Ctrl+C` (or `docker compose down`).
+
+Without Compose, the equivalent is:
+
+```bash
+docker build -t cognition-case .
+docker run --rm -p 3000:3000 cognition-case
+```
+
+The image is a multi-stage production build (Next.js standalone output on
+`node:20-alpine`, running as a non-root user), so what you see is the same
+production bundle as the live deployment.
+
+### Option 2: Node.js
+
+Prerequisites: Node.js 20+ and npm.
+
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:3000. Use the role switcher in the top bar to demo
-role-based access as viewer / approver / admin. Theme and language switchers are
-next to it.
+Open http://localhost:3000. Other commands: `npm run build`, `npm run lint`.
 
-Other commands: `npm run build`, `npm run lint`.
+### Using the app
+
+Use the role switcher in the top bar to demo role-based access as viewer /
+approver / admin. Theme and language switchers are next to it. Data is seeded
+in memory, so a restart resets it to a clean state.
 
 ## Structure
 
