@@ -254,5 +254,387 @@
     "invalid_role": "Papel inválido",
     "refund_invalid_transition": "Não é possível executar ''{action}'' em um reembolso com status ''{status}''.",
     "flag_exists": "A flag ''{key}'' já existe em {environment}."
+  },
+  "evaluationPage": {
+    "replicated": {
+      "title": "Replicado",
+      "items": {
+        "grids": {
+          "name": "Grades de dados",
+          "detail": "Filtragem e busca na fila de KYC, reembolsos e flags."
+        },
+        "forms": {
+          "name": "Formulários validados",
+          "detail": "Campos obrigatórios e regras de negócio em cada ação que altera estado."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Papéis viewer, approver e admin, aplicados no servidor."
+        },
+        "audit": {
+          "name": "Log de auditoria",
+          "detail": "Quem fez o quê, quando, com valores antes e depois."
+        },
+        "deploy": {
+          "name": "Implantação",
+          "detail": "No ar na Vercel, compartilhável com a equipe."
+        }
+      },
+      "done": "Feito"
+    },
+    "gaps": {
+      "title": "Não replicado",
+      "effort": {
+        "days": "Dias",
+        "ongoing": "Contínuo",
+        "months": "Meses",
+        "notBridgeable": "Sem solução"
+      },
+      "items": {
+        "sso": {
+          "name": "SSO real",
+          "takes": "Provedor gerenciado (Auth0, Clerk, WorkOS). Dias para integrar, dependência permanente.",
+          "effort": "days"
+        },
+        "database": {
+          "name": "Banco de dados persistente",
+          "takes": "Postgres mais migrações, backups, retenção. Dias para configurar, operação contínua.",
+          "effort": "days"
+        },
+        "connectors": {
+          "name": "Conectores",
+          "takes": "Integrações feitas à mão ou uma camada de integração (Composio, Merge, Paragon). A lacuna mais difícil: trabalho contínuo de qualquer forma.",
+          "effort": "ongoing"
+        },
+        "citizen": {
+          "name": "Desenvolvimento cidadão",
+          "takes": "Cada nova ferramenta e cada mudança vira um ticket de engenharia.",
+          "effort": "notBridgeable"
+        },
+        "compliance": {
+          "name": "Certificação de compliance",
+          "takes": "Herdada das escolhas de infraestrutura; meses de auditoria se a certificação for exigida.",
+          "effort": "months"
+        }
+      }
+    },
+    "dimensions": {
+      "title": "Dimensões de Avaliação",
+      "items": {
+        "build": {
+          "title": "Custo de construção",
+          "points": [
+            "Horas de engenharia primeiro: transformar o protótipo em um sistema de produção (SSO, banco de dados, integrações, testes) leva semanas de tempo sênior, não horas.",
+            "Construir ainda significa comprar: motores de workflow (Temporal, Inngest), autenticação gerenciada e camadas de integração têm cada um sua conta.",
+            "Auto-hospedar os equivalentes open-source troca assinaturas por gasto de nuvem. Não existe opção com zero fornecedores."
+          ]
+        },
+        "maintenance": {
+          "title": "Ônus de manutenção",
+          "points": [
+            "Conectores são um produto, não uma funcionalidade; alguém precisa manter cada integração funcionando conforme as APIs de terceiros mudam.",
+            "Infraestrutura auto-hospedada adiciona patches, upgrades e plantão."
+          ]
+        },
+        "security": {
+          "title": "Implicações de segurança",
+          "points": [
+            "Autenticação (SSO, sessões, MFA) e autorização (modelos de papéis, verificações de permissão em cada ação) vêm com a plataforma hoje e passariam a ser responsabilidade da equipe.",
+            "Em uma fintech regulada, o mesmo vale para obrigações de auditoria e compliance."
+          ]
+        },
+        "opportunity": {
+          "title": "Custo de oportunidade",
+          "points": [
+            "O desenvolvimento cidadão desaparece: operações e compliance param de construir seus próprios aplicativos e abrem tickets.",
+            "A previsão de demanda define a escala: de três a dez aplicativos CRUD, a equipe atual absorve; além disso, um a três engenheiros dedicados a US$ 200 mil+ superam o custo da licença antes mesmo do custo de oportunidade."
+          ]
+        }
+      }
+    },
+    "capexOpex": {
+      "title": "Capex vs. Opex",
+      "intro": "As mesmas dimensões, divididas em custo único e recorrente.",
+      "items": {
+        "build": {
+          "capex": "Construção inicial: semanas de engenharia sênior para endurecer o protótipo",
+          "opex": "Assinaturas de ferramentas ou gasto de nuvem para equivalentes auto-hospedados"
+        },
+        "maintenance": {
+          "capex": "-",
+          "opex": "Manutenção de integrações, patches, upgrades, plantão"
+        },
+        "security": {
+          "capex": "Integração de SSO e autorização",
+          "opex": "Revisões de acesso, patches de dependências, trabalho de auditoria e compliance"
+        },
+        "opportunity": {
+          "capex": "Funcionalidades não entregues durante a construção inicial",
+          "opex": "Cada mudança de ferramenta como ticket de engenharia; 1 a 3 engenheiros dedicados (US$ 200 mil+ cada) se a demanda crescer"
+        }
+      },
+      "buyProfile": "Comprar inverte o perfil: capex quase zero e uma única linha de opex.",
+      "buyTitle": "Comprar (contraste)",
+      "columns": {
+        "dimension": "Dimensão",
+        "capex": "Único (capex)",
+        "opex": "Recorrente (opex)"
+      },
+      "none": "Nenhum",
+      "buyCapex": "Quase zero",
+      "buyOpex": "Licença da plataforma; o fornecedor carrega manutenção e segurança"
+    },
+    "title": "Avaliação",
+    "lead": "O protótipo foi construído em cerca de duas horas com o Devin. O objetivo era replicar o núcleo de capacidades que os três aplicativos usam na plataforma, não um sistema de produção.",
+    "facts": {
+      "time": "~2 horas com o Devin",
+      "scope": "Núcleo de capacidades replicado",
+      "deploy": "Implantado na Vercel"
+    },
+    "comparison": {
+      "title": "Replicado vs. a lacuna"
+    }
+  },
+  "researchPage": {
+    "title": "Pesquisa",
+    "lead": "O que o Microsoft Power Apps faz, quais capacidades os três aplicativos usam e onde está o valor da plataforma.",
+    "components": {
+      "title": "O que é o Power Apps",
+      "columns": {
+        "component": "Componente",
+        "provides": "O que oferece"
+      },
+      "items": {
+        "canvas": {
+          "name": "Aplicativos de tela (canvas)",
+          "provides": "Construtor de UI de arrastar e soltar com fórmulas no estilo Excel (Power Fx)."
+        },
+        "modelDriven": {
+          "name": "Aplicativos baseados em modelo",
+          "provides": "UI gerada a partir do modelo de dados: defina tabelas e regras, receba grades, formulários e dashboards. O modo usado para ferramentas internas CRUD."
+        },
+        "dataverse": {
+          "name": "Microsoft Dataverse",
+          "provides": "Plataforma de dados gerenciada: tabelas relacionais, segurança por coluna, validação, auditoria de alterações."
+        },
+        "connectors": {
+          "name": "Conectores",
+          "provides": "Mais de 1.000 integrações prontas; conectores personalizados para APIs internas."
+        },
+        "automate": {
+          "name": "Power Automate",
+          "provides": "Fluxos de trabalho: aprovações, notificações, tarefas agendadas."
+        },
+        "ai": {
+          "name": "IA / Copilot",
+          "provides": "Geração de aplicativos por linguagem natural, modelos do AI Builder."
+        }
+      }
+    },
+    "capabilities": {
+      "title": "As capacidades que os três aplicativos usam",
+      "items": {
+        "grids": {
+          "name": "Grades de dados",
+          "detail": "Visões ordenáveis e filtráveis sobre casos de KYC, reembolsos, flags."
+        },
+        "forms": {
+          "name": "Formulários validados",
+          "detail": "Campos obrigatórios, entradas tipadas, regras de negócio."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Analistas revisam, líderes de compliance aprovam, engenharia alterna flags. Obrigatório em uma fintech regulada."
+        },
+        "audit": {
+          "name": "Trilha de auditoria",
+          "detail": "Cada alteração registrada com valores antigos e novos. Obrigatório para KYC e reembolsos."
+        },
+        "approvals": {
+          "name": "Aprovações",
+          "detail": "Máquinas de estado pendente / aprovado / rejeitado com notificações."
+        },
+        "connectors": {
+          "name": "Conectores",
+          "detail": "Integrações (provedores de identidade, processadores de pagamento) que a equipe não mantém."
+        },
+        "managed": {
+          "name": "Plataforma gerenciada",
+          "detail": "SSO, hospedagem, patches e backups são problema do fornecedor."
+        }
+      },
+      "note": "Mesmo padrão nos três aplicativos: tabela, formulário, ação restrita por papel, log de auditoria. Modo móvel offline, AI Builder e o resto da plataforma ficam sem uso."
+    },
+    "value": {
+      "title": "Onde está o valor",
+      "intro": "O valor está no pacote, não em uma única funcionalidade.",
+      "bundleTitle": "O pacote de valor",
+      "weaknessesTitle": "Fraquezas documentadas",
+      "bundle": {
+        "speed": {
+          "name": "Velocidade",
+          "detail": "Um aplicativo CRUD funcional em horas ou dias, sem engenheiros."
+        },
+        "citizen": {
+          "name": "Desenvolvimento cidadão",
+          "detail": "Operações e compliance constroem seus próprios aplicativos."
+        },
+        "governance": {
+          "name": "Governança",
+          "detail": "SSO, RBAC, auditoria, SOC 2 / ISO 27001 herdados da Microsoft."
+        },
+        "integrations": {
+          "name": "Integrações mantidas",
+          "detail": "Conectores são configuração, não código para manter."
+        },
+        "infra": {
+          "name": "Sem infraestrutura",
+          "detail": "Sem servidores, deployments ou plantão."
+        }
+      },
+      "weaknesses": {
+        "licensing": {
+          "name": "Licenciamento",
+          "detail": "~US$ 20/usuário/mês de tabela, mas conectores premium, capacidade do Dataverse e empilhamento por aplicativo tornam os custos reais difíceis de prever."
+        },
+        "delegation": {
+          "name": "Limites de delegação",
+          "detail": "Consultas não delegáveis rodam no cliente sobre 500 a 2.000 linhas e retornam resultados errados em escala."
+        },
+        "ux": {
+          "name": "UX restrita",
+          "detail": "Difícil ir além de formulários sobre dados."
+        },
+        "api": {
+          "name": "Cotas de API",
+          "detail": "Limites diários de requisições por usuário."
+        },
+        "lockin": {
+          "name": "Lock-in",
+          "detail": "Aplicativos, Power Fx e dados do Dataverse não são portáveis."
+        }
+      }
+    },
+    "caution": {
+      "title": "Alerta: o preço pode não refletir o uso",
+      "body": "O gasto com a plataforma costuma refletir a estrutura do contrato, não o uso. No preço de tabela, 60 usuários custam cerca de US$ 14,4 mil/ano, bem abaixo dos US$ 250 mil informados. Comece com uma auditoria de licenças. Compare construir com o preço renegociado ou um concorrente mais barato, não com o contrato atual."
+    },
+    "sources": {
+      "title": "Fontes"
+    }
+  },
+  "recommendationPage": {
+    "title": "Recomendação",
+    "bluf": "Renegocie ou substitua o contrato primeiro. Construa apenas se isso falhar, ou quando a demanda por ferramentas internas superar três aplicativos.",
+    "situation": {
+      "title": "Situação",
+      "body": "A equipe de engenharia paga US$ 250 mil/ano por uma plataforma que roda três aplicativos CRUD. No preço de tabela, 60 usuários custam cerca de US$ 14,4 mil/ano. O protótipo prova que o núcleo de capacidades é replicável em horas. O custo real de construir é a propriedade: SSO, banco de dados, manutenção de conectores, compliance e a perda do desenvolvimento cidadão."
+    },
+    "options": {
+      "title": "As opções",
+      "columns": {
+        "option": "Opção",
+        "cost": "Custo anual",
+        "effort": "Esforço de engenharia",
+        "risk": "Risco",
+        "customization": "Customização"
+      },
+      "ratings": {
+        "good": "Bom",
+        "fair": "Razoável",
+        "poor": "Ruim"
+      },
+      "items": {
+        "renegotiate": {
+          "name": "Renegociar o contrato",
+          "cost": "O preço de tabela é ~US$ 14,4 mil; mesmo 3x isso fica muito abaixo do valor atual",
+          "effort": "Nenhum",
+          "risk": "Nada muda operacionalmente",
+          "customization": "As restrições permanecem"
+        },
+        "vendor": {
+          "name": "Migrar para um fornecedor mais barato (Retool, Appsmith, Budibase)",
+          "cost": "Faixa de US$ 20-40 mil/ano para este porte",
+          "effort": "Semanas de migração para três aplicativos pequenos",
+          "risk": "Novo lock-in, melhores condições de saída",
+          "customization": "Mais flexível, ainda uma plataforma"
+        },
+        "build": {
+          "name": "Construir internamente",
+          "cost": "Assinaturas de ferramentas agora; US$ 200 mil+ por engenheiro dedicado se a demanda crescer",
+          "effort": "Semanas de robustecimento, depois manutenção permanente",
+          "risk": "Segurança e compliance passam a ser problema da equipe",
+          "customization": "Controle total"
+        }
+      }
+    },
+    "reasoning": {
+      "title": "Raciocínio",
+      "items": {
+        "commodity": {
+          "name": "Teste de commodity",
+          "detail": "Ferramentas internas CRUD não diferenciam o negócio. Capacidade commodity tende a compra."
+        },
+        "tco": {
+          "name": "TCO honesto",
+          "detail": "Estimativas de construção de ferramentas internas estouram de 2,5 a 3x. Compare o custo de três anos de construção com o preço corrigido da licença, não com o contrato atual. Construir só vence contra o número inflado."
+        },
+        "hybrid": {
+          "name": "Não existe construção pura",
+          "detail": "Auth, banco de dados e camadas de integração ainda seriam comprados. A escolha real é qual conjunto de fornecedores possuir."
+        },
+        "citizen": {
+          "name": "O desenvolvimento cidadão se perde",
+          "detail": "Hoje operações e compliance entregam suas próprias mudanças; internamente, cada mudança vira um ticket de engenharia."
+        },
+        "devin": {
+          "name": "Onde o Devin entra",
+          "detail": "O protótipo levou duas horas, e o trabalho seguinte tem o mesmo formato de tarefa bem delimitada. Construir fica mais barato, mas os custos de propriedade permanecem."
+        }
+      }
+    },
+    "triggers": {
+      "title": "O que mudaria a decisão",
+      "intro": "A recomendação vira para construir se qualquer um destes valer.",
+      "items": {
+        "audit": {
+          "name": "A auditoria falha",
+          "detail": "O gasto não consegue se aproximar do preço de tabela."
+        },
+        "demand": {
+          "name": "A demanda cresce",
+          "detail": "Um roadmap de dez ou mais ferramentas internas justifica a propriedade dedicada."
+        },
+        "customization": {
+          "name": "A customização vira restrição",
+          "detail": "Limites de delegação ou tetos de UX bloqueiam os fluxos de trabalho."
+        },
+        "compliance": {
+          "name": "Compliance exige controle dos dados",
+          "detail": "O fornecedor não consegue oferecer o controle de dados exigido."
+        }
+      }
+    },
+    "steps": {
+      "title": "Próximos passos",
+      "items": {
+        "audit": {
+          "name": "Auditoria de licenças e uso",
+          "detail": "Uma semana, financeiro mais um engenheiro."
+        },
+        "quotes": {
+          "name": "Cotações de concorrentes",
+          "detail": "Cotações de duas plataformas concorrentes, na mesma semana."
+        },
+        "checkpoint": {
+          "name": "Ponto de decisão",
+          "detail": "Total renegociado abaixo de cerca de US$ 50 mil/ano significa comprar, e a questão se encerra por um ano."
+        },
+        "pilot": {
+          "name": "Piloto de construção de quatro semanas com Devin",
+          "detail": "Robustecer o aplicativo de KYC de ponta a ponta, incluindo SSO e persistência, e remedir a linha de custo antes de se comprometer com os outros dois."
+        }
+      }
+    }
   }
 }

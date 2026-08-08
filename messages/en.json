@@ -254,5 +254,387 @@
     "invalid_role": "Invalid role",
     "refund_invalid_transition": "Cannot {action} a refund in ''{status}'' status.",
     "flag_exists": "Flag ''{key}'' already exists in {environment}."
+  },
+  "evaluationPage": {
+    "replicated": {
+      "title": "Replicated",
+      "items": {
+        "grids": {
+          "name": "Data grids",
+          "detail": "Filtering and search across the KYC queue, refunds, and flags."
+        },
+        "forms": {
+          "name": "Validated forms",
+          "detail": "Required fields and business rules on every state-changing action."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Viewer, approver, admin roles, enforced server-side."
+        },
+        "audit": {
+          "name": "Audit log",
+          "detail": "Who did what, when, with before and after values."
+        },
+        "deploy": {
+          "name": "Deployment",
+          "detail": "Live on Vercel, shareable with the team."
+        }
+      },
+      "done": "Done"
+    },
+    "gaps": {
+      "title": "Not replicated",
+      "effort": {
+        "days": "Days",
+        "ongoing": "Ongoing",
+        "months": "Months",
+        "notBridgeable": "Not bridgeable"
+      },
+      "items": {
+        "sso": {
+          "name": "Real SSO",
+          "takes": "Managed provider (Auth0, Clerk, WorkOS). Days to integrate, permanent dependency.",
+          "effort": "days"
+        },
+        "database": {
+          "name": "Persistent database",
+          "takes": "Postgres plus migrations, backups, retention. Days to set up, ongoing operations.",
+          "effort": "days"
+        },
+        "connectors": {
+          "name": "Connectors",
+          "takes": "Hand-built integrations or an integration layer (Composio, Merge, Paragon). The hardest gap: ongoing work either way.",
+          "effort": "ongoing"
+        },
+        "citizen": {
+          "name": "Citizen development",
+          "takes": "Every new tool and every change becomes an engineering ticket.",
+          "effort": "notBridgeable"
+        },
+        "compliance": {
+          "name": "Compliance certification",
+          "takes": "Inherited from infrastructure choices; months of audit work if certification is required.",
+          "effort": "months"
+        }
+      }
+    },
+    "dimensions": {
+      "title": "Evaluation Dimensions",
+      "items": {
+        "build": {
+          "title": "Build cost",
+          "points": [
+            "Engineering hours first: hardening the prototype into a production system (SSO, database, integrations, testing) is weeks of senior time, not hours.",
+            "Building still means buying: workflow engines (Temporal, Inngest), managed auth, and integration layers each have a bill.",
+            "Self-hosting the open-source equivalents trades subscriptions for cloud spend. There is no zero-vendor option."
+          ]
+        },
+        "maintenance": {
+          "title": "Maintenance burden",
+          "points": [
+            "Connectors are a product, not a feature; someone must keep every integration working as third-party APIs change.",
+            "Self-hosted infrastructure adds patching, upgrades, and on-call."
+          ]
+        },
+        "security": {
+          "title": "Security implications",
+          "points": [
+            "Authentication (SSO, sessions, MFA) and authorization (role models, permission checks on every action) come with the platform today and would become the team's responsibility.",
+            "In a regulated fintech, so do audit and compliance obligations."
+          ]
+        },
+        "opportunity": {
+          "title": "Opportunity cost",
+          "points": [
+            "Citizen development disappears: operations and compliance stop building their own apps and file tickets instead.",
+            "Demand forecast decides the scale: at three to ten CRUD apps the current team absorbs it; beyond that, one to three dedicated engineers at $200K+ exceed the license cost before opportunity cost is counted."
+          ]
+        }
+      }
+    },
+    "capexOpex": {
+      "title": "Capex vs. Opex",
+      "intro": "The same dimensions, split into one-time and recurring cost.",
+      "items": {
+        "build": {
+          "capex": "Initial build: weeks of senior engineering to harden the prototype",
+          "opex": "Tool subscriptions or cloud spend for self-hosted equivalents"
+        },
+        "maintenance": {
+          "capex": "-",
+          "opex": "Integration upkeep, patching, upgrades, on-call"
+        },
+        "security": {
+          "capex": "SSO and authorization integration",
+          "opex": "Access reviews, dependency patching, audit and compliance work"
+        },
+        "opportunity": {
+          "capex": "Features not shipped during the initial build",
+          "opex": "Every tool change as an engineering ticket; 1 to 3 dedicated engineers ($200K+ each) if demand grows"
+        }
+      },
+      "buyProfile": "Buying inverts the profile: near-zero capex and a single opex line.",
+      "buyTitle": "Buy (for contrast)",
+      "columns": {
+        "dimension": "Dimension",
+        "capex": "One-time (capex)",
+        "opex": "Recurring (opex)"
+      },
+      "none": "None",
+      "buyCapex": "Near zero",
+      "buyOpex": "Platform license; the vendor carries maintenance and security"
+    },
+    "title": "Evaluation",
+    "lead": "The prototype was built in roughly two hours with Devin. The goal was to replicate the capability core the three apps use on the platform, not a production system.",
+    "facts": {
+      "time": "~2 hours with Devin",
+      "scope": "Capability core replicated",
+      "deploy": "Deployed on Vercel"
+    },
+    "comparison": {
+      "title": "Replicated vs. the gap"
+    }
+  },
+  "researchPage": {
+    "title": "Research",
+    "lead": "What Microsoft Power Apps does, which capabilities the three apps use, and where the platform's value lies.",
+    "components": {
+      "title": "What Power Apps is",
+      "columns": {
+        "component": "Component",
+        "provides": "What it provides"
+      },
+      "items": {
+        "canvas": {
+          "name": "Canvas apps",
+          "provides": "Drag-and-drop UI builder with Excel-like formulas (Power Fx)."
+        },
+        "modelDriven": {
+          "name": "Model-driven apps",
+          "provides": "UI generated from the data model: define tables and rules, get grids, forms, and dashboards. The mode used for CRUD internal tools."
+        },
+        "dataverse": {
+          "name": "Microsoft Dataverse",
+          "provides": "Managed data platform: relational tables, column-level security, validation, change auditing."
+        },
+        "connectors": {
+          "name": "Connectors",
+          "provides": "1,000+ prebuilt integrations; custom connectors for internal APIs."
+        },
+        "automate": {
+          "name": "Power Automate",
+          "provides": "Workflows: approvals, notifications, scheduled jobs."
+        },
+        "ai": {
+          "name": "AI / Copilot",
+          "provides": "Natural-language app generation, AI Builder models."
+        }
+      }
+    },
+    "capabilities": {
+      "title": "The capabilities the three apps use",
+      "items": {
+        "grids": {
+          "name": "Data grids",
+          "detail": "Sortable, filterable views over KYC cases, refunds, flags."
+        },
+        "forms": {
+          "name": "Validated forms",
+          "detail": "Required fields, typed inputs, business rules."
+        },
+        "rbac": {
+          "name": "RBAC",
+          "detail": "Analysts review, compliance leads approve, engineering toggles flags. Required in a regulated fintech."
+        },
+        "audit": {
+          "name": "Audit trail",
+          "detail": "Every change logged with old and new values. Required for KYC and refunds."
+        },
+        "approvals": {
+          "name": "Approvals",
+          "detail": "Pending / approved / rejected state machines with notifications."
+        },
+        "connectors": {
+          "name": "Connectors",
+          "detail": "Integrations (identity providers, payment processors) the team does not maintain."
+        },
+        "managed": {
+          "name": "Managed platform",
+          "detail": "SSO, hosting, patching, backups are the vendor's problem."
+        }
+      },
+      "note": "Same pattern in all three apps: table, form, role-gated action, audit log. Offline mobile, AI Builder, and the rest of the platform go unused."
+    },
+    "value": {
+      "title": "Where the value lies",
+      "intro": "The value is the bundle, not any single feature.",
+      "bundleTitle": "The value bundle",
+      "weaknessesTitle": "Documented weaknesses",
+      "bundle": {
+        "speed": {
+          "name": "Speed",
+          "detail": "A working CRUD app in hours or days, without engineers."
+        },
+        "citizen": {
+          "name": "Citizen development",
+          "detail": "Operations and compliance build their own apps."
+        },
+        "governance": {
+          "name": "Governance",
+          "detail": "SSO, RBAC, auditing, SOC 2 / ISO 27001 inherited from Microsoft."
+        },
+        "integrations": {
+          "name": "Maintained integrations",
+          "detail": "Connectors are configuration, not code to own."
+        },
+        "infra": {
+          "name": "No infrastructure",
+          "detail": "No servers, deployments, or on-call."
+        }
+      },
+      "weaknesses": {
+        "licensing": {
+          "name": "Licensing",
+          "detail": "~$20/user/month list, but premium connectors, Dataverse capacity, and per-app stacking make real costs hard to predict."
+        },
+        "delegation": {
+          "name": "Delegation limits",
+          "detail": "Non-delegable queries run client-side on 500 to 2,000 rows and return wrong results at scale."
+        },
+        "ux": {
+          "name": "Constrained UX",
+          "detail": "Hard to go beyond forms-over-data."
+        },
+        "api": {
+          "name": "API caps",
+          "detail": "Per-user daily request limits."
+        },
+        "lockin": {
+          "name": "Lock-in",
+          "detail": "Apps, Power Fx, and Dataverse data are not portable."
+        }
+      }
+    },
+    "caution": {
+      "title": "Caution: price may not reflect usage",
+      "body": "Platform spend often reflects contract structure, not usage. At list price, 60 users cost roughly $14.4K/year, far below the reported $250K. Start with a license audit. Compare building against the renegotiated price or a cheaper competitor, not the current contract."
+    },
+    "sources": {
+      "title": "Sources"
+    }
+  },
+  "recommendationPage": {
+    "title": "Recommendation",
+    "bluf": "Renegotiate or replace the contract first. Build only if that fails, or when demand for internal tools outgrows three apps.",
+    "situation": {
+      "title": "Situation",
+      "body": "The engineering team pays $250K/year for a platform running three CRUD apps. At list price, 60 users cost roughly $14.4K/year. The prototype proves the capability core is replicable in hours. The real cost of building is ownership: SSO, database, connector upkeep, compliance, and the loss of citizen development."
+    },
+    "options": {
+      "title": "The options",
+      "columns": {
+        "option": "Option",
+        "cost": "Annual cost",
+        "effort": "Engineering effort",
+        "risk": "Risk",
+        "customization": "Customization"
+      },
+      "ratings": {
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
+      },
+      "items": {
+        "renegotiate": {
+          "name": "Renegotiate the contract",
+          "cost": "List price is ~$14.4K; even 3x that is far below today",
+          "effort": "None",
+          "risk": "Nothing changes operationally",
+          "customization": "Constraints stay"
+        },
+        "vendor": {
+          "name": "Move to a cheaper vendor (Retool, Appsmith, Budibase)",
+          "cost": "$20-40K/year range for this size",
+          "effort": "Weeks of migration for three small apps",
+          "risk": "New lock-in, better exit terms",
+          "customization": "More flexible, still a platform"
+        },
+        "build": {
+          "name": "Build in-house",
+          "cost": "Tool subscriptions now; $200K+ per dedicated engineer if demand grows",
+          "effort": "Weeks of hardening, then permanent upkeep",
+          "risk": "Security and compliance become the team's problem",
+          "customization": "Full control"
+        }
+      }
+    },
+    "reasoning": {
+      "title": "Reasoning",
+      "items": {
+        "commodity": {
+          "name": "Commodity test",
+          "detail": "Internal CRUD tools do not differentiate the business. Commodity capability defaults to buy."
+        },
+        "tco": {
+          "name": "Honest TCO",
+          "detail": "Build estimates for internal tooling overrun 2.5 to 3x. Compare three-year build cost against the corrected license price, not the current contract. Build only wins against the inflated number."
+        },
+        "hybrid": {
+          "name": "There is no pure build",
+          "detail": "Auth, database, and integration layers would still be bought. The real choice is which vendor set to own."
+        },
+        "citizen": {
+          "name": "Citizen development is lost",
+          "detail": "Today operations and compliance ship their own changes; in-house, every change is an engineering ticket."
+        },
+        "devin": {
+          "name": "Where Devin fits",
+          "detail": "The prototype took two hours, and the follow-on work is the same shape of well-scoped task. Building gets cheaper, but the ownership costs remain."
+        }
+      }
+    },
+    "triggers": {
+      "title": "What would change the call",
+      "intro": "The recommendation flips toward build if any of these hold.",
+      "items": {
+        "audit": {
+          "name": "The audit fails",
+          "detail": "Spend cannot be brought near list price."
+        },
+        "demand": {
+          "name": "Demand grows",
+          "detail": "A roadmap of ten or more internal tools makes dedicated ownership worth it."
+        },
+        "customization": {
+          "name": "Customization becomes a constraint",
+          "detail": "Delegation limits or UX ceilings block the workflows."
+        },
+        "compliance": {
+          "name": "Compliance requires data control",
+          "detail": "The vendor cannot provide the required data control."
+        }
+      }
+    },
+    "steps": {
+      "title": "Next steps",
+      "items": {
+        "audit": {
+          "name": "License and usage audit",
+          "detail": "One week, finance plus one engineer."
+        },
+        "quotes": {
+          "name": "Competitor quotes",
+          "detail": "Quotes from two competitor platforms, same week."
+        },
+        "checkpoint": {
+          "name": "Decision checkpoint",
+          "detail": "Renegotiated total under roughly $50K/year means buy, and the question closes for a year."
+        },
+        "pilot": {
+          "name": "Four-week build pilot with Devin",
+          "detail": "Production-harden the KYC app end to end, including SSO and persistence, and re-measure the cost line before committing to the other two."
+        }
+      }
+    }
   }
 }
