@@ -28,7 +28,9 @@
       "assessment": "Avaliação",
       "research": "Pesquisa",
       "evaluation": "Análise",
-      "recommendation": "Recomendação"
+      "recommendation": "Recomendação",
+      "architecture": "Arquitetura",
+      "documentation": "Documentação"
     }
   },
   "roles": {
@@ -635,6 +637,44 @@
           "detail": "Robustecer o aplicativo de KYC de ponta a ponta, incluindo SSO e persistência, e remedir a linha de custo antes de se comprometer com os outros dois."
         }
       }
+    }
+  },
+  "architecturePage": {
+    "title": "Visão Geral da Arquitetura",
+    "lead": "Como o protótipo foi construído e por quê: o formato do sistema, as decisões-chave e seus tradeoffs, e o que a arquitetura deliberadamente não afirma.",
+    "shape": {
+      "title": "Formato do Sistema",
+      "body": "Uma única aplicação Next.js 15 (App Router) contendo os três apps internos, um log de auditoria compartilhado e a avaliação escrita. Um repositório, um destino de deploy (Vercel, mais uma imagem Docker para execução local), zero serviços externos. Foi deliberado: o exercício é um protótipo de ~2 horas cujo trabalho é demonstrar o núcleo de capacidades do Power Apps, então toda infraestrutura que não servia a essa demonstração foi cortada.",
+      "storeLine": "Armazenamento em memória (singleton em nível de módulo, populado na inicialização)"
+    },
+    "decisions": {
+      "title": "Decisões-Chave e Tradeoffs",
+      "items": {
+        "store": {
+          "name": "Armazenamento em memória em vez de banco de dados",
+          "detail": "Um singleton em nível de módulo, populado na inicialização, guarda todos os dados; toda mutação passa por ele e adiciona uma entrada de auditoria com valores antes/depois. Custo: os dados reiniciam em cold starts. Benefício: toda a camada de dados levou minutos, e os fluxos, validação e semântica de auditoria são totalmente reais. Trocar por Postgres depois muda um módulo, não os apps. É o corte de escopo mais importante, divulgado na página inicial e na avaliação."
+        },
+        "auth": {
+          "name": "Identidade simulada, autorização real",
+          "detail": "Um cookie demo-role mais um seletor de papéis substitui o SSO; construir auth real em duas horas consumiria o orçamento provando pouco. Mas a autorização é aplicada no servidor em cada rota de API, não apenas escondida na UI: trocar de papel muda de fato o que a API permite. A identidade é falsa, o controle de acesso não."
+        },
+        "ux": {
+          "name": "Espelhamento deliberado da UX do Power Apps",
+          "detail": "O shell (barra superior, navegação lateral, barras de comando, seletores de visão, registros em página inteira) copia o Power Apps model-driven de propósito, com base em uma análise da documentação da Microsoft. Uma comparação justa de construir vs. comprar exige que o protótipo se pareça com o que a equipe já usa; uma UI mais bonita porém estranha enviesaria a comparação."
+        },
+        "docs": {
+          "name": "A avaliação vive no app",
+          "detail": "Pesquisa, avaliação, recomendação e esta visão geral acompanham o artefato que analisam, renderizadas como páginas projetadas a partir de catálogos de mensagens por idioma, com os documentos-fonte mantidos no repositório."
+        },
+        "boring": {
+          "name": "Todo o resto é simples de propósito",
+          "detail": "TypeScript em tudo, shadcn/ui sobre tokens semânticos de design (um único ponto de troca de paleta, dark mode quase de graça), next-intl com catálogos por idioma e traduções dos documentos, Intl.* para datas e moeda. Essas escolhas maximizaram o que duas horas podiam produzir e deixaram costuras óbvias (armazenamento, auth) onde as preocupações de produção se encaixariam."
+        }
+      }
+    },
+    "limits": {
+      "title": "O Que Esta Arquitetura Não Afirma",
+      "body": "Sem persistência, sem provedor real de identidade, sem conectores para sistemas externos, sem administração delegada ou gestão de ambientes. São exatamente as capacidades do Power Apps cujo custo de substituição a avaliação precifica; o trabalho do protótipo era tornar essa lacuna concreta, não fechá-la."
     }
   }
 }
