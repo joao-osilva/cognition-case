@@ -1,7 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArchitectureView } from "@/components/ArchitectureView";
 import { EvaluationView } from "@/components/EvaluationView";
 import { RecommendationView } from "@/components/RecommendationView";
 import { ResearchView } from "@/components/ResearchView";
@@ -12,7 +11,6 @@ const VIEWS: Record<string, React.ComponentType> = {
   research: ResearchView,
   evaluation: EvaluationView,
   recommendation: RecommendationView,
-  architecture: ArchitectureView,
 };
 
 function AnalysisNav({

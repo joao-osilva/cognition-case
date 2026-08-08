@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import {
   ClipboardCheckIcon,
+  FileTextIcon,
   FlagIcon,
   GripIcon,
   HomeIcon,
@@ -71,10 +72,15 @@ const GROUPS: NavGroup[] = [
         labelKey: "recommendation",
         icon: LayoutGridIcon,
       },
+    ],
+  },
+  {
+    labelKey: "documentation",
+    items: [
       {
-        href: "/analysis/architecture",
+        href: "/architecture",
         labelKey: "architecture",
-        icon: LayoutGridIcon,
+        icon: FileTextIcon,
       },
     ],
   },

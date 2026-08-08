@@ -29,7 +29,8 @@
       "research": "Pesquisa",
       "evaluation": "Análise",
       "recommendation": "Recomendação",
-      "architecture": "Arquitetura"
+      "architecture": "Arquitetura",
+      "documentation": "Documentação"
     }
   },
   "roles": {
@@ -236,8 +237,7 @@
   "analysis": {
     "research": "Pesquisa",
     "evaluation": "Análise",
-    "recommendation": "Recomendação",
-    "architecture": "Arquitetura"
+    "recommendation": "Recomendação"
   },
   "apiErrors": {
     "forbidden": "Esta ação exige o papel ''{required}'' ou superior. Você está atualmente como ''{role}''.",

@@ -29,7 +29,8 @@
       "research": "Research",
       "evaluation": "Evaluation",
       "recommendation": "Recommendation",
-      "architecture": "Architecture"
+      "architecture": "Architecture",
+      "documentation": "Documentation"
     }
   },
   "roles": {
@@ -236,8 +237,7 @@
   "analysis": {
     "research": "Research",
     "evaluation": "Evaluation",
-    "recommendation": "Recommendation",
-    "architecture": "Architecture"
+    "recommendation": "Recommendation"
   },
   "apiErrors": {
     "forbidden": "This action requires the ''{required}'' role or higher. You are currently ''{role}''.",
